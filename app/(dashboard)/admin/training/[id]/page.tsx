@@ -11,7 +11,7 @@ import {
   saveQuizQuestion,
   deleteQuizQuestion,
   reorderQuizQuestions,
-} from '../actions'
+} from '../../actions'
 import type { TrainingModule } from '@/lib/types'
 import type { QuizQuestion } from '@/lib/types'
 import { ArrowLeft, Plus, Trash2, GripVertical } from 'lucide-react'

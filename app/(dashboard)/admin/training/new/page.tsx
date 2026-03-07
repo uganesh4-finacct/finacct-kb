@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
-import { saveTrainingModule } from '../actions'
+import { saveTrainingModule } from '../../actions'
 import { ArrowLeft } from 'lucide-react'
 
 function slugify(s: string) {
