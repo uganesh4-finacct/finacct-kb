@@ -39,7 +39,7 @@ export function FullEditor({
       handlePaste: (view, event) => {
         const items = event.clipboardData?.items
         if (!items) return false
-        for (const item of items) {
+        for (const item of Array.from(items)) {
           if (item.type.indexOf('image') !== -1) {
             event.preventDefault()
             const file = item.getAsFile()
@@ -75,7 +75,7 @@ export function FullEditor({
   useEffect(() => {
     if (!editor) return
     editor.on('update', emitChange)
-    return () => editor.off('update', emitChange)
+    return () => { editor.off('update', emitChange) }
   }, [editor, emitChange])
 
   useEffect(() => {

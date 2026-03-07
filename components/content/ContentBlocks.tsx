@@ -8,7 +8,7 @@ import {
   Star,
   User,
   ArrowRight,
-  Sitemap,
+  Network,
   GitBranch,
 } from 'lucide-react'
 
@@ -279,7 +279,7 @@ export function AccountTree({
         {items.map((item) => (
           <div key={item.id}>
             <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-slate-700/30 text-slate-200 font-medium">
-              <Sitemap className="w-4 h-4 text-slate-400 shrink-0" />
+              <Network className="w-4 h-4 text-slate-400 shrink-0" />
               <span className="font-mono text-blue-300">{item.id}</span>
               <span>{item.label}</span>
             </div>

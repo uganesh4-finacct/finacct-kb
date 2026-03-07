@@ -1,8 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { CaretDown, CaretUp, Copy, Coffee, Wine, Buildings } from 'phosphor-react'
-import { UtensilsCrossed, Beef, Sandwich } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Coffee,
+  Wine,
+  Building2,
+  UtensilsCrossed,
+  Beef,
+  Sandwich,
+} from 'lucide-react'
 
 export interface COATemplateAccountRow {
   id: string
@@ -22,13 +31,13 @@ interface COATemplateCardProps {
   accounts: COATemplateAccountRow[]
 }
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; weight?: string; className?: string }>> = {
+const ICON_MAP: Record<string, React.ComponentType<Record<string, unknown>>> = {
   Coffee,
   ForkKnife: UtensilsCrossed,
   BeerStein: Beef,
   Hamburger: Sandwich,
   Wine,
-  Buildings,
+  Buildings: Building2,
 }
 
 const HEADERS = ['Account Number', 'Account Name', 'QBO Account Type', 'QBO Detail Type', 'Category', 'Notes']
@@ -56,7 +65,7 @@ function copyAllToClipboard(accounts: COATemplateAccountRow[]): boolean {
 export function COATemplateCard({ type, title, iconName, accounts }: COATemplateCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
-  const Icon = ICON_MAP[iconName] ?? Buildings
+  const Icon = ICON_MAP[iconName] ?? Building2
 
   const handleCopyAll = () => {
     if (copyAllToClipboard(accounts)) {
@@ -74,7 +83,7 @@ export function COATemplateCard({ type, title, iconName, accounts }: COATemplate
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center gap-4 p-5 text-left"
       >
-        <Icon size={32} weight="light" className="text-slate-400 shrink-0" />
+        <Icon size={32} className="text-slate-400 shrink-0" />
         <div className="flex-1 min-w-0">
           <h3 className="text-base font-medium text-white">{title}</h3>
           <p className="text-sm text-slate-500 mt-0.5">{accounts.length} accounts</p>
@@ -82,7 +91,7 @@ export function COATemplateCard({ type, title, iconName, accounts }: COATemplate
         <span className="text-sm font-medium text-green-500 shrink-0">
           {expanded ? 'Collapse' : 'View Accounts'}
         </span>
-        {expanded ? <CaretUp size={18} className="text-slate-400 shrink-0" /> : <CaretDown size={18} className="text-slate-400 shrink-0" />}
+        {expanded ? <ChevronUp size={18} className="text-slate-400 shrink-0" /> : <ChevronDown size={18} className="text-slate-400 shrink-0" />}
       </button>
 
       {expanded && (

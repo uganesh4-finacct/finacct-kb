@@ -31,7 +31,7 @@ export default async function DashboardLayout({
     console.error('[DashboardLayout] Profile fetch error:', profileError.message, 'for user', user.id)
   }
 
-  const profileData: Profile | null = profile
+  const profileData = profile as Profile | null
   const rawRole = (profileData?.role as string | undefined)?.toLowerCase()
   const validRoles: UserRole[] = ['admin', 'accountant', 'trainee']
   const role: UserRole = rawRole && validRoles.includes(rawRole as UserRole) ? (rawRole as UserRole) : 'accountant'

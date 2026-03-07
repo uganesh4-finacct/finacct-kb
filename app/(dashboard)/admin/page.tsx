@@ -33,14 +33,29 @@ export default async function AdminDashboardPage() {
   const totalSections = sectionsRes.count ?? 0
   const teamMembers = profilesRes.count ?? 0
   const readsThisWeek = readsRes.count ?? 0
-  const recentArticles = (recentRes.data ?? []) as Array<{
+  const rawRecent = recentRes.data ?? []
+  const recentArticles: Array<{
     id: string
     title: string
     slug: string
     updated_at: string
     section_id: string
     kb_sections: { title: string; slug: string } | null
-  }>
+  }> = rawRecent.map((a: { id: string; title: string; slug: string; updated_at: string; section_id: string; kb_sections?: unknown }) => {
+    const sec = a.kb_sections
+    const section = Array.isArray(sec) ? sec[0] : sec
+    const kb_sections = section && typeof section === 'object' && section !== null && 'title' in section && 'slug' in section
+      ? { title: String((section as { title: string }).title), slug: String((section as { slug: string }).slug) }
+      : null
+    return {
+      id: a.id,
+      title: a.title,
+      slug: a.slug,
+      updated_at: a.updated_at,
+      section_id: a.section_id,
+      kb_sections,
+    }
+  })
 
   const stats = [
     { label: 'Total Articles', value: totalArticles, icon: FileText, href: '/admin/articles' },

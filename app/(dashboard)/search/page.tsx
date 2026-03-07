@@ -111,21 +111,22 @@ export default async function SearchPage({
         })
         .filter((a: { kb_sections: unknown }) => a.kb_sections != null)
         .slice(0, 50)
-      results = list.map((a: {
-        id: string
-        title: string
-        slug: string
-        excerpt: string | null
-        kb_sections: { slug: string; title: string }
-      }) => ({
-        type: 'article' as const,
-        id: a.id,
-        href: `/section/${a.kb_sections.slug}/${a.slug}`,
-        title: a.title,
-        subtitle: a.kb_sections.title,
-        highlightedTitle: highlight(a.title, query),
-        highlightedDescription: a.excerpt ? highlight(a.excerpt, query) : null,
-      }))
+      results = list.map((a: { id: string; title: string; slug: string; excerpt: string | null; kb_sections: unknown }) => {
+        const secRaw = a.kb_sections
+        const sec = Array.isArray(secRaw) ? secRaw[0] : secRaw
+        const section = sec && typeof sec === 'object' && sec !== null && 'slug' in sec && 'title' in sec
+          ? { slug: String((sec as { slug: string }).slug), title: String((sec as { title: string }).title) }
+          : { slug: '', title: '' }
+        return {
+          type: 'article' as const,
+          id: a.id,
+          href: `/section/${section.slug}/${a.slug}`,
+          title: a.title,
+          subtitle: section.title,
+          highlightedTitle: highlight(a.title, query),
+          highlightedDescription: a.excerpt ? highlight(a.excerpt, query) : null,
+        }
+      })
     }
   }
 

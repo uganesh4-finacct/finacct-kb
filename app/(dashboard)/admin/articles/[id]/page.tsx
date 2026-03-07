@@ -10,7 +10,7 @@ import {
   saveArticle,
   getArticleVersions,
   restoreArticleVersion,
-} from '../../actions'
+} from '@/app/(dashboard)/admin/actions'
 import { ArrowLeft, History, RotateCcw } from 'lucide-react'
 
 function slugify(s: string) {

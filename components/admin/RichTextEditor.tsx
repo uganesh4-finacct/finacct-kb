@@ -22,7 +22,7 @@ export function RichTextEditor({ content, onChange, placeholder, className = '',
       handlePaste: (view, event) => {
         const items = event.clipboardData?.items
         if (!items) return false
-        for (const item of items) {
+        for (const item of Array.from(items)) {
           if (item.type.indexOf('image') !== -1) {
             event.preventDefault()
             const file = item.getAsFile()
@@ -59,7 +59,9 @@ export function RichTextEditor({ content, onChange, placeholder, className = '',
   useEffect(() => {
     if (!editor) return
     editor.on('update', emitChange)
-    return () => editor.off('update', emitChange)
+    return () => {
+      editor.off('update', emitChange)
+    }
   }, [editor, emitChange])
 
   if (!editor) return <div className="animate-pulse rounded-lg bg-slate-700/50 h-48" />

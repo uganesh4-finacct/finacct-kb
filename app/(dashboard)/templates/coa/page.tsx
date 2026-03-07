@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { BookOpen } from 'phosphor-react'
+import { BookOpen } from 'lucide-react'
 import { COATemplateCard } from '@/components/templates/COATemplateCard'
 import type { COATemplateAccountRow } from '@/components/templates/COATemplateCard'
 
@@ -59,7 +59,7 @@ export default async function COATemplatesPage() {
           href="/section/pos-guides/qbo-mapping-guide"
           className="inline-flex items-center gap-2.5 py-2.5 pr-3 pl-2.5 rounded-lg bg-slate-800/30 border border-slate-800/50 hover:border-green-500/30 hover:bg-slate-800/60 transition-colors text-slate-200"
         >
-          <BookOpen size={18} weight="light" className="text-slate-400 shrink-0" />
+          <BookOpen size={18} className="text-slate-400 shrink-0" />
           <span className="text-sm font-medium text-white">Need help importing?</span>
           <span className="text-slate-500 text-sm">→ QBO Import Guide</span>
         </Link>

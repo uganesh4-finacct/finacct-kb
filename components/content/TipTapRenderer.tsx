@@ -13,7 +13,6 @@ import {
   ProcessFlow,
   StepFlow,
 } from '@/components/content/ContentBlocks'
-import { Receipt, Timer, TrendingDown } from 'lucide-react'
 
 export interface TipTapNode {
   type: string
@@ -115,7 +114,7 @@ function renderNode(node: TipTapNode, index: number): React.ReactNode {
 
     case 'scenario':
       return (
-        <ScenarioBox key={key} title={attrs.title as string | undefined}>
+        <ScenarioBox key={key}>
           {content.map((c, i) => renderNode(c, i))}
         </ScenarioBox>
       )
@@ -169,17 +168,14 @@ function renderNode(node: TipTapNode, index: number): React.ReactNode {
 
     case 'kpi_card': {
       const status = (attrs.status as 'good' | 'warning' | 'bad' | 'neutral') ?? 'neutral'
-      const iconName = (attrs.icon as string) ?? 'TrendingUp'
-      const Icon = iconName === 'Receipt' ? Receipt : iconName === 'Timer' ? Timer : iconName === 'TrendingDown' ? TrendingDown : TrendingUp
+      const sublabel = [attrs.subtext, attrs.targetRange].filter(Boolean).map(String).join(' • ') || undefined
       return (
         <KPICard
           key={key}
           label={String(attrs.label ?? '')}
           value={String(attrs.value ?? '')}
-          subtext={attrs.subtext as string | undefined}
-          targetRange={attrs.targetRange as string | undefined}
+          sublabel={sublabel}
           status={status}
-          icon={Icon}
         />
       )
     }
@@ -246,7 +242,7 @@ function renderNode(node: TipTapNode, index: number): React.ReactNode {
     case 'comparisonTable': {
       const wrongArr = attrs.wrong as string[] | undefined
       const rightArr = attrs.right as string[] | undefined
-      const rowsArr = attrs.rows as { wrong: string; right: string }[] | undefined
+      const rowsArr = (attrs.rows as { wrong: string; right: string }[] | undefined) ?? []
       return (
         <ComparisonTable
           key={key}

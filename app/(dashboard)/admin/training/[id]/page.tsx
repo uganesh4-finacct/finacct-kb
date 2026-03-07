@@ -251,7 +251,7 @@ export default function EditTrainingModulePage() {
 
         {(showAddQuestion || editingQuestionId) && (
           <QuestionForm
-            question={editingQuestionId ? questions.find((q) => q.id === editingQuestionId) : null}
+            question={editingQuestionId ? questions.find((q) => q.id === editingQuestionId) ?? undefined : undefined}
             onSave={handleSaveQuestion}
             onCancel={() => { setShowAddQuestion(false); setEditingQuestionId(null); setError(null); }}
           />

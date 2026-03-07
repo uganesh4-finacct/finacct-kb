@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, type SetStateAction } from 'react'
 
 const STORAGE_KEY = 'sidebarCollapsed'
 
@@ -21,13 +21,16 @@ export function useSidebarState() {
     }
   }, [])
 
-  const setCollapsed = useCallback((value: boolean) => {
-    setCollapsedState(value)
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
-    } catch {
-      // ignore
-    }
+  const setCollapsed = useCallback((value: SetStateAction<boolean>) => {
+    setCollapsedState((prev) => {
+      const next = typeof value === 'function' ? value(prev) : value
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      } catch {
+        // ignore
+      }
+      return next
+    })
   }, [])
 
   const toggle = useCallback(() => {

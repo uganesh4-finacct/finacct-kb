@@ -52,15 +52,18 @@ export default async function SectionPage({
       .limit(20)
     if (reads && reads.length > 0) {
       recentReads = reads
-        .map((r: { article_id: string; read_at: string; kb_articles?: { title: string; slug: string; kb_sections?: { slug: string } | null } | null }) => {
-          const a = r.kb_articles
-          if (!a) return null
-          const sec = a.kb_sections
+        .map((r: { article_id: string; read_at: string; kb_articles?: unknown }) => {
+          const raw = r.kb_articles
+          const a = Array.isArray(raw) ? raw[0] : raw
+          if (!a || typeof a !== 'object' || !('title' in a) || !('slug' in a)) return null
+          const secRaw = 'kb_sections' in a ? a.kb_sections : undefined
+          const sec = Array.isArray(secRaw) ? secRaw[0] : secRaw
+          const sectionSlug = sec && typeof sec === 'object' && sec !== null && 'slug' in sec ? String((sec as { slug: string }).slug) : ''
           return {
             article_id: r.article_id,
-            article_title: a.title,
-            article_slug: a.slug,
-            section_slug: sec && typeof sec === 'object' && 'slug' in sec ? (sec as { slug: string }).slug : '',
+            article_title: String(a.title),
+            article_slug: String(a.slug),
+            section_slug: sectionSlug,
             read_at: r.read_at,
           }
         })

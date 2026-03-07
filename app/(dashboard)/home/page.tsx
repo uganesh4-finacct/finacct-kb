@@ -35,8 +35,8 @@ export default async function HomePage() {
 
   const profileData: Profile | null = profile
   const rawRole = (profileData?.role as string | undefined)?.toLowerCase()
-  const validRoles = ['admin', 'accountant', 'trainee'] as const
-  const role = rawRole && validRoles.includes(rawRole) ? rawRole : 'accountant'
+  const validRoles: readonly ['admin', 'accountant', 'trainee'] = ['admin', 'accountant', 'trainee']
+  const role: 'admin' | 'accountant' | 'trainee' = rawRole && validRoles.includes(rawRole as 'admin' | 'accountant' | 'trainee') ? (rawRole as 'admin' | 'accountant' | 'trainee') : 'accountant'
   const isTrainee = role === 'trainee'
   const isAdmin = role === 'admin'
   const fullName = profileData?.full_name?.trim() || user.email?.split('@')[0] || 'User'
