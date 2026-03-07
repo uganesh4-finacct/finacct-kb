@@ -8,6 +8,7 @@ import { QuizQuestion } from '@/components/training/QuizQuestion'
 import { QuizCompletePass } from '@/components/training/QuizComplete'
 import { QuizFailScreen } from '@/components/training/QuizFailScreen'
 import { QuizLocked } from '@/components/training/QuizLocked'
+import { clearCheckpointsForModule } from '@/components/training/Checkpoint'
 import { prepareQuiz } from '@/lib/quiz-utils'
 import type { QuizQuestionInput } from '@/lib/quiz-utils'
 
@@ -87,6 +88,11 @@ export function QuizClient({
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [quizStarted, finalSubmitted, handleBeforeUnload])
+
+  // Clear checkpoints when user enters quiz page so that returning to module (Back to Review, browser back, or Review Sections) shows 0/4
+  useEffect(() => {
+    clearCheckpointsForModule(moduleId)
+  }, [moduleId])
 
   function handleStartQuiz() {
     setQuizStarted(true)
