@@ -1,0 +1,51 @@
+{
+  "name": "finacct-kb",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx next dev -p 3002",
+    "build": "npx next build",
+    "start": "npx next start",
+    "lint": "npx next lint",
+    "seed": "npx tsx scripts/seed.ts",
+    "seed:kb": "npx ts-node scripts/seed-kb-articles.ts",
+    "seed:kb:clear": "npx ts-node scripts/seed-kb-articles.ts --clear",
+    "seed:coa": "npx tsx scripts/seed-coa-templates.ts"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "@tiptap/extension-code-block-lowlight": "^2.1.13",
+    "@tiptap/extension-image": "^2.1.13",
+    "@tiptap/extension-link": "^2.1.13",
+    "@tiptap/extension-table": "^2.1.13",
+    "@tiptap/extension-table-cell": "^2.1.13",
+    "@tiptap/extension-table-header": "^2.1.13",
+    "@tiptap/extension-table-row": "^2.1.13",
+    "@tiptap/react": "^2.1.13",
+    "@tiptap/starter-kit": "^2.1.13",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.0",
+    "lowlight": "^3.1.0",
+    "lucide-react": "^0.294.0",
+    "next": "^14.2.35",
+    "phosphor-react": "^1.4.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "dotenv": "^16.6.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5"
+  }
+}
