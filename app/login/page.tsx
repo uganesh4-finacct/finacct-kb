@@ -34,8 +34,8 @@ function LoginForm() {
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-xl shadow-slate-900/20 p-8">
         <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="p-2 rounded-xl bg-orange-100">
-            <BookOpen className="w-8 h-8 text-orange-600" />
+          <div className="p-2 rounded-xl bg-purple-100">
+            <BookOpen className="w-8 h-8 text-purple-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">FinAcct360 Academy</h1>
@@ -55,7 +55,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition text-slate-900"
+              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-slate-900"
               placeholder="you@company.com"
             />
           </div>
@@ -70,7 +70,7 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition text-slate-900"
+              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-slate-900"
               placeholder="••••••••"
             />
           </div>
@@ -82,13 +82,13 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-medium focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-60 transition"
+            className="w-full py-3 px-4 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-60 transition"
           >
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
         <p className="mt-6 text-center text-sm text-slate-500">
-          <Link href="/reset-password" className="text-orange-600 hover:text-orange-700 font-medium">
+          <Link href="/reset-password" className="text-purple-600 hover:text-purple-700 font-medium">
             Forgot password?
           </Link>
         </p>

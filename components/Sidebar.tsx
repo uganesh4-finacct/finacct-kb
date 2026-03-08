@@ -79,7 +79,7 @@ export function Sidebar({ role, sections, onCollapse, collapsed }: SidebarProps)
     <div className="flex flex-col h-full w-full min-w-[240px]">
       <div className="p-3 border-b border-slate-800/50 shrink-0">
         <Link href="/home" className="flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800">
-          <BookOpen size={36} className="text-orange-500 shrink-0" aria-hidden />
+          <BookOpen size={36} className="text-purple-500 shrink-0" aria-hidden />
           <div className="flex flex-col min-w-0">
             <span className="font-semibold text-white text-sm leading-tight truncate">FinAcct360</span>
             <span className="text-xs text-slate-400 leading-tight truncate">Academy</span>

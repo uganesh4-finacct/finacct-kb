@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: 'FinAcct360 Academy',
   description: 'Internal training and knowledge base',
   icons: {
-    // v=2 busts cache so production shows updated favicon (orange book + cap)
-    icon: [{ url: '/icon.svg?v=2', type: 'image/svg+xml' }, { url: '/favicon.svg?v=2', type: 'image/svg+xml' }],
+    // v=3 purple theme; bump after favicon/icon changes so production updates
+    icon: [{ url: '/icon.svg?v=3', type: 'image/svg+xml' }, { url: '/favicon.svg?v=3', type: 'image/svg+xml' }],
   },
 }
 

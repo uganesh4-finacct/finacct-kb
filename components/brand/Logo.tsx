@@ -23,7 +23,7 @@ export function Logo({ size = 'md', showText = true, href, className = '' }: Log
   const { iconSize, labelSize } = sizeMap[size]
   const content = (
     <div className={`flex items-center gap-3 ${className}`}>
-      <div className="flex items-center gap-1.5 bg-orange-500 rounded-lg px-2.5 py-2 shrink-0">
+      <div className="flex items-center gap-1.5 bg-purple-500 rounded-lg px-2.5 py-2 shrink-0">
         <BookOpen size={iconSize} className="text-white" aria-hidden />
         <span className={`text-white font-bold ${labelSize}`}>FA</span>
       </div>
