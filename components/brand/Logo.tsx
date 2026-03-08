@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { BookOpen } from 'lucide-react'
 
 export type LogoSize = 'sm' | 'md' | 'lg'
 
@@ -13,23 +14,26 @@ interface LogoProps {
 }
 
 const sizeMap = {
-  sm: { box: 'w-7 h-7', text: 'text-sm' },
-  md: { box: 'w-9 h-9', text: 'text-lg' },
-  lg: { box: 'w-11 h-11', text: 'text-xl' },
+  sm: { box: 'w-7 h-7', text: 'text-sm', iconSize: 14 },
+  md: { box: 'w-9 h-9', text: 'text-lg', iconSize: 16 },
+  lg: { box: 'w-11 h-11', text: 'text-xl', iconSize: 20 },
 } as const
 
 export function Logo({ size = 'md', showText = true, href, className = '' }: LogoProps) {
-  const { box, text } = sizeMap[size]
+  const { box, text, iconSize } = sizeMap[size]
   const content = (
     <div className={`flex items-center gap-3 ${className}`}>
-      <div className={`${box} bg-green-500 rounded-lg flex items-center justify-center shrink-0`}>
+      <div className={`${box} bg-orange-500 rounded-lg flex items-center justify-center shrink-0`}>
         <span className={`text-white font-bold ${text}`}>FA</span>
       </div>
       {showText && (
-        <div className="flex flex-col min-w-0">
-          <span className="font-semibold text-white leading-tight truncate">FinAcct360</span>
-          <span className="text-xs text-slate-400 leading-tight truncate">Academy</span>
-        </div>
+        <>
+          <BookOpen size={iconSize} className="text-slate-300 shrink-0" aria-hidden />
+          <div className="flex flex-col min-w-0">
+            <span className="font-semibold text-white leading-tight truncate">FinAcct360</span>
+            <span className="text-xs text-slate-400 leading-tight truncate">Academy</span>
+          </div>
+        </>
       )}
     </div>
   )
