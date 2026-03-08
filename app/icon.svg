@@ -1,4 +1,6 @@
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <rect width="32" height="32" rx="6" fill="#f97316"/>
-  <text x="16" y="22" text-anchor="middle" fill="white" font-family="system-ui" font-weight="bold" font-size="14">FA</text>
+  <path d="M8 8 L16 6 L24 8 L24 24 L16 22 L8 24 Z" fill="none" stroke="white" stroke-width="1.5"/>
+  <line x1="16" y1="6" x2="16" y2="22" stroke="white" stroke-width="1.5"/>
+  <text x="16" y="18" text-anchor="middle" fill="white" font-family="system-ui" font-weight="bold" font-size="8">FA</text>
 </svg>

@@ -14,26 +14,24 @@ interface LogoProps {
 }
 
 const sizeMap = {
-  sm: { box: 'w-7 h-7', text: 'text-sm', iconSize: 14 },
-  md: { box: 'w-9 h-9', text: 'text-lg', iconSize: 16 },
-  lg: { box: 'w-11 h-11', text: 'text-xl', iconSize: 20 },
+  sm: { iconSize: 14, labelSize: 'text-xs' },
+  md: { iconSize: 18, labelSize: 'text-sm' },
+  lg: { iconSize: 22, labelSize: 'text-base' },
 } as const
 
 export function Logo({ size = 'md', showText = true, href, className = '' }: LogoProps) {
-  const { box, text, iconSize } = sizeMap[size]
+  const { iconSize, labelSize } = sizeMap[size]
   const content = (
     <div className={`flex items-center gap-3 ${className}`}>
-      <div className={`${box} bg-orange-500 rounded-lg flex items-center justify-center shrink-0`}>
-        <span className={`text-white font-bold ${text}`}>FA</span>
+      <div className="flex items-center gap-1.5 bg-orange-500 rounded-lg px-2.5 py-2 shrink-0">
+        <BookOpen size={iconSize} className="text-white" aria-hidden />
+        <span className={`text-white font-bold ${labelSize}`}>FA</span>
       </div>
       {showText && (
-        <>
-          <BookOpen size={iconSize} className="text-slate-300 shrink-0" aria-hidden />
-          <div className="flex flex-col min-w-0">
-            <span className="font-semibold text-white leading-tight truncate">FinAcct360</span>
-            <span className="text-xs text-slate-400 leading-tight truncate">Academy</span>
-          </div>
-        </>
+        <div className="flex flex-col min-w-0">
+          <span className="font-semibold text-white text-sm leading-tight truncate">FinAcct360</span>
+          <span className="text-xs text-slate-400 leading-tight truncate">Academy</span>
+        </div>
       )}
     </div>
   )
