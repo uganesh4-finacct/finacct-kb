@@ -1,5 +1,5 @@
 -- COA template accounts for in-page expandable view.
--- Restaurant types: cafe, fsr, bar, qsr, fine_dining, multi_unit
+-- Restaurant types: cafe, fsr, bar, qsr, fine-dining, multi-unit
 
 CREATE TABLE IF NOT EXISTS public.coa_template_accounts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,

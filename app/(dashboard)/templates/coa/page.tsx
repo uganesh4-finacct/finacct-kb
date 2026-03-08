@@ -29,7 +29,7 @@ export default async function COATemplatesPage() {
   }
 
   return (
-    <div className="px-4 py-4 lg:px-8 lg:py-6 max-w-4xl">
+    <div className="px-4 py-4 lg:px-8 lg:py-6 max-w-6xl mx-auto">
       <header className="mb-8">
         <h1 className="text-2xl font-semibold text-white tracking-tight">
           COA Templates

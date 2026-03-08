@@ -61,4 +61,7 @@ async function main() {
   console.log(`Done. Inserted ${total} rows into coa_template_accounts.`)
 }
 
-main()
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
