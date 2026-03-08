@@ -120,10 +120,10 @@ export function KPICard({ value, label, sublabel, status = 'good', compact = fal
 
   if (compact) {
     return (
-      <div className={`rounded-xl bg-gradient-to-b ${statusColors[status ?? 'neutral']} border p-3 text-center min-w-0`}>
-        <div className="text-lg font-bold text-white mb-0.5 leading-tight">{value}</div>
-        <div className="text-xs text-slate-300 font-medium leading-snug">{label}</div>
-        {sublabel && <div className="text-[10px] text-slate-500 mt-1">{sublabel}</div>}
+      <div className={`rounded-xl bg-gradient-to-b ${statusColors[status ?? 'neutral']} border p-2.5 text-center min-w-0 flex flex-col justify-center`}>
+        <div className="text-sm font-bold text-white leading-tight">{value}</div>
+        <div className="text-[11px] text-slate-300 font-medium leading-snug mt-0.5">{label}</div>
+        {sublabel && <div className="text-[10px] text-slate-500 leading-snug mt-0.5">{sublabel}</div>}
       </div>
     )
   }
