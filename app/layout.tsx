@@ -3,7 +3,10 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'FinAcct360 Academy',
-  description: 'Internal documentation and training platform for FinAcct360 accounting team',
+  description: 'Internal training and knowledge base',
+  icons: {
+    icon: '/icon.svg',
+  },
 }
 
 export default function RootLayout({

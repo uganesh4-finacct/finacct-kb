@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { Search, Menu } from 'lucide-react'
 import { UserMenu } from './UserMenu'
 import type { UserRole } from '@/lib/types'
@@ -29,9 +28,6 @@ export function Header({ email, fullName, role, onMenuClick, showMenuButton }: H
             <Menu size={20} />
           </button>
         )}
-        <Link href="/home" className="text-sm font-medium text-slate-300 hover:text-white truncate hidden sm:block">
-          FinAcct360 Academy
-        </Link>
       </div>
       <div className="flex-1 max-w-xl mx-4 hidden md:block">
         <form method="get" action="/search" className="relative">
