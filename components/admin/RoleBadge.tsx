@@ -8,8 +8,14 @@ const ROLE_STYLES: Record<UserRole, string> = {
   trainee: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
 }
 
+const ROLE_LABELS: Record<UserRole, string> = {
+  admin: 'Admin',
+  accountant: 'Accountant',
+  trainee: 'Trainee',
+}
+
 export function RoleBadge({ role }: { role: UserRole }) {
-  const label = role === 'accountant' ? 'Accountant' : role.charAt(0).toUpperCase() + role.slice(1)
+  const label = ROLE_LABELS[role] ?? role
   return (
     <span
       className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${ROLE_STYLES[role] ?? 'bg-slate-500/20 text-slate-300'}`}

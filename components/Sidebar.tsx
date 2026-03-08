@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   Home,
@@ -13,7 +14,6 @@ import {
   ChevronLeft,
 } from 'lucide-react'
 import { FileXls, Table } from 'phosphor-react'
-import { Logo } from '@/components/brand/Logo'
 import type { UserRole } from '@/lib/types'
 import type { Section } from '@/lib/types'
 import { getDeduplicatedSections } from '@/lib/sections'
@@ -79,7 +79,19 @@ export function Sidebar({ role, sections, onCollapse, collapsed }: SidebarProps)
   return (
     <div className="flex flex-col h-full w-full min-w-[240px]">
       <div className="p-3 border-b border-slate-800/50 shrink-0">
-        <Logo size="md" showText={true} href="/home" />
+        <Link href="/home" className="flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800">
+          <Image
+            src="/FAacademy.png"
+            alt="FinAcct360 Academy"
+            width={36}
+            height={36}
+            className="rounded-lg shrink-0"
+          />
+          <div className="flex flex-col min-w-0">
+            <span className="font-semibold text-white text-sm leading-tight truncate">FinAcct360</span>
+            <span className="text-xs text-slate-400 leading-tight truncate">Academy</span>
+          </div>
+        </Link>
       </div>
       <nav className="p-3 space-y-1 flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain py-4">
         {/* Home - always first */}

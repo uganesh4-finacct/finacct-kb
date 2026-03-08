@@ -15,6 +15,10 @@ import { UserPlus, Trash2, AlertTriangle } from 'lucide-react'
 
 const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'admin']
 
+function roleLabel(r: UserRole): string {
+  return r.charAt(0).toUpperCase() + r.slice(1)
+}
+
 export default function AdminTeamPage() {
   const searchParams = useSearchParams()
   const [profiles, setProfiles] = useState<Profile[]>([])
@@ -135,7 +139,7 @@ export default function AdminTeamPage() {
                         className="rounded-lg border border-slate-600 bg-slate-700 text-white text-sm px-2 py-1"
                       >
                         {ROLE_OPTIONS.map((r) => (
-                          <option key={r} value={r}>{r}</option>
+                          <option key={r} value={r}>{roleLabel(r)}</option>
                         ))}
                       </select>
                     </td>
@@ -203,7 +207,7 @@ export default function AdminTeamPage() {
                 <label className="block text-sm font-medium text-slate-300 mb-1">Role</label>
                 <select name="role" className="w-full px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white">
                   {ROLE_OPTIONS.map((r) => (
-                    <option key={r} value={r}>{r}</option>
+                    <option key={r} value={r}>{roleLabel(r)}</option>
                   ))}
                 </select>
               </div>
