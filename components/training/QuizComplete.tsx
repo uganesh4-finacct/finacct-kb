@@ -36,7 +36,7 @@ export function QuizCompletePass({
       {trainingJustCompleted && (
         <div className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/40">
           <p className="text-lg font-semibold text-green-300">
-            🎉 Training Complete! You now have full access to the Knowledge Base as an Accountant.
+            🎉 Training Complete! You now have full access to the FinAcct360 Academy as an Accountant.
           </p>
         </div>
       )}

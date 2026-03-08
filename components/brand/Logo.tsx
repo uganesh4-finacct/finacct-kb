@@ -32,7 +32,7 @@ export function Logo({ size = 'md', showText = true, href, className = '' }: Log
             FinAcct360
           </span>
           <span className="text-xs text-slate-400 leading-tight truncate">
-            Knowledge Base
+            FinAcct360 Academy
           </span>
         </div>
       )}

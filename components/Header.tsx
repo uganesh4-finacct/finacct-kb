@@ -30,7 +30,7 @@ export function Header({ email, fullName, role, onMenuClick, showMenuButton }: H
           </button>
         )}
         <Link href="/home" className="text-sm font-medium text-slate-300 hover:text-white truncate hidden sm:block">
-          Knowledge Base
+          FinAcct360 Academy
         </Link>
       </div>
       <div className="flex-1 max-w-xl mx-4 hidden md:block">

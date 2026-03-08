@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
               <BookOpen className="w-8 h-8 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900">Knowledge Base</h1>
+              <h1 className="text-xl font-bold text-slate-900">FinAcct360 Academy</h1>
               <p className="text-sm text-slate-500">FinAcct360 Internal</p>
             </div>
           </div>

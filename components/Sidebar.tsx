@@ -99,7 +99,7 @@ export function Sidebar({ role, sections, onCollapse, collapsed }: SidebarProps)
         ) : (
           <>
             <p className="px-3 py-1.5 mt-4 text-xs font-medium text-slate-500 uppercase tracking-wide">
-              Knowledge Base
+              FinAcct360 Academy
             </p>
             {mainSections.map((section) => {
               const Icon = SECTION_ICONS[section.icon] ?? SECTION_ICONS.default

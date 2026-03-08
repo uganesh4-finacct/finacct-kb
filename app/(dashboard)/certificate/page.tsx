@@ -77,7 +77,7 @@ export default async function CertificatePage() {
             <p className="text-center text-slate-600 text-sm mb-6">This certifies that</p>
             <p className="text-center font-serif text-3xl font-semibold text-slate-800 mb-2">{fullName}</p>
             <p className="text-center text-slate-600 text-base mb-8">
-              has successfully completed the FinAcct360 Knowledge Base Training Program
+              has successfully completed the FinAcct360 Academy Training Program
             </p>
 
             {/* Stat boxes */}
