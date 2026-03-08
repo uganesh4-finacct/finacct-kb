@@ -10,7 +10,8 @@
     "seed": "npx tsx scripts/seed.ts",
     "seed:kb": "npx ts-node scripts/seed-kb-articles.ts",
     "seed:kb:clear": "npx ts-node scripts/seed-kb-articles.ts --clear",
-    "seed:coa": "npx tsx scripts/seed-coa-templates.ts"
+    "seed:coa": "npx tsx scripts/seed-coa-templates.ts",
+    "seed:coa-detailed": "npx tsx scripts/seed-coa-detailed.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.9.0",

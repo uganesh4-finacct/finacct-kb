@@ -1,77 +1,45 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { X, Copy, Check } from 'lucide-react'
 import type { COATemplateAccountRow } from './COATemplateCard'
 
-const CATEGORY_ORDER = [
-  'Assets',
-  'Liabilities',
-  'Equity',
-  'Revenue',
-  'COGS',
-  'Labor',
-  'Operating',
-  'Other',
-  'Multi-Unit',
-] as const
+type StatementTab = 'all' | 'pnl' | 'bs' | 'scf'
 
-const HEADERS = ['Account Number', 'Account Name', 'QBO Account Type', 'QBO Detail Type', 'Category', 'Notes']
-
-function groupByCategory(accounts: COATemplateAccountRow[]): { category: string; rows: COATemplateAccountRow[] }[] {
-  const sorted = [...accounts].sort((a, b) => a.order_index - b.order_index)
-  const byCat = new Map<string, COATemplateAccountRow[]>()
-  for (const row of sorted) {
-    const cat = row.category || 'Other'
-    if (!byCat.has(cat)) byCat.set(cat, [])
-    byCat.get(cat)!.push(row)
-  }
-  const result: { category: string; rows: COATemplateAccountRow[] }[] = []
-  for (const cat of CATEGORY_ORDER) {
-    const rows = byCat.get(cat)
-    if (rows?.length) result.push({ category: cat, rows })
-  }
-  for (const [cat, rows] of Array.from(byCat)) {
-    if (!CATEGORY_ORDER.includes(cat as (typeof CATEGORY_ORDER)[number])) {
-      result.push({ category: cat, rows })
-    }
-  }
-  return result
+const STATEMENT_CATEGORIES: Record<StatementTab, string[]> = {
+  all: ['Assets', 'Liabilities', 'Equity', 'Revenue', 'COGS', 'Labor', 'Operating', 'Other', 'Multi-Unit'],
+  pnl: ['Revenue', 'COGS', 'Labor', 'Operating', 'Other'],
+  bs: ['Assets', 'Liabilities', 'Equity'],
+  scf: ['Assets', 'Liabilities', 'Equity', 'Revenue', 'COGS', 'Labor', 'Operating', 'Other', 'Multi-Unit'],
 }
 
-function copyAllToClipboard(accounts: COATemplateAccountRow[]): boolean {
-  const headerRow = HEADERS.join('\t')
-  const dataRows = accounts
-    .sort((a, b) => a.order_index - b.order_index)
-    .map((a) =>
-      [
-        a.account_number,
-        a.account_name,
-        a.qbo_account_type,
-        a.qbo_detail_type,
-        a.category,
-        a.notes ?? '',
-      ].join('\t')
-    )
-  const text = [headerRow, ...dataRows].join('\n')
-  if (typeof navigator?.clipboard?.writeText !== 'function') return false
-  navigator.clipboard.writeText(text)
-  return true
+const CATEGORY_ORDER_BY_TAB: Record<StatementTab, readonly string[]> = {
+  all: ['Assets', 'Liabilities', 'Equity', 'Revenue', 'COGS', 'Labor', 'Operating', 'Other', 'Multi-Unit'],
+  pnl: ['Revenue', 'COGS', 'Labor', 'Operating', 'Other'],
+  bs: ['Assets', 'Liabilities', 'Equity'],
+  scf: ['Assets', 'Liabilities', 'Equity', 'Revenue', 'COGS', 'Labor', 'Operating', 'Other', 'Multi-Unit'],
 }
 
-function copyRowToClipboard(row: COATemplateAccountRow): boolean {
-  const line = [
-    row.account_number,
-    row.account_name,
-    row.qbo_account_type,
-    row.qbo_detail_type,
-    row.category,
-    row.notes ?? '',
-  ].join('\t')
-  if (typeof navigator?.clipboard?.writeText !== 'function') return false
-  navigator.clipboard.writeText(line)
-  return true
+const COPY_BUTTON_LABEL: Record<StatementTab, string> = {
+  all: 'Copy All',
+  pnl: 'Copy P&L',
+  bs: 'Copy BS',
+  scf: 'Copy SCF',
 }
+
+const HEADER_LABEL: Record<StatementTab, string> = {
+  all: 'All',
+  pnl: 'Profit & Loss',
+  bs: 'Balance Sheet',
+  scf: 'Cash Flow',
+}
+
+const TABS: { key: StatementTab; label: string }[] = [
+  { key: 'all', label: 'All' },
+  { key: 'pnl', label: 'Profit & Loss' },
+  { key: 'bs', label: 'Balance Sheet' },
+  { key: 'scf', label: 'Cash Flow' },
+]
 
 interface COADrawerProps {
   isOpen: boolean
@@ -81,26 +49,58 @@ interface COADrawerProps {
 }
 
 export function COADrawer({ isOpen, onClose, restaurantTitle, accounts }: COADrawerProps) {
-  const [copied, setCopied] = useState(false)
-  const [copiedRowId, setCopiedRowId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<StatementTab>('all')
+  const [copiedAll, setCopiedAll] = useState(false)
+  const [copiedCategory, setCopiedCategory] = useState<string | null>(null)
 
-  const handleCopyAll = () => {
-    if (copyAllToClipboard(accounts)) {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+  const filteredAccounts = useMemo(() => {
+    const allowed = STATEMENT_CATEGORIES[activeTab]
+    return accounts.filter((acc) => allowed.includes(acc.category || 'Other'))
+  }, [accounts, activeTab])
+
+  const groupedAccounts = useMemo(() => {
+    const groups: Record<string, COATemplateAccountRow[]> = {}
+    const sorted = [...filteredAccounts].sort((a, b) => a.order_index - b.order_index)
+    sorted.forEach((acc) => {
+      const cat = acc.category || 'Other'
+      if (!groups[cat]) groups[cat] = []
+      groups[cat].push(acc)
+    })
+    return groups
+  }, [filteredAccounts])
+
+  const orderedCategories = useMemo(() => {
+    const order = CATEGORY_ORDER_BY_TAB[activeTab]
+    const withData = order.filter((cat) => (groupedAccounts[cat]?.length ?? 0) > 0)
+    const other = Object.keys(groupedAccounts).filter((cat) => !order.includes(cat))
+    return [...withData, ...other]
+  }, [activeTab, groupedAccounts])
+
+  const handleCopyFiltered = () => {
+    const text = filteredAccounts
+      .sort((a, b) => a.order_index - b.order_index)
+      .map((a) => `${a.account_number}\t${a.account_name}${a.kpi_mapping ? `\t${a.kpi_mapping}` : ''}`)
+      .join('\n')
+    if (typeof navigator?.clipboard?.writeText === 'function') {
+      navigator.clipboard.writeText(text)
+      setCopiedAll(true)
+      setTimeout(() => setCopiedAll(false), 2000)
     }
   }
 
-  const handleCopyRow = (row: COATemplateAccountRow) => {
-    if (copyRowToClipboard(row)) {
-      setCopiedRowId(row.id)
-      setTimeout(() => setCopiedRowId(null), 2000)
+  const handleCopyCategory = (category: string) => {
+    const categoryAccounts = groupedAccounts[category] ?? []
+    const text = categoryAccounts
+      .map((a) => `${a.account_number}\t${a.account_name}${a.kpi_mapping ? `\t${a.kpi_mapping}` : ''}`)
+      .join('\n')
+    if (typeof navigator?.clipboard?.writeText === 'function') {
+      navigator.clipboard.writeText(text)
+      setCopiedCategory(category)
+      setTimeout(() => setCopiedCategory(null), 2000)
     }
   }
 
   if (!isOpen) return null
-
-  const grouped = groupByCategory(accounts)
 
   return (
     <>
@@ -110,74 +110,107 @@ export function COADrawer({ isOpen, onClose, restaurantTitle, accounts }: COADra
         aria-hidden
       />
       <div
-        className="fixed right-0 top-0 h-full w-full max-w-lg bg-slate-900 border-l border-slate-700 z-50 overflow-y-auto shadow-xl"
+        className="fixed right-0 top-0 h-full w-full max-w-lg bg-slate-900 border-l border-slate-700 z-50 flex flex-col shadow-xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="coa-drawer-title"
       >
-        <div className="sticky top-0 bg-slate-900 border-b border-slate-700 p-4 flex items-center justify-between z-10">
-          <div>
-            <h2 id="coa-drawer-title" className="text-lg font-semibold text-white">
-              {restaurantTitle}
-            </h2>
-            <p className="text-sm text-slate-400">{accounts.length} accounts</p>
+        <div className="border-b border-slate-700 p-4 shrink-0">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 id="coa-drawer-title" className="text-lg font-semibold text-white">
+                {restaurantTitle}
+              </h2>
+              <p className="text-sm text-slate-400">
+                {HEADER_LABEL[activeTab]} · {filteredAccounts.length} accounts
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleCopyFiltered}
+                className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm hover:bg-green-500 transition-colors"
+              >
+                {copiedAll ? <Check size={16} /> : <Copy size={16} />}
+                {copiedAll ? 'Copied!' : COPY_BUTTON_LABEL[activeTab]}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors"
+                aria-label="Close drawer"
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleCopyAll}
-              className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm hover:bg-green-500 transition-colors"
-            >
-              {copied ? <Check size={16} /> : <Copy size={16} />}
-              {copied ? 'Copied!' : 'Copy All'}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors"
-              aria-label="Close drawer"
-            >
-              <X size={20} />
-            </button>
+
+          <div className="flex gap-1 bg-slate-800 p-1 rounded-lg">
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex-1 min-w-0 px-2 py-2 text-xs font-medium leading-tight rounded-md transition-colors text-center ${
+                  activeTab === tab.key
+                    ? 'bg-orange-500 text-white'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="p-4">
-          {grouped.map((group) => (
-            <div key={group.category} className="mb-6">
-              <h3 className="text-xs uppercase tracking-wide text-slate-500 mb-2 font-medium">
-                {group.category}
-              </h3>
-              <div className="space-y-0.5">
-                {group.rows.map((account) => (
-                  <div
-                    key={account.id}
-                    className="flex items-center justify-between py-2 px-3 hover:bg-slate-800/50 rounded-lg group"
+        <div className="flex-1 overflow-y-auto p-4">
+          {orderedCategories.map((category) => {
+            const categoryAccounts = groupedAccounts[category] ?? []
+            return (
+              <div key={category} className="mb-6">
+                <div className="flex items-center justify-between mb-2 sticky top-0 bg-slate-900 py-1 z-10">
+                  <h3 className="text-xs uppercase tracking-wide text-slate-500 font-semibold">
+                    {category}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyCategory(category)}
+                    className="flex items-center gap-1 text-xs text-slate-400 hover:text-green-400 transition-colors"
                   >
-                    <div className="flex items-center gap-4 min-w-0">
-                      <span className="text-slate-400 font-mono text-sm w-14 shrink-0">
+                    {copiedCategory === category ? (
+                      <>
+                        <Check size={14} className="text-green-400" />
+                        <span className="text-green-400">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={14} />
+                        <span>Copy {categoryAccounts.length}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="space-y-0.5">
+                  {categoryAccounts.map((account) => (
+                    <div
+                      key={account.id}
+                      className={`flex items-center gap-3 py-1.5 px-2 rounded hover:bg-slate-800 ${
+                        account.is_parent ? 'font-medium' : 'pl-6 text-slate-400'
+                      }`}
+                    >
+                      <span className="font-mono text-sm w-12 text-slate-500 shrink-0">
                         {account.account_number}
                       </span>
-                      <span className="text-slate-200 text-sm truncate">{account.account_name}</span>
+                      <span className={account.is_parent ? 'text-white' : 'text-slate-300'}>
+                        {account.account_name}
+                      </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopyRow(account)}
-                      className="shrink-0 p-1.5 rounded text-slate-500 hover:text-green-400 hover:bg-slate-700/50 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                      title="Copy this account"
-                      aria-label={`Copy account ${account.account_number}`}
-                    >
-                      {copiedRowId === account.id ? (
-                        <Check size={14} className="text-green-400" />
-                      ) : (
-                        <Copy size={14} />
-                      )}
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </>

@@ -13,6 +13,7 @@ import {
   ProcessFlow,
   StepFlow,
 } from '@/components/content/ContentBlocks'
+import { COAAccountList } from '@/components/kb/COAAccountList'
 
 export interface TipTapNode {
   type: string
@@ -294,6 +295,15 @@ function renderNode(node: TipTapNode, index: number): React.ReactNode {
       const stepItems = (attrs.steps as { title: string; description?: string }[]) ?? []
       return <StepFlow key={key} steps={stepItems} />
     }
+
+    case 'coaAccountList':
+      return (
+        <COAAccountList
+          key={key}
+          category={String(attrs.category ?? '')}
+          restaurantType={(attrs.restaurantType as string) || 'fsr'}
+        />
+      )
 
     default:
       return content.length ? <div key={key}>{content.map((c, i) => renderNode(c, i))}</div> : null

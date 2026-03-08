@@ -168,6 +168,11 @@ const scenarioBox = (content: string) => ({
   content: [paragraph(content)],
 })
 
+const coaAccountList = (category: string, restaurantType = 'fsr') => ({
+  type: 'coaAccountList',
+  attrs: { category, restaurantType },
+})
+
 const stepFlow = (steps: { title: string; description: string }[]) => ({
   type: 'stepFlow',
   attrs: { steps, vertical: true },
@@ -334,6 +339,7 @@ const chartOfAccountsArticles = [
       content: [
         heading(1, 'Assets Accounts (1000s)'),
         paragraph('Asset accounts represent what the business owns or is owed. They appear on the balance sheet and drive cash flow classification on the Statement of Cash Flows (SCF).'),
+        coaAccountList('Assets'),
 
         heading(2, 'Cash (1010-1040)'),
         paragraph('Operating and payroll checking, savings, and petty cash. Changes in cash are reconciled on the SCF.'),
@@ -420,6 +426,8 @@ const chartOfAccountsArticles = [
         heading(1, 'Liabilities Accounts (2000s)'),
         paragraph('Liability accounts represent what the business owes. They appear on the balance sheet and affect Operating or Financing sections of the Statement of Cash Flows.'),
 
+        coaAccountList('Liabilities'),
+
         heading(2, 'Accounts Payable (2100s)'),
         paragraph('Amounts owed to vendors for goods and services already received.'),
         table(
@@ -496,6 +504,8 @@ const chartOfAccountsArticles = [
         heading(1, 'Equity Accounts (3000s)'),
         paragraph('Equity represents ownership and accumulated results. Owner contributions and draws are Financing on the Statement of Cash Flows; net income flows through Operating.'),
 
+        coaAccountList('Equity'),
+
         heading(2, "Owner's Equity / Capital (3100)"),
         paragraph('Capital contributed by owners. Increases are Financing (inflow).'),
         table(
@@ -552,7 +562,9 @@ const chartOfAccountsArticles = [
       content: [
         heading(1, 'Revenue Accounts (4000s)'),
         paragraph('All revenue accounts fall in the 4000-4999 range. This section details each account and when to use it.'),
-        
+
+        coaAccountList('Revenue'),
+
         heading(2, 'Food Sales (4100-4130)'),
         paragraph('Food sales are the primary revenue driver for most restaurants. We break them down by service type to track channel performance.'),
         table(
@@ -632,6 +644,8 @@ const chartOfAccountsArticles = [
       content: [
         heading(1, 'COGS Accounts (5000s)'),
         paragraph('Cost of Goods Sold (COGS) represents the direct cost of items sold to customers. This is one of the most important sections for restaurant profitability.'),
+
+        coaAccountList('COGS'),
 
         heading(2, 'What Belongs in COGS?'),
         insightBox('The Simple Test', 'If a customer takes it or consumes it, it\'s COGS. If it stays in the restaurant after the customer leaves, it\'s probably an operating expense.'),
@@ -716,6 +730,8 @@ const chartOfAccountsArticles = [
         heading(1, 'Labor Accounts (6000s)'),
         paragraph('Labor is typically the second-largest expense for restaurants (after COGS). Breaking it down by department helps identify staffing issues.'),
 
+        coaAccountList('Labor'),
+
         heading(2, 'Why We Separate Labor by Department'),
         insightBox('Department Visibility', 'If labor is just one number, you can\'t tell if you\'re overstaffed in the kitchen or the front. Separation reveals where to focus.'),
 
@@ -797,6 +813,8 @@ const chartOfAccountsArticles = [
       content: [
         heading(1, 'Operating Expenses (7000s)'),
         paragraph('Operating expenses are the costs of running the restaurant that aren\'t directly tied to food/beverage or labor.'),
+
+        coaAccountList('Operating'),
 
         heading(2, 'Rent & Occupancy (7100s)'),
         table(
@@ -907,6 +925,8 @@ const chartOfAccountsArticles = [
       content: [
         heading(1, 'Other Expenses (8000s)'),
         paragraph('These are non-operating expenses that still impact the bottom line.'),
+
+        coaAccountList('Other'),
 
         heading(2, 'Bank & CC Fees (8100s)'),
         table(

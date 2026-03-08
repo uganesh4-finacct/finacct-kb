@@ -19,6 +19,10 @@ export interface COATemplateAccountRow {
   category: string
   notes: string | null
   order_index: number
+  parent_account_number?: string | null
+  is_parent?: boolean
+  account_level?: number
+  kpi_mapping?: string | null
 }
 
 interface COATemplateCardProps {

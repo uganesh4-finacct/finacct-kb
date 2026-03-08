@@ -8,10 +8,11 @@ import { COADrawer } from '@/components/templates/COADrawer'
 import type { COATemplateAccountRow } from '@/components/templates/COATemplateCard'
 
 const RESTAURANT_CONFIG: { type: string; title: string; icon: string }[] = [
+  // type must match coa_template_accounts.restaurant_type exactly: bar, cafe, fine-dining, fsr, multi-unit, qsr
   { type: 'cafe', title: 'Cafe / Coffee Shop', icon: 'Coffee' },
   { type: 'fsr', title: 'Full Service Restaurant', icon: 'ForkKnife' },
   { type: 'bar', title: 'Bar & Grill', icon: 'BeerStein' },
-  { type: 'qsr', title: 'Fast Casual / QSR', icon: 'Hamburger' },
+  { type: 'qsr', title: 'QSR', icon: 'Hamburger' },
   { type: 'fine-dining', title: 'Fine Dining', icon: 'Wine' },
   { type: 'multi-unit', title: 'Multi-Unit / Chain', icon: 'Buildings' },
 ]
