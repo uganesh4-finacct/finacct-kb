@@ -52,18 +52,12 @@ export function QuizCompletePass({
           <p className="text-sm text-slate-500 mb-6">Time: {timeSpentFormatted}</p>
         )}
         <div className="flex flex-wrap justify-center gap-4">
-          <Link
-            href={`/training/${moduleSlug}/quiz`}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-800 transition-colors font-medium"
-          >
-            Review Answers
-          </Link>
           {nextModuleSlug ? (
             <Link
               href={`/training/${nextModuleSlug}`}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-medium transition-colors"
             >
-              Next: {nextModuleTitle ?? `Module ${moduleNumber + 1}`} →
+              Next: {nextModuleTitle ?? `Module ${moduleNumber + 1}`}
               <ArrowRight className="w-4 h-4" />
             </Link>
           ) : (
