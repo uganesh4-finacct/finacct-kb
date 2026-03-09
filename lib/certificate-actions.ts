@@ -11,7 +11,16 @@ export async function getOrCreateCertificate() {
   if (!profile?.training_completed) return { data: null, error: 'Training not completed' }
 
   const { data: existing } = await supabase.from('certificates').select('*').eq('user_id', user.id).single()
-  if (existing) return { data: existing, error: null }
+  if (existing) {
+    let cert = existing as { modules_completed?: number | null }
+    if (cert.modules_completed == null) {
+      const { data: attempts } = await supabase.from('quiz_attempts').select('module_id').eq('user_id', user.id).eq('passed', true)
+      const count = attempts ? new Set(attempts.map((a: { module_id: string }) => a.module_id)).size : 0
+      await supabase.from('certificates').update({ modules_completed: count }).eq('user_id', user.id)
+      cert = { ...cert, modules_completed: count }
+    }
+    return { data: cert, error: null }
+  }
 
   const { data: attempts } = await supabase.from('quiz_attempts').select('module_id, score').eq('user_id', user.id).eq('passed', true)
   const bestByModule: Record<string, number> = {}
@@ -21,6 +30,7 @@ export async function getOrCreateCertificate() {
   }
   const scores = Object.values(bestByModule)
   const averageScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0
+  const modulesCompleted = attempts ? new Set(attempts.map((a: { module_id: string }) => a.module_id)).size : 0
 
   const { data: progress } = await supabase.from('training_progress').select('time_spent_seconds').eq('user_id', user.id)
   const totalTime = (progress ?? []).reduce((sum, p) => sum + (p.time_spent_seconds ?? 0), 0)
@@ -36,6 +46,7 @@ export async function getOrCreateCertificate() {
       certificate_number: certNumber,
       average_score: Math.round(averageScore * 100) / 100,
       total_time_spent_seconds: totalTime,
+      modules_completed: modulesCompleted,
     })
     .select()
     .single()

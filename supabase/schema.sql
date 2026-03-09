@@ -153,7 +153,8 @@ CREATE TABLE public.certificates (
   certificate_number TEXT UNIQUE NOT NULL,
   issued_at TIMESTAMPTZ DEFAULT NOW(),
   average_score DECIMAL(5,2),
-  total_time_spent_seconds INTEGER
+  total_time_spent_seconds INTEGER,
+  modules_completed INTEGER
 );
 
 -- =============================================

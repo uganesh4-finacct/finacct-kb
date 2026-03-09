@@ -38,6 +38,40 @@ function getLearningPoints(content: TipTapNode | null): string[] {
   return points
 }
 
+/** Extract checkpoint box items from doc (the "I can..." list) for the checkbox component. */
+function getCheckpointItemsFromContent(content: TipTapNode | null): string[] {
+  const items: string[] = []
+  function walk(n: TipTapNode) {
+    if (n.type === 'checkpointBox' && Array.isArray(n.attrs?.items)) {
+      items.push(...(n.attrs.items as string[]))
+    }
+    n.content?.forEach(walk)
+  }
+  if (content?.type === 'doc') walk(content)
+  return items
+}
+
+/** Strip the "Checkpoints" h2 and the following checkpointBox from content so only the checkbox component shows. */
+function contentWithoutCheckpointsBlock(content: TipTapNode | null): TipTapNode | null {
+  if (!content || content.type !== 'doc' || !content.content?.length) return content
+  const out: TipTapNode[] = []
+  let i = 0
+  while (i < content.content.length) {
+    const node = content.content[i]
+    const isCheckpointsHeading =
+      node?.type === 'heading' && (node.attrs?.level as number) === 2 && getNodeText(node) === 'Checkpoints'
+    const next = content.content[i + 1]
+    const isCheckpointBox = next?.type === 'checkpointBox'
+    if (isCheckpointsHeading && isCheckpointBox) {
+      i += 2
+      continue
+    }
+    out.push(node as TipTapNode)
+    i += 1
+  }
+  return { ...content, content: out }
+}
+
 /** Strip duplicate h1 and optional leading description paragraph. */
 function contentWithoutDuplicateTitle(content: TipTapNode | null, description?: string): TipTapNode | null {
   if (!content || content.type !== 'doc' || !content.content?.length) return content
@@ -93,8 +127,15 @@ export function TrainingModuleView(props: TrainingModuleViewProps) {
   const [currentSectionId, setCurrentSectionId] = useState<string | null>(null)
   const [readSectionIds, setReadSectionIds] = useState<Set<string>>(new Set())
 
-  const displayContent = useMemo(() => contentWithoutDuplicateTitle(content, description), [content, description])
+  const displayContent = useMemo(() => {
+    const base = contentWithoutDuplicateTitle(content, description)
+    return contentWithoutCheckpointsBlock(base)
+  }, [content, description])
   const learningPoints = useMemo(() => getLearningPoints(displayContent), [displayContent])
+  const checkpointItemsFromContent = useMemo(
+    () => getCheckpointItemsFromContent(contentWithoutDuplicateTitle(content, description)),
+    [content, description]
+  )
   const totalSections = sectionIds.length
   const allSectionsRead = totalSections > 0 && readSectionIds.size >= totalSections
 
@@ -279,11 +320,15 @@ export function TrainingModuleView(props: TrainingModuleViewProps) {
             </div>
           </div>
 
+          <p className="mt-8 text-slate-400 text-sm">
+            Ready when you can complete all checkpoints below.
+          </p>
+
           <Checkpoint
             allSectionsRead={allSectionsRead}
             sectionsRead={sectionsRead}
             totalSections={totalSections}
-            checkpointItems={learningPoints}
+            checkpointItems={checkpointItemsFromContent.length > 0 ? checkpointItemsFromContent : learningPoints}
             moduleId={moduleId}
             moduleSlug={moduleSlug}
             questionCount={questionCount}

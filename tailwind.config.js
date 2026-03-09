@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         heading: ['Plus Jakarta Sans', 'Inter', 'ui-sans-serif', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'Georgia', 'serif'],
       },
       fontSize: {
         'display': ['2.25rem', { lineHeight: '1.2', letterSpacing: '-0.03em' }],
