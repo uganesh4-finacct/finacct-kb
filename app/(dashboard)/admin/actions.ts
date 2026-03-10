@@ -61,7 +61,7 @@ export async function inviteUser(formData: FormData) {
     const admin = createAdminClient()
     const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email.trim(), {
       data: { full_name: fullName.trim(), role },
-      emailRedirectTo: redirectTo,
+      redirectTo,
     })
     if (inviteError) return { ok: false as const, error: inviteError.message }
     if (inviteData?.user) {
