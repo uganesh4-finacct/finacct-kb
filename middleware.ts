@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/lib/types'
 
-const PUBLIC_PATHS = ['/login', '/reset-password', '/auth/confirm', '/update-password']
+const PUBLIC_PATHS = ['/login', '/reset-password', '/auth/confirm', '/auth/accept-invite', '/update-password']
 const TRAINING_PATH = '/training'
 const ADMIN_PATH = '/admin'
 const SECTION_PATH = '/section'

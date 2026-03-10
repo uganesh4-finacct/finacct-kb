@@ -55,10 +55,13 @@ export async function inviteUser(formData: FormData) {
   const fullName = (formData.get('full_name') as string) || 'New User'
   const role = (formData.get('role') as UserRole) || 'trainee'
   if (!email?.trim()) return { ok: false as const, error: 'Email required' }
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://kb.finacct360.io'
+  const redirectTo = `${siteUrl.replace(/\/$/, '')}/auth/accept-invite`
   try {
     const admin = createAdminClient()
     const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email.trim(), {
       data: { full_name: fullName.trim(), role },
+      emailRedirectTo: redirectTo,
     })
     if (inviteError) return { ok: false as const, error: inviteError.message }
     if (inviteData?.user) {

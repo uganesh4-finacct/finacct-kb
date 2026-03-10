@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
@@ -16,6 +16,15 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(errorParam === 'invalid_reset_link' ? 'Reset link invalid or expired. Request a new one.' : null)
   const [loading, setLoading] = useState(false)
+
+  // If we landed here with an invite hash (e.g. Supabase redirected to login), send to accept-invite to set password
+  useEffect(() => {
+    const hash = typeof window !== 'undefined' ? window.location.hash : ''
+    const params = new URLSearchParams(hash.replace(/^#/, ''))
+    if (params.get('access_token') || params.get('type') === 'invite') {
+      router.replace(`/auth/accept-invite${hash ? `#${hash.replace(/^#/, '')}` : ''}`)
+    }
+  }, [router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
