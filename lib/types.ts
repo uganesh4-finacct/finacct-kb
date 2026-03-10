@@ -16,6 +16,8 @@ export interface Profile {
   invited_at?: string | null
   last_active_at?: string | null
   avatar_url?: string | null
+  /** True when user was invited and has not yet set password; redirect to /update-password */
+  needs_password_set?: boolean
 }
 
 // Section Types

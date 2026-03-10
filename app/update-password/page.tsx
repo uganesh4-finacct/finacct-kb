@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { BookOpen, CheckCircle } from 'lucide-react'
+import { clearNeedsPasswordSet } from '@/app/actions/password'
 
 export default function UpdatePasswordPage() {
   const router = useRouter()
@@ -48,6 +49,7 @@ export default function UpdatePasswordPage() {
       setError(updateError.message)
       return
     }
+    await clearNeedsPasswordSet()
     setDone(true)
     router.push('/login?message=Password updated. Sign in with your new password.')
     router.refresh()

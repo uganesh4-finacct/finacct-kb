@@ -73,15 +73,22 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  // Fetch profile for role and training status (fresh from DB every request, no cache)
+  // Fetch profile for role, training status, and needs_password_set (fresh from DB every request, no cache)
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('role, training_completed')
+    .select('role, training_completed, needs_password_set')
     .eq('id', user.id)
     .maybeSingle()
 
   if (profileError) {
     console.error('[Middleware] Profile fetch error:', profileError.message, 'code:', profileError.code, 'for user', user.id)
+  }
+
+  // Invited users must set a password before using the app; send them to set-password page
+  if (profile?.needs_password_set === true && pathname !== '/update-password' && pathname !== '/auth/accept-invite' && pathname !== '/login') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/update-password'
+    return NextResponse.redirect(url)
   }
 
   const rawRole = (profile?.role as string | undefined)?.toLowerCase()

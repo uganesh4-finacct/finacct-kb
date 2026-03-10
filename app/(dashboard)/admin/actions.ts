@@ -67,7 +67,11 @@ export async function inviteUser(formData: FormData) {
     if (inviteData?.user) {
       const { error: profileError } = await admin
         .from('profiles')
-        .update({ full_name: fullName.trim(), role })
+        .update({
+          full_name: fullName.trim(),
+          role,
+          needs_password_set: true,
+        })
         .eq('id', inviteData.user.id)
       if (profileError) {
         // Profile may be created by trigger with default role; ignore or log
