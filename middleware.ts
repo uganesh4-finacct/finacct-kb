@@ -84,8 +84,11 @@ export async function middleware(request: NextRequest) {
     console.error('[Middleware] Profile fetch error:', profileError.message, 'code:', profileError.code, 'for user', user.id)
   }
 
-  // Invited users must set a password before using the app; send them to set-password page
-  if (profile?.needs_password_set === true && pathname !== '/update-password' && pathname !== '/set-password' && pathname !== '/auth/accept-invite' && pathname !== '/auth/accept-invite/confirm' && pathname !== '/login') {
+  // Invited users must set a password before using the app; send them to set-password page.
+  // Normalize path (no trailing slash) so /update-password and /update-password/ both allow the page and avoid redirect loops.
+  const pathNormalized = pathname.replace(/\/$/, '') || '/'
+  const isSetPasswordPath = pathNormalized === '/update-password' || pathNormalized === '/set-password' || pathNormalized.startsWith('/auth/accept-invite') || pathNormalized === '/login'
+  if (profile?.needs_password_set === true && !isSetPasswordPath) {
     const url = request.nextUrl.clone()
     url.pathname = '/update-password'
     return NextResponse.redirect(url)
