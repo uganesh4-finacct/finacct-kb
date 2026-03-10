@@ -5,12 +5,14 @@ import type { UserRole } from '@/lib/types'
 const ROLE_STYLES: Record<UserRole, string> = {
   admin: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
   accountant: 'bg-green-500/20 text-green-300 border-green-500/40',
+  editor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
   trainee: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
 }
 
 const ROLE_LABELS: Record<UserRole, string> = {
   admin: 'Admin',
   accountant: 'Accountant',
+  editor: 'Editor',
   trainee: 'Trainee',
 }
 
