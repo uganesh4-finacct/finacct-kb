@@ -9,6 +9,7 @@ import type { UserRole } from '@/lib/types'
 const ROLE_LABELS: Record<UserRole, string> = {
   admin: 'Admin',
   accountant: 'Accountant',
+  editor: 'Editor',
   trainee: 'Trainee',
 }
 

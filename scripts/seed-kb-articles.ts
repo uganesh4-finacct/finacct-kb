@@ -197,7 +197,7 @@ const chartOfAccountsArticles = [
       content: [
         heading(1, '1.1 Master COA Framework'),
         paragraph('The FinAcct360 Chart of Accounts is designed specifically for restaurant operations, providing granular visibility into all revenue streams, cost centers, and operational metrics that drive profitability in the food service industry.'),
-
+        
         heading(2, 'Account Range Structure'),
         table(
           ['Range', 'Category', 'Purpose'],
@@ -1261,7 +1261,7 @@ const sampleFinancialsArticles = [
       content: [
         heading(1, '4.1 Cafe / Coffee Shop P&L (Morning Buzz Profile)'),
         paragraph('Monthly P&L for a typical 1,200 sq ft cafe with $85,000 monthly revenue.'),
-
+        
         heading(2, 'REVENUE'),
         table(
           ['Account', 'Amount', '% of Sales'],
