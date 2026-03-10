@@ -5,10 +5,10 @@ import { useSearchParams } from 'next/navigation'
 import {
   getTeamProfiles,
   getQuizStatsByUser,
-  inviteUser,
   updateUserRole,
   deleteUser,
 } from '../actions'
+import { inviteUserWithOurEmail } from '@/app/actions/invite-email'
 import type { Profile } from '@/lib/types'
 import type { UserRole } from '@/lib/types'
 import { UserPlus, Trash2, AlertTriangle } from 'lucide-react'
@@ -51,7 +51,7 @@ export default function AdminTeamPage() {
     setInviteLoading(true)
     const form = e.currentTarget
     const formData = new FormData(form)
-    const res = await inviteUser(formData)
+    const res = await inviteUserWithOurEmail(formData)
     setInviteLoading(false)
     if (res.ok) {
       setModalOpen(false)
