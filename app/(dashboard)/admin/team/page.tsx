@@ -13,7 +13,7 @@ import type { Profile } from '@/lib/types'
 import type { UserRole } from '@/lib/types'
 import { UserPlus, Trash2, AlertTriangle } from 'lucide-react'
 
-const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'admin']
+const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'editor', 'admin']
 
 function roleLabel(r: UserRole): string {
   return r.charAt(0).toUpperCase() + r.slice(1)

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { UserRole } from '@/lib/types'
 
-const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'admin']
+const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'editor', 'admin']
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())

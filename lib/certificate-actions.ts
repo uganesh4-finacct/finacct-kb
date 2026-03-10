@@ -55,6 +55,24 @@ export async function getOrCreateCertificate() {
     .single()
 
   if (error) return { data: null, error: error.message }
+
+  const { data: newProfile } = await supabase.from('profiles').select('full_name').eq('id', user.id).single()
+  const userName = newProfile?.full_name || user.email?.split('@')[0] || 'A user'
+  const adminEmail = process.env.ADMIN_COMPLETION_EMAIL || 'ganesh@finacctsolutions.com'
+  if (process.env.RESEND_API_KEY && adminEmail) {
+    try {
+      const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <onboarding@resend.dev>'
+      await resend.emails.send({
+        from,
+        to: [adminEmail],
+        subject: `${userName} completed FinAcct360 Academy training`,
+        html: `<p>${userName} has completed all training modules and received their certificate (${certNumber}).</p>`,
+      })
+    } catch {
+      // ignore
+    }
+  }
+
   return { data: inserted, error: null }
 }
 

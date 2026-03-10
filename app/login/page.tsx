@@ -10,9 +10,11 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') ?? '/home'
+  const message = searchParams.get('message')
+  const errorParam = searchParams.get('error')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(errorParam === 'invalid_reset_link' ? 'Reset link invalid or expired. Request a new one.' : null)
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -43,6 +45,11 @@ function LoginForm() {
           </div>
         </div>
         <h2 className="text-2xl font-semibold text-slate-800 mb-6">Sign in</h2>
+        {message && (
+          <p className="mb-4 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+            {message}
+          </p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
