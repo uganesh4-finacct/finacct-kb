@@ -33,7 +33,7 @@ export default async function DashboardLayout({
 
   const profileData = profile as Profile | null
   const rawRole = (profileData?.role as string | undefined)?.toLowerCase()
-  const validRoles: UserRole[] = ['admin', 'accountant', 'trainee']
+  const validRoles: UserRole[] = ['admin', 'editor', 'accountant', 'trainee']
   const role: UserRole = rawRole && validRoles.includes(rawRole as UserRole) ? (rawRole as UserRole) : 'accountant'
 
   if (process.env.NODE_ENV === 'development') {

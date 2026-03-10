@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Clock, Star, Bookmark } from 'lucide-react'
+import { Bookmark } from 'lucide-react'
 
 export type ArticleType = 'reference' | 'guide' | 'checklist' | 'template' | 'troubleshoot'
 
@@ -17,7 +17,7 @@ export interface ArticleCardProps {
   type: ArticleType
   title: string
   description: string | null
-  readTime: number
+  readTime?: number
   saves?: number
   href: string
   isPinned?: boolean
@@ -28,8 +28,6 @@ export function ArticleCard({
   type,
   title,
   description,
-  readTime,
-  saves = 0,
   href,
   isPinned = false,
   onBookmarkClick,
@@ -72,19 +70,8 @@ export function ArticleCard({
         {title}
       </h3>
       {description && (
-        <p className="text-sm text-slate-400 line-clamp-2 mb-4">{description}</p>
+        <p className="text-sm text-slate-400 line-clamp-2">{description}</p>
       )}
-
-      <div className="flex items-center gap-4 text-xs text-slate-500">
-        <span className="flex items-center gap-1">
-          <Clock className="w-3.5 h-3.5" />
-          {readTime} min read
-        </span>
-        <span className="flex items-center gap-1">
-          <Star className="w-3.5 h-3.5" />
-          {saves} saves
-        </span>
-      </div>
     </Link>
   )
 }

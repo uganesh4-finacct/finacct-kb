@@ -107,12 +107,12 @@ export default function AdminSectionsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-slate-800/50">
-                <th className="px-4 py-3 text-sm font-semibold text-slate-300">Title</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-300">Icon</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-300">Articles</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-300">Status</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-300 w-28">Actions</th>
+              <tr className="border-b border-slate-700 bg-slate-800">
+                <th className="px-4 py-3 text-sm font-semibold text-slate-200">Title</th>
+                <th className="px-4 py-3 text-sm font-semibold text-slate-200">Icon</th>
+                <th className="px-4 py-3 text-sm font-semibold text-slate-200">Articles</th>
+                <th className="px-4 py-3 text-sm font-semibold text-slate-200">Status</th>
+                <th className="px-4 py-3 text-sm font-semibold text-slate-200 w-28">Actions</th>
               </tr>
             </thead>
             <tbody>

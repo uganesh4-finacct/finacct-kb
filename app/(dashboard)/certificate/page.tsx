@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { getOrCreateCertificate } from '@/lib/certificate-actions'
 import { CertificateDownload } from '@/components/CertificateDownload'
 import { CertificatePrint } from '@/components/CertificatePrint'
+import { CertificateEmailButton } from '@/components/CertificateEmailButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,14 +19,23 @@ export default async function CertificatePage() {
   const { data: profile } = await supabase.from('profiles').select('full_name, training_completed').eq('id', user.id).single()
   if (!profile?.training_completed) redirect('/training')
 
+  const { count: totalModulesCount } = await supabase
+    .from('training_modules')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_published', true)
+  const totalModules = totalModulesCount ?? 0
+
   const { data: cert, error } = await getOrCreateCertificate()
   if (error || !cert) redirect('/training')
 
   const modulesCompleted = (cert as { modules_completed?: number | null }).modules_completed ?? 0
+  if (totalModules > 0 && modulesCompleted < totalModules) redirect('/training')
+
   const issuedDate = new Date(cert.issued_at)
   const issuedFormatted = issuedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   const fullName = profile.full_name || user.email?.split('@')[0] || 'User'
   const averageScore = cert.average_score != null ? Number(cert.average_score).toFixed(1) : '—'
+  const modulesLabel = totalModules > 0 ? totalModules : modulesCompleted
 
   return (
     <div className="min-h-screen bg-slate-900 p-6 lg:p-8">
@@ -41,6 +50,7 @@ export default async function CertificatePage() {
       <div className="no-print flex flex-col items-center gap-4 mb-8 max-w-5xl mx-auto">
         <div className="flex flex-wrap items-center justify-center gap-3">
           <CertificateDownload />
+          <CertificateEmailButton />
           <CertificatePrint />
         </div>
         <Link href="/training" className="text-slate-400 hover:text-white text-sm font-medium">
@@ -51,22 +61,21 @@ export default async function CertificatePage() {
       <div className="max-w-5xl mx-auto flex justify-center">
         <div
           id="certificate"
-          className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-4xl mx-auto"
-          style={{ width: '800px', minHeight: '560px' }}
+          className="bg-white rounded-xl shadow-2xl max-w-4xl mx-auto certificate-pdf-source"
+          style={{ width: '800px', minHeight: '560px', paddingTop: '6px' }}
         >
-          {/* Gradient top border */}
-          <div className="h-2 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600" />
+          {/* Gradient top border — visible margin so PDF capture doesn't clip */}
+          <div className="h-2 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-t-xl" />
 
-          <div className="p-12 h-full flex flex-col">
-            {/* Logo */}
-            <div className="flex justify-center mb-8">
-              <Image
+          <div className="p-12 pt-10 pb-10 flex flex-col">
+            {/* Logo — extra top padding so PDF capture doesn't clip */}
+            <div className="flex justify-center mb-8 pt-2">
+              <img
                 src="/logo-light.png"
                 alt="FinAcct360 Academy"
                 width={180}
                 height={60}
-                className="object-contain"
-                priority
+                className="object-contain w-[180px] h-[60px]"
               />
             </div>
 
@@ -103,7 +112,7 @@ export default async function CertificatePage() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto mb-10">
               <div className="text-center p-4 bg-slate-50 rounded-xl">
-                <p className="text-3xl font-bold text-orange-500">{modulesCompleted}</p>
+                <p className="text-3xl font-bold text-orange-500">{modulesLabel}</p>
                 <p className="text-xs uppercase tracking-wide text-slate-500 mt-1">Modules</p>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-xl">

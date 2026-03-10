@@ -245,8 +245,30 @@
 }
 
 .ProseMirror th {
-  background: #f8fafc;
+  background: #334155;
   font-weight: 600;
+  color: #e2e8f0;
+}
+
+/* Article editor (dark): headings and text readable on dark background */
+.article-editor-root .ProseMirror {
+  color: #e2e8f0;
+}
+.article-editor-root .ProseMirror h1,
+.article-editor-root .ProseMirror h2,
+.article-editor-root .ProseMirror h3 {
+  color: #f1f5f9;
+}
+.article-editor-root .ProseMirror td {
+  border-color: #475569;
+  color: #e2e8f0;
+}
+.article-editor-root .ProseMirror code {
+  background: #334155;
+  color: #e2e8f0;
+}
+.article-editor-root .ProseMirror blockquote {
+  color: #94a3b8;
 }
 
 .ProseMirror blockquote {

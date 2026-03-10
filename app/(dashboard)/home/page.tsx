@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import type { Profile, Section } from '@/lib/types'
+import type { Profile, Section, UserRole } from '@/lib/types'
 import { getGreeting } from '@/lib/greeting'
 import { SECTION_DISPLAY_ORDER } from '@/lib/sections'
 import { TraineeHome } from '@/components/home/TraineeHome'
@@ -35,8 +35,8 @@ export default async function HomePage() {
 
   const profileData: Profile | null = profile
   const rawRole = (profileData?.role as string | undefined)?.toLowerCase()
-  const validRoles: readonly ['admin', 'accountant', 'trainee'] = ['admin', 'accountant', 'trainee']
-  const role: 'admin' | 'accountant' | 'trainee' = rawRole && validRoles.includes(rawRole as 'admin' | 'accountant' | 'trainee') ? (rawRole as 'admin' | 'accountant' | 'trainee') : 'accountant'
+  const validRoles: readonly UserRole[] = ['admin', 'editor', 'accountant', 'trainee']
+  const role: UserRole = rawRole && validRoles.includes(rawRole as UserRole) ? (rawRole as UserRole) : 'accountant'
   const isTrainee = role === 'trainee'
   const isAdmin = role === 'admin'
   const fullName = profileData?.full_name?.trim() || user.email?.split('@')[0] || 'User'

@@ -10,9 +10,10 @@ import {
   Printer,
   ChevronLeft,
   ChevronRight,
+  Pencil,
 } from 'lucide-react'
-import { Pencil } from 'phosphor-react'
-import { InlineEditor } from '@/components/editor/InlineEditor'
+import { ArticleEditor } from '@/components/ArticleEditor'
+import { EditModeToggle } from '@/components/EditModeToggle'
 import { ReadingProgress } from '@/components/content/ReadingProgress'
 import { ArticleSidebar } from '@/components/content/ArticleSidebar'
 
@@ -92,6 +93,7 @@ export function ArticlePageClient({
   const [copied, setCopied] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [toastType, setToastType] = useState<'success' | 'error'>('success')
 
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -214,6 +216,7 @@ export function ArticlePageClient({
   return (
     <>
       <ReadingProgress progress={progress} />
+      <EditModeToggle onEdit={() => setIsEditing(true)} visible={canEdit && !isEditing} />
 
       <div className="w-full max-w-[1600px] mx-auto px-6 py-6 lg:px-10 lg:py-8 flex gap-8">
         <ArticleSidebar
@@ -229,7 +232,7 @@ export function ArticlePageClient({
         />
 
         <article className="article-main-content min-w-0 flex-1 no-select max-w-none">
-          <nav className="flex flex-wrap items-center justify-between gap-4 mb-4" aria-label="Breadcrumb">
+          <nav className="flex flex-wrap items-center justify-between gap-4 mb-4 bg-slate-900/50 -mx-2 px-2 py-2 rounded-lg" aria-label="Breadcrumb">
             <div className="flex items-center gap-2 text-sm text-slate-400">
               <Link href="/home" className="hover:text-white flex items-center gap-1 transition-colors">
                 <Home className="w-4 h-4" />
@@ -284,7 +287,7 @@ export function ArticlePageClient({
             </div>
           </nav>
 
-          <header className="mb-8">
+          <header className="mb-8 bg-slate-900/50 -mx-2 px-4 py-3 rounded-lg">
             <h1 className="text-2xl font-semibold text-white leading-tight mb-2">{articleTitle}</h1>
             {articleExcerpt && !isEditing && (
               <p className="text-base text-slate-400 mb-3">{articleExcerpt}</p>
@@ -299,7 +302,9 @@ export function ArticlePageClient({
 
           {toastMessage && (
             <div
-              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium shadow-lg"
+              className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg text-sm font-medium shadow-lg ${
+                toastType === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+              }`}
               role="status"
               aria-live="polite"
             >
@@ -308,15 +313,20 @@ export function ArticlePageClient({
           )}
 
           {isEditing ? (
-            <InlineEditor
+            <ArticleEditor
               articleId={articleId}
               initialContent={initialContent ?? { type: 'doc', content: [] }}
               onSaveSuccess={() => {
                 setToastMessage('Article saved')
+                setToastType('success')
                 router.refresh()
                 setIsEditing(false)
               }}
               onCancel={() => setIsEditing(false)}
+              onSaveError={(msg) => {
+                setToastMessage(msg)
+                setToastType('error')
+              }}
               enableDraft={true}
             />
           ) : (

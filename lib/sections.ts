@@ -10,15 +10,19 @@ export const SECTION_DISPLAY_ORDER = [
   'pos-guides',
 ] as const
 
+/** Sections to hide from sidebar and home (e.g. not ready yet). */
+const HIDDEN_SECTION_SLUGS = new Set<string>(['client-education'])
+
 const preferredSlugs = new Set<string>(SECTION_DISPLAY_ORDER)
 
 /**
  * Deduplicate sections by title (keep one per title, preferring the preferred slug).
  * Sort by SECTION_DISPLAY_ORDER so sidebar and home show sections in the same order.
+ * Excludes sections in HIDDEN_SECTION_SLUGS.
  */
 export function getDeduplicatedSections(sections: Section[]): Section[] {
   const filtered = sections
-    .filter((s) => s.is_published && !s.is_training_section)
+    .filter((s) => s.is_published && !s.is_training_section && !HIDDEN_SECTION_SLUGS.has(s.slug))
   const byTitle = new Map<string, Section>()
   for (const s of filtered) {
     const existing = byTitle.get(s.title)

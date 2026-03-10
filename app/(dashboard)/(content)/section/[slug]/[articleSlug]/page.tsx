@@ -66,12 +66,22 @@ export default async function ArticlePage({
 
   const showQuickCopy = section.slug === 'chart-of-accounts'
 
+  /** Sections that allow inline editing (Admin or Editor). Client Education is read-only. */
+  const EDITABLE_SECTION_SLUGS = [
+    'chart-of-accounts',
+    'standard-operating-procedures',
+    'exception-handling',
+    'sample-financials',
+    'pos-guides',
+  ]
   let canEdit = false
   const { data: { user } } = await supabase.auth.getUser()
   if (user) {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle()
     const role = (profile?.role as string)?.toLowerCase()
-    canEdit = role === 'admin'
+    const isAdminOrEditor = role === 'admin' || role === 'editor'
+    /** Inline article edit: admin or editor, and only in editable sections (not client-education). */
+    canEdit = isAdminOrEditor && EDITABLE_SECTION_SLUGS.includes(section.slug)
   }
 
   return (

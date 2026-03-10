@@ -10,6 +10,7 @@
     "seed": "npx tsx scripts/seed.ts",
     "seed:kb": "npx ts-node scripts/seed-kb-articles.ts",
     "seed:kb:clear": "npx ts-node scripts/seed-kb-articles.ts --clear",
+    "delete-minimal-kb": "npx ts-node scripts/delete-minimal-kb-articles.ts",
     "seed:coa": "npx tsx scripts/seed-coa-templates.ts",
     "seed:coa-detailed": "npx tsx scripts/seed-coa-detailed.ts"
   },
@@ -17,6 +18,7 @@
     "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.39.0",
     "@tiptap/extension-code-block-lowlight": "^2.1.13",
+    "@tiptap/extension-highlight": "^2.27.2",
     "@tiptap/extension-image": "^2.1.13",
     "@tiptap/extension-link": "^2.1.13",
     "@tiptap/extension-table": "^2.1.13",
@@ -33,6 +35,7 @@
     "phosphor-react": "^1.4.1",
     "react": "^18",
     "react-dom": "^18",
+    "resend": "^6.9.3",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

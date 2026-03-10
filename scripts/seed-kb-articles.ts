@@ -68,7 +68,7 @@ const sections = [
     id: 'sample-financials',
     title: 'Sample Financials',
     slug: 'sample-financials',
-    description: 'P&L templates and examples by restaurant type',
+    description: 'Sample P&L statements by restaurant type, plus Balance Sheet template. Use for client expectations and benchmarking.',
     icon: 'BarChart3',
     order_index: 3,
   },
@@ -179,146 +179,130 @@ const stepFlow = (steps: { title: string; description: string }[]) => ({
 })
 
 // =============================================================================
-// SECTION 1: CHART OF ACCOUNTS (12 articles)
+// SECTION 1: CHART OF ACCOUNTS (5 cards: 1.1 – 1.5)
 // =============================================================================
 
 const chartOfAccountsArticles = [
   {
-    title: 'COA Master Framework',
-    slug: 'coa-master-framework',
+    title: '1.1 Master COA Framework',
+    slug: '1-1-master-coa-framework',
     section_slug: 'chart-of-accounts',
     type: 'reference',
-    excerpt: 'Complete FinAcct360 Chart of Accounts structure for all restaurant types',
-    read_time: 8,
+    excerpt: 'Account range structure, revenue, COGS, labor, and operating expense breakdowns',
+    read_time: 12,
     is_pinned: true,
     order_index: 0,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'COA Master Framework'),
-        paragraph('The FinAcct360 Chart of Accounts is specifically designed for restaurant accounting. Every account maps directly to the KPIs our clients see on their dashboard.'),
-        insightBox('Why Our COA Matters', 'Generic COAs don\'t work for restaurants. Our structure ensures: Prime Cost calculates correctly, Food vs Beverage costs are separated, Third-party delivery fees are visible, and Labor is broken down by department.'),
-        
-        heading(2, 'Account Range Overview'),
+        heading(1, '1.1 Master COA Framework'),
+        paragraph('The FinAcct360 Chart of Accounts is designed specifically for restaurant operations, providing granular visibility into all revenue streams, cost centers, and operational metrics that drive profitability in the food service industry.'),
+
+        heading(2, 'Account Range Structure'),
         table(
           ['Range', 'Category', 'Purpose'],
           [
-            ['1000-1999', 'Assets', 'Cash, AR, inventory, equipment'],
-            ['2000-2999', 'Liabilities', 'AP, credit cards, loans, accruals'],
-            ['3000-3999', 'Equity', 'Owner\'s equity, retained earnings, draws'],
-            ['4000-4999', 'Revenue', 'All sales categories'],
-            ['5000-5999', 'Cost of Goods Sold', 'Food, beverage, packaging'],
-            ['6000-6999', 'Labor', 'All payroll and related costs'],
-            ['7000-7999', 'Operating Expenses', 'Rent, utilities, marketing, supplies'],
-            ['8000-8999', 'Other Expenses', 'Bank fees, depreciation, interest'],
-            ['9000-9999', 'Multi-Unit', 'Consolidated reporting (chains only)'],
+            ['1000-1999', 'Assets', 'Cash, receivables, inventory, equipment, deposits'],
+            ['2000-2999', 'Liabilities', 'Payables, credit cards, loans, accrued expenses'],
+            ['3000-3999', 'Equity', 'Owner capital, retained earnings, distributions'],
+            ['4000-4999', 'Revenue', 'All sales by category, discounts, comps'],
+            ['5000-5999', 'Cost of Goods Sold', 'Food cost, beverage cost, packaging, supplies'],
+            ['6000-6999', 'Labor Costs', 'Wages, benefits, payroll taxes by position'],
+            ['7000-7999', 'Operating Expenses', 'Rent, utilities, marketing, repairs, insurance'],
+            ['8000-8999', 'Other Income/Expense', 'Interest, depreciation, one-time items'],
+            ['9000-9999', 'Multi-Unit/Consolidated', 'Intercompany, allocations, consolidated entries'],
           ]
         ),
 
-        heading(2, 'Revenue Accounts (4000s)'),
+        heading(2, 'Revenue Accounts (4000s) - Detailed Breakdown'),
         table(
-          ['Account', 'Name', 'Description'],
+          ['Account', 'Name', 'Description & Usage'],
           [
-            ['4100', 'Food Sales', 'Dine-in and takeout food'],
-            ['4110', 'Food Sales - Dine In', 'Food consumed on premises'],
-            ['4120', 'Food Sales - Takeout', 'Food picked up by customer'],
-            ['4130', 'Food Sales - Catering', 'Catering and events'],
-            ['4200', 'Beverage Sales', 'All drink sales'],
-            ['4210', 'Beer Sales', 'Draft and bottled beer'],
-            ['4220', 'Wine Sales', 'Wine by glass and bottle'],
-            ['4230', 'Spirits Sales', 'Liquor and cocktails'],
-            ['4240', 'NA Beverage Sales', 'Soft drinks, coffee, tea'],
-            ['4300', 'Third-Party Delivery', 'DoorDash, UberEats, Grubhub'],
-            ['4310', 'DoorDash Sales', 'DoorDash orders'],
-            ['4320', 'UberEats Sales', 'UberEats orders'],
-            ['4330', 'Grubhub Sales', 'Grubhub orders'],
-            ['4400', 'Other Revenue', 'Non-food/bev revenue'],
-            ['4410', 'Gift Card Sales', 'Gift card purchases'],
-            ['4420', 'Merchandise Sales', 'Branded items'],
-            ['4500', 'Discounts', 'Negative - reduces revenue'],
-            ['4510', 'Comps', 'Complimentary items'],
-            ['4520', 'Employee Meals', 'Staff food allowance'],
-          ]
-        ),
-        warningBox('Third-Party Delivery', 'ALWAYS separate third-party sales from regular food sales. The 15-30% commission fees significantly impact margins. Clients need to see this clearly.'),
-
-        heading(2, 'COGS Accounts (5000s)'),
-        table(
-          ['Account', 'Name', 'Description'],
-          [
-            ['5100', 'Food Cost', 'All food purchases'],
-            ['5110', 'Meat & Poultry', 'Beef, chicken, pork'],
-            ['5120', 'Seafood', 'Fish, shellfish'],
-            ['5130', 'Produce', 'Fruits, vegetables'],
-            ['5140', 'Dairy', 'Milk, cheese, eggs'],
-            ['5150', 'Dry Goods', 'Pasta, rice, flour'],
-            ['5200', 'Beverage Cost', 'All beverage purchases'],
-            ['5210', 'Beer Cost', 'Beer inventory'],
-            ['5220', 'Wine Cost', 'Wine inventory'],
-            ['5230', 'Spirits Cost', 'Liquor inventory'],
-            ['5240', 'NA Beverage Cost', 'Soft drinks, coffee beans'],
-            ['5300', 'Packaging', 'To-go containers, bags'],
-            ['5400', 'Paper Goods', 'Napkins, paper towels (customer use)'],
-          ]
-        ),
-        proTipBox('Paper goods for customer use (napkins at tables) go to 5400. Paper goods for cleaning (paper towels in kitchen) go to 7510 Cleaning Supplies.'),
-
-        heading(2, 'Labor Accounts (6000s)'),
-        table(
-          ['Account', 'Name', 'Description'],
-          [
-            ['6100', 'FOH Labor', 'Front of house wages'],
-            ['6110', 'Server Wages', 'Servers, waitstaff'],
-            ['6120', 'Bartender Wages', 'Bartenders'],
-            ['6130', 'Host Wages', 'Hosts, hostesses'],
-            ['6140', 'Busser Wages', 'Bussers, food runners'],
-            ['6200', 'BOH Labor', 'Back of house wages'],
-            ['6210', 'Kitchen Wages', 'Line cooks, prep'],
-            ['6220', 'Dishwasher Wages', 'Dishwashers'],
-            ['6300', 'Management Labor', 'Salaried managers'],
-            ['6310', 'GM Salary', 'General Manager'],
-            ['6320', 'AGM Salary', 'Assistant Manager'],
-            ['6400', 'Payroll Taxes', 'Employer portion'],
-            ['6410', 'Social Security', 'Employer SS 6.2%'],
-            ['6420', 'Medicare', 'Employer Medicare 1.45%'],
-            ['6430', 'FUTA', 'Federal unemployment'],
-            ['6440', 'SUTA', 'State unemployment'],
-            ['6500', 'Benefits', 'Health, 401k, workers comp'],
-            ['6600', 'Overtime', 'OT premium (0.5x portion only)'],
-          ]
-        ),
-        insightBox('Overtime Recording', 'Record the base rate in regular wages (6100/6200). Only the 0.5x premium goes to 6600 Overtime. This gives accurate regular vs OT visibility.'),
-
-        heading(2, 'Operating Expenses (7000s)'),
-        table(
-          ['Account', 'Name', 'Description'],
-          [
-            ['7100', 'Rent & Occupancy', 'Base rent, CAM, property tax'],
-            ['7200', 'Utilities', 'Electric, gas, water, trash, internet'],
-            ['7300', 'Marketing', 'Digital, print, local advertising'],
-            ['7400', 'Technology', 'POS fees, software subscriptions'],
-            ['7500', 'Supplies', 'Cleaning, office, smallwares'],
-            ['7600', 'Repairs & Maintenance', 'Equipment repair, building maintenance'],
-            ['7700', 'Insurance', 'General liability, property'],
-            ['7800', 'Professional Services', 'Accounting, legal, consulting'],
-            ['7900', 'Licenses & Permits', 'Liquor license, health permit, business license'],
+            ['4000', 'Food Sales - Dine In', 'All food revenue from on-premise dining. Primary revenue driver for full-service.'],
+            ['4010', 'Food Sales - Takeout', 'Direct takeout orders placed in-store or by phone. No third-party fees.'],
+            ['4020', 'Food Sales - Delivery (1st Party)', "Delivery orders through restaurant's own drivers/system."],
+            ['4030', 'Food Sales - DoorDash', 'Gross food sales via DoorDash before commission deduction.'],
+            ['4031', 'Food Sales - Uber Eats', 'Gross food sales via Uber Eats before commission deduction.'],
+            ['4032', 'Food Sales - Grubhub', 'Gross food sales via Grubhub before commission deduction.'],
+            ['4040', 'Food Sales - Catering', 'Large orders for events, corporate functions, parties.'],
+            ['4100', 'Beer Sales', 'All draft, bottle, and can beer sales.'],
+            ['4110', 'Wine Sales', 'Wine by glass and bottle sales.'],
+            ['4120', 'Spirits/Liquor Sales', 'All mixed drinks, shots, premium spirits.'],
+            ['4130', 'Non-Alcoholic Beverage Sales', 'Soft drinks, coffee, tea, juices, mocktails.'],
+            ['4200', 'Merchandise Sales', 'Branded items, retail products, gift cards.'],
+            ['4900', 'Discounts & Comps', 'CONTRA ACCOUNT - Reduces revenue. Manager comps, promos, coupons.'],
+            ['4910', 'Employee Meals', 'CONTRA ACCOUNT - Staff meal deductions from sales.'],
+            ['4920', 'Voids & Refunds', 'CONTRA ACCOUNT - Order errors, customer refunds.'],
           ]
         ),
 
-        heading(2, 'Other Expenses (8000s)'),
+        heading(2, 'Cost of Goods Sold (5000s) - Detailed Breakdown'),
         table(
-          ['Account', 'Name', 'Description'],
+          ['Account', 'Name', 'Description & Usage'],
           [
-            ['8100', 'Bank & CC Fees', 'Bank fees, credit card processing'],
-            ['8110', 'Bank Fees', 'Account fees'],
-            ['8120', 'CC Processing', 'Card processing fees (2.5-3.5%)'],
-            ['8200', 'Third-Party Fees', 'Delivery platform commissions'],
-            ['8210', 'DoorDash Fees', 'DoorDash commission (15-30%)'],
-            ['8220', 'UberEats Fees', 'UberEats commission'],
-            ['8230', 'Grubhub Fees', 'Grubhub commission'],
-            ['8300', 'Interest Expense', 'Loan interest'],
-            ['8400', 'Depreciation', 'Asset depreciation'],
-            ['8500', 'Amortization', 'Intangible amortization'],
+            ['5000', 'Food Cost - Proteins', 'Meat, poultry, seafood purchases. Typically 35-45% of food cost.'],
+            ['5010', 'Food Cost - Produce', 'Fresh vegetables, fruits, herbs. Monitor for waste closely.'],
+            ['5020', 'Food Cost - Dairy', 'Milk, cheese, butter, cream, eggs.'],
+            ['5030', 'Food Cost - Dry Goods', 'Pasta, rice, flour, canned goods, spices, oils.'],
+            ['5040', 'Food Cost - Frozen', 'Frozen proteins, vegetables, prepared items.'],
+            ['5050', 'Food Cost - Bakery/Bread', 'Bread, buns, pastries, desserts.'],
+            ['5100', 'Beverage Cost - Beer', 'Draft, bottle, can beer purchases.'],
+            ['5110', 'Beverage Cost - Wine', 'Wine inventory purchases.'],
+            ['5120', 'Beverage Cost - Spirits', 'Liquor, mixers, garnishes for bar.'],
+            ['5130', 'Beverage Cost - NA Beverages', 'Soft drinks, coffee, tea, juices, syrups.'],
+            ['5200', 'Paper & Packaging', 'To-go containers, napkins, straws, bags. Critical for QSR/fast casual.'],
+            ['5210', 'Smallwares & Supplies', 'Kitchen tools, utensils, disposable gloves.'],
+            ['5300', 'Third-Party Delivery Fees', 'DoorDash, Uber Eats, Grubhub commissions (15-30% of order).'],
+          ]
+        ),
+
+        heading(2, 'Labor Costs (6000s) - Detailed Breakdown'),
+        table(
+          ['Account', 'Name', 'Description & Usage'],
+          [
+            ['6000', 'FOH Wages - Servers', 'Server hourly wages (often $2.13-$7.25 tipped minimum).'],
+            ['6010', 'FOH Wages - Bartenders', 'Bartender hourly wages.'],
+            ['6020', 'FOH Wages - Hosts/Cashiers', 'Host stand, cashier positions.'],
+            ['6030', 'FOH Wages - Bussers/Runners', 'Support staff hourly wages.'],
+            ['6100', 'BOH Wages - Line Cooks', 'Kitchen line cook hourly wages.'],
+            ['6110', 'BOH Wages - Prep Cooks', 'Prep cook hourly wages.'],
+            ['6120', 'BOH Wages - Dishwashers', 'Dish/porter hourly wages.'],
+            ['6200', 'Management Salaries', 'GM, AGM, Kitchen Manager fixed salaries.'],
+            ['6210', 'Sous Chef/Executive Chef', 'Senior kitchen leadership salaries.'],
+            ['6300', 'Overtime Pay', 'All overtime wages (1.5x rate). Track closely - major cost leak.'],
+            ['6400', 'Payroll Taxes', 'FICA, FUTA, SUTA employer portion. ~7.65% of wages.'],
+            ['6410', 'Workers Comp Insurance', 'Workers compensation premiums. High-risk industry.'],
+            ['6420', 'Health Insurance', 'Employer-paid health benefits.'],
+            ['6500', 'Contract Labor', 'Temp agencies, event staffing, 1099 workers.'],
+          ]
+        ),
+
+        heading(2, 'Operating Expenses (7000s) - Detailed Breakdown'),
+        table(
+          ['Account', 'Name', 'Description & Usage'],
+          [
+            ['7000', 'Rent - Base', 'Monthly base rent per lease. Typically 6-10% of revenue.'],
+            ['7010', 'Rent - CAM/NNN', 'Common area maintenance, triple net pass-throughs.'],
+            ['7020', 'Rent - Percentage Rent', 'Revenue-based rent above breakpoint (mall/high-traffic locations).'],
+            ['7100', 'Utilities - Electric', 'Electricity for HVAC, kitchen equipment, lighting.'],
+            ['7110', 'Utilities - Gas', 'Natural gas for cooking, heating.'],
+            ['7120', 'Utilities - Water/Sewer', 'Water usage, sewer, trash removal.'],
+            ['7130', 'Utilities - Internet/Phone', 'Internet for POS, phones, music streaming.'],
+            ['7200', 'Marketing - Digital', 'Social media ads, Google Ads, SEO, email marketing.'],
+            ['7210', 'Marketing - Print/Local', 'Flyers, local sponsorships, signage.'],
+            ['7220', 'Marketing - Loyalty Programs', 'Loyalty software, rewards fulfillment costs.'],
+            ['7300', 'Repairs & Maintenance', 'Equipment repairs, HVAC service, plumbing, electrical.'],
+            ['7310', 'Equipment Rental/Leases', 'Leased kitchen equipment, POS hardware rental.'],
+            ['7400', 'Insurance - General Liability', 'GL policy for slip/fall, property damage.'],
+            ['7410', 'Insurance - Property', 'Building/contents insurance.'],
+            ['7420', 'Insurance - Liquor Liability', 'Dram shop coverage for alcohol service.'],
+            ['7500', 'Professional Services', 'Accounting, legal, consulting fees.'],
+            ['7510', 'Bank & Credit Card Fees', 'Merchant processing fees (typically 2.5-3.5% of CC sales).'],
+            ['7520', 'Software & Subscriptions', 'POS subscription, scheduling software, inventory systems.'],
+            ['7600', 'Cleaning & Janitorial', 'Cleaning supplies, janitorial service, linen service.'],
+            ['7610', 'Pest Control', 'Monthly pest control service.'],
+            ['7700', 'Licenses & Permits', 'Health permits, liquor license, business license.'],
+            ['7800', 'Music & Entertainment', 'ASCAP/BMI fees, DJ, live entertainment.'],
           ]
         ),
       ],
@@ -326,85 +310,89 @@ const chartOfAccountsArticles = [
   },
 
   {
-    title: 'Assets Accounts (1000s)',
-    slug: 'assets-accounts-1000s',
+    title: '1.2 COA by Restaurant Type',
+    slug: '1-2-coa-by-restaurant-type',
     section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'Cash, AR, inventory, prepaid, fixed assets, and accumulated depreciation',
-    read_time: 5,
-    is_pinned: false,
+    type: 'guide',
+    excerpt: 'Key accounts and target percentages for cafe, FSR, bar, QSR, fine dining, multi-unit',
+    read_time: 10,
+    is_pinned: true,
     order_index: 1,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Assets Accounts (1000s)'),
-        paragraph('Asset accounts represent what the business owns or is owed. They appear on the balance sheet and drive cash flow classification on the Statement of Cash Flows (SCF).'),
-        coaAccountList('Assets'),
+        heading(1, '1.2 COA by Restaurant Type'),
+        paragraph('While our master COA provides the complete framework, different restaurant concepts emphasize different accounts. Below are the key accounts and typical percentages for each restaurant type we serve.'),
 
-        heading(2, 'Cash (1010-1040)'),
-        paragraph('Operating and payroll checking, savings, and petty cash. Changes in cash are reconciled on the SCF.'),
+        heading(2, 'Type 1: Cafe / Coffee Shop (Morning Buzz Profile)'),
+        paragraph('Key Characteristics: High-margin beverages, morning/afternoon daypart focus, lower labor needs, high transaction volume with low average ticket.'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Revenue Focus', 'COGS Focus', 'Target Percentages'],
           [
-            ['1010', 'Operating Checking', 'Operating'],
-            ['1020', 'Payroll Checking', 'Operating'],
-            ['1030', 'Savings', 'Operating'],
-            ['1040', 'Petty Cash', 'Operating'],
+            ['4130 NA Bev Sales (60-70%)', '5130 Coffee/Tea Cost', 'Total COGS: 22-28%'],
+            ['4040 Food Sales (25-35%)', '5050 Bakery/Pastries', 'Labor: 25-30%'],
+            ['4200 Merchandise (5-10%)', '5200 Paper Cups/Lids', 'Prime Cost: 50-55%'],
           ]
         ),
 
-        heading(2, 'Accounts Receivable (1100s)'),
-        paragraph('Money owed to the business. Catering and gift card receivables are common in restaurants.'),
+        heading(2, 'Type 2: Full Service Restaurant (Olive & Vine Profile)'),
+        paragraph('Key Characteristics: Table service, full bar, higher check averages, lunch and dinner dayparts, significant FOH labor.'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Revenue Focus', 'COGS Focus', 'Target Percentages'],
           [
-            ['1100', 'Accounts Receivable', 'Operating'],
-            ['1110', 'AR - Catering', 'Operating'],
-            ['1120', 'AR - Gift Cards', 'Operating'],
+            ['4000 Food Dine-In (65-75%)', '5000-5050 Full Food Cost', 'Food COGS: 28-32%'],
+            ['4100-4120 Alcohol (20-30%)', '5100-5120 Full Bar Cost', 'Bev COGS: 18-22%'],
+            ['4130 NA Beverages (5%)', '5300 Delivery Fees (if applicable)', 'Labor: 30-35%'],
+            ['', '', 'Prime Cost: 60-65%'],
           ]
         ),
 
-        heading(2, 'Inventory (1200s)'),
-        paragraph('Food, beverage, and supplies on hand. Valued at cost for balance sheet.'),
+        heading(2, 'Type 3: Bar & Grill / Sports Bar (Smokeys, Tailgators Profile)'),
+        paragraph('Key Characteristics: Beverage-forward concept, high alcohol mix, event-driven traffic (games), late-night hours, entertainment costs.'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Revenue Focus', 'COGS Focus', 'Target Percentages'],
           [
-            ['1200', 'Inventory', 'Operating'],
-            ['1210', 'Food Inventory', 'Operating'],
-            ['1220', 'Beverage Inventory', 'Operating'],
-          ]
-        ),
-        insightBox('Inventory and SCF', 'An increase in inventory uses cash (Operating); a decrease frees cash. Restaurant inventory should be counted at least monthly for accurate COGS.'),
-
-        heading(2, 'Prepaid Expenses (1300s)'),
-        paragraph('Expenses paid in advance. As time passes, these move to expense accounts.'),
-        table(
-          ['Account', 'Name', 'SCF'],
-          [
-            ['1300', 'Prepaid Expenses', 'Operating'],
-            ['1310', 'Prepaid Insurance', 'Operating'],
-            ['1320', 'Prepaid Rent', 'Operating'],
+            ['4100 Beer (30-40%)', '5100 Beer Cost (critical)', 'Bev COGS: 20-24%'],
+            ['4120 Spirits (15-25%)', '5120 Spirits Cost', 'Food COGS: 30-35%'],
+            ['4000 Food (35-45%)', '5000 Wings/Appetizers', 'Labor: 28-32%'],
+            ['', '', 'Prime Cost: 58-62%'],
           ]
         ),
 
-        heading(2, 'Fixed Assets (1500s)'),
-        paragraph('Equipment, furniture, and improvements. Purchases are Investing activities on the SCF.'),
+        heading(2, 'Type 4: Fast Casual / QSR (Brij Foods / Spitz Profile)'),
+        paragraph('Key Characteristics: Counter service, high volume, fast throughput, heavy delivery mix, significant paper/packaging costs.'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Revenue Focus', 'COGS Focus', 'Target Percentages'],
           [
-            ['1500', 'Fixed Assets', 'Investing'],
-            ['1510', 'Kitchen Equipment', 'Investing'],
-            ['1520', 'Furniture & Fixtures', 'Investing'],
-            ['1530', 'Leasehold Improvements', 'Investing'],
+            ['4000 Food Dine-In (30-40%)', '5200 Paper/Packaging (HIGH)', 'Food COGS: 28-32%'],
+            ['4010 Takeout (20-30%)', '5300 Delivery Fees (HIGH)', 'Paper: 3-5%'],
+            ['4030-4032 3rd Party (25-35%)', '5000-5040 Food Cost', 'Delivery Fees: 8-12%'],
+            ['', '', 'Labor: 25-30%'],
+            ['', '', 'Prime Cost: 58-65%'],
           ]
         ),
 
-        heading(2, 'Accumulated Depreciation (1600)'),
-        paragraph('Contra-asset that reduces fixed assets. Depreciation expense is non-cash; on SCF it is added back in Operating.'),
+        heading(2, 'Type 5: Fine Dining'),
+        paragraph('Key Characteristics: High check average, premium ingredients, extensive wine program, high labor with skilled staff, dinner-focused.'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Revenue Focus', 'COGS Focus', 'Target Percentages'],
           [
-            ['1600', 'Accumulated Depreciation', 'Operating (add-back)'],
+            ['4000 Food Dine-In (60-70%)', '5000 Premium Proteins', 'Food COGS: 30-35%'],
+            ['4110 Wine (20-30%)', '5110 Wine Inventory', 'Wine COGS: 28-35%'],
+            ['4120 Spirits (5-10%)', '6200-6210 Chef Salaries', 'Labor: 35-40%'],
+            ['', '', 'Prime Cost: 65-70%'],
+          ]
+        ),
+
+        heading(2, 'Type 6: Multi-Unit / Chain Operations'),
+        paragraph('Key Characteristics: Multiple locations, corporate overhead allocation, intercompany transactions, consolidated reporting requirements.'),
+        table(
+          ['Additional Accounts', 'Allocation Methods', 'Consolidation Notes'],
+          [
+            ['9000 Intercompany Revenue', 'Corporate overhead by revenue %', 'Eliminate intercompany'],
+            ['9100 Management Fees', 'Marketing by unit count', 'Unit-level P&L required'],
+            ['9200 Royalty Expense', 'IT by transaction volume', 'Same-store sales tracking'],
+            ['9300 Corporate Allocations', 'HR by headcount', 'Four-wall EBITDA focus'],
           ]
         ),
       ],
@@ -412,1470 +400,727 @@ const chartOfAccountsArticles = [
   },
 
   {
-    title: 'Liabilities Accounts (2000s)',
-    slug: 'liabilities-accounts-2000s',
+    title: '1.3 Balance Sheet Accounts',
+    slug: '1-3-balance-sheet-accounts',
     section_slug: 'chart-of-accounts',
     type: 'reference',
-    excerpt: 'AP, credit cards, accrued expenses, loans, and deferred revenue',
-    read_time: 5,
+    excerpt: 'Assets (1000s), Liabilities (2000s), and Equity (3000s)',
+    read_time: 8,
     is_pinned: false,
     order_index: 2,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Liabilities Accounts (2000s)'),
-        paragraph('Liability accounts represent what the business owes. They appear on the balance sheet and affect Operating or Financing sections of the Statement of Cash Flows.'),
+        heading(1, '1.3 Balance Sheet Accounts'),
+        paragraph('Balance sheet accounts represent what the business owns (assets), owes (liabilities), and owner interest (equity).'),
 
-        coaAccountList('Liabilities'),
-
-        heading(2, 'Accounts Payable (2100s)'),
-        paragraph('Amounts owed to vendors for goods and services already received.'),
+        heading(2, 'Assets (1000s)'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Account', 'Name', 'Description & Notes'],
           [
-            ['2100', 'Accounts Payable', 'Operating'],
-            ['2110', 'AP - Food Vendors', 'Operating'],
-            ['2120', 'AP - Beverage Vendors', 'Operating'],
+            ['1000', 'Operating Checking', 'Primary operating account for daily transactions.'],
+            ['1010', 'Payroll Account', 'Dedicated account for payroll funding.'],
+            ['1020', 'Savings/Reserve', 'Emergency fund, tax reserves.'],
+            ['1100', 'Accounts Receivable', 'Catering deposits, gift card sales clearing, etc.'],
+            ['1200', 'Food Inventory', 'On-hand food inventory value (if tracking).'],
+            ['1210', 'Beverage Inventory', 'Bar inventory value (if tracking).'],
+            ['1300', 'Prepaid Rent', 'Rent paid in advance.'],
+            ['1310', 'Prepaid Insurance', 'Annual insurance premiums paid upfront.'],
+            ['1400', 'Security Deposits', 'Lease deposits, utility deposits.'],
+            ['1500', 'Leasehold Improvements', 'Build-out costs, tenant improvements.'],
+            ['1510', 'Accumulated Depr - LHI', 'CONTRA - Accumulated depreciation on improvements.'],
+            ['1600', 'Kitchen Equipment', 'Ovens, fryers, refrigeration, prep equipment.'],
+            ['1610', 'Accumulated Depr - Equipment', 'CONTRA - Accumulated depreciation on equipment.'],
+            ['1700', 'Furniture & Fixtures', 'Tables, chairs, bar fixtures, decor.'],
+            ['1710', 'Accumulated Depr - FF&E', 'CONTRA - Accumulated depreciation on FF&E.'],
+            ['1800', 'POS System & Technology', 'Point of sale hardware, computers, tablets.'],
           ]
         ),
 
-        heading(2, 'Credit Cards Payable (2200)'),
-        paragraph('Outstanding credit card balances used for business expenses. Paydown is Operating.'),
+        heading(2, 'Liabilities (2000s)'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Account', 'Name', 'Description & Notes'],
           [
-            ['2200', 'Credit Cards Payable', 'Operating'],
-          ]
-        ),
-        warningBox('Credit Card vs Expense', 'Charges go to expense accounts (e.g. 5100 Food Cost). The liability (2200) increases when you charge; it decreases when you pay the card. Don\'t double-count expenses when paying the bill.'),
-
-        heading(2, 'Accrued Expenses (2300s)'),
-        paragraph('Expenses incurred but not yet paid or invoiced.'),
-        table(
-          ['Account', 'Name', 'SCF'],
-          [
-            ['2300', 'Accrued Expenses', 'Operating'],
-            ['2310', 'Accrued Payroll', 'Operating'],
-            ['2320', 'Accrued Taxes', 'Operating'],
-            ['2330', 'Accrued Interest', 'Operating'],
+            ['2000', 'Accounts Payable', 'Amounts owed to vendors, suppliers.'],
+            ['2100', 'Credit Card - Amex', 'Business credit card balance.'],
+            ['2110', 'Credit Card - Visa/MC', 'Additional credit card accounts.'],
+            ['2200', 'Accrued Payroll', 'Wages earned but not yet paid.'],
+            ['2210', 'Accrued Payroll Taxes', 'Payroll taxes owed to IRS/state.'],
+            ['2300', 'Sales Tax Payable', 'Collected sales tax owed to state.'],
+            ['2400', 'Gift Card Liability', 'Outstanding gift card balances (unearned revenue).'],
+            ['2500', 'Line of Credit', 'Revolving credit facility balance.'],
+            ['2600', 'Equipment Loan', 'Financed kitchen equipment.'],
+            ['2700', 'SBA Loan / Term Loan', 'Long-term business loans.'],
+            ['2800', 'Due to Owner/Shareholder', 'Owner loans to the business.'],
           ]
         ),
 
-        heading(2, 'Loans Payable (2400s)'),
-        paragraph('Debt from lenders. Principal payments are Financing on the SCF; interest is Operating.'),
+        heading(2, 'Equity (3000s)'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Account', 'Name', 'Description & Notes'],
           [
-            ['2400', 'Loans Payable', 'Financing'],
-            ['2410', 'Line of Credit', 'Financing'],
-            ['2420', 'Equipment Loans', 'Financing'],
-            ['2430', 'SBA Loans', 'Financing'],
+            ['3000', 'Owner Capital / Common Stock', 'Initial and additional owner investments.'],
+            ['3100', 'Retained Earnings', 'Accumulated profits from prior years.'],
+            ['3200', 'Owner Distributions', 'CONTRA - Owner draws/distributions.'],
+            ['3300', 'Current Year Net Income', 'YTD profit/loss (auto-calculated).'],
           ]
         ),
-        proTipBox('When recording a loan payment: split between Interest Expense (8300) and reduction of 2400s. Only the principal portion is Financing on SCF.'),
-
-        heading(2, 'Deferred Revenue (2500s)'),
-        paragraph('Money received before revenue is earned (e.g. gift cards, deposits).'),
-        table(
-          ['Account', 'Name', 'SCF'],
-          [
-            ['2500', 'Deferred Revenue', 'Operating'],
-            ['2510', 'Gift Card Liability', 'Operating'],
-            ['2520', 'Deposits Received', 'Operating'],
-          ]
-        ),
-
       ],
     },
   },
 
   {
-    title: 'Equity Accounts (3000s)',
-    slug: 'equity-accounts-3000s',
+    title: '1.4 Cash Flow Classification',
+    slug: '1-4-cash-flow-classification',
     section_slug: 'chart-of-accounts',
     type: 'reference',
-    excerpt: "Owner's equity, retained earnings, draws, and current year earnings",
-    read_time: 4,
+    excerpt: 'Operating, Investing, and Financing cash flow mapping',
+    read_time: 5,
     is_pinned: false,
     order_index: 3,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Equity Accounts (3000s)'),
-        paragraph('Equity represents ownership and accumulated results. Owner contributions and draws are Financing on the Statement of Cash Flows; net income flows through Operating.'),
+        heading(1, '1.4 Cash Flow Classification'),
+        paragraph('Understanding cash flow classification is critical for restaurant owners. Below is our standard mapping of restaurant accounts to the three cash flow categories.'),
 
-        coaAccountList('Equity'),
-
-        heading(2, "Owner's Equity / Capital (3100)"),
-        paragraph('Capital contributed by owners. Increases are Financing (inflow).'),
+        heading(2, 'Operating Activities'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Cash Inflows (Sources)', 'Cash Outflows (Uses)'],
           [
-            ['3100', "Owner's Equity / Capital", 'Financing'],
+            ['Cash sales and credit card settlements', 'Payment to food/beverage vendors'],
+            ['Collection of accounts receivable', 'Payroll and payroll taxes'],
+            ['Gift card sales (initially)', 'Rent and utility payments'],
+            ['Deposits received for catering', 'Insurance premiums'],
+            ['', 'Marketing and advertising'],
+            ['', 'All operating expenses'],
           ]
         ),
 
-        heading(2, 'Retained Earnings (3200)'),
-        paragraph('Cumulative profit (or loss) from prior years. Not a source of cash flow by itself; it\'s the result of past operations.'),
+        heading(2, 'Investing Activities'),
         table(
-          ['Account', 'Name', 'SCF'],
+          ['Cash Inflows (Sources)', 'Cash Outflows (Uses)'],
           [
-            ['3200', 'Retained Earnings', '—'],
-          ]
-        ),
-        insightBox('Closing the Books', 'Each period, net income closes into Retained Earnings (or 3900 Current Year Earnings). Retained Earnings = opening balance + prior year net income - dividends/draws.'),
-
-        heading(2, "Owner's Draws / Distributions (3300)"),
-        paragraph('Withdrawals by owners. Reduces equity and is a Financing outflow on the SCF.'),
-        table(
-          ['Account', 'Name', 'SCF'],
-          [
-            ['3300', "Owner's Draws / Distributions", 'Financing'],
-          ]
-        ),
-        warningBox('Draws vs Salary', 'In pass-through entities (LLC, S-Corp), owner draws are not wages—they\'re distributions. W-2 salary to owner goes through Labor (6300s) and reduces net income.'),
-
-        heading(2, 'Current Year Earnings (3900)'),
-        paragraph('Current period net income before closing. On the SCF, net income is the starting point for Operating activities.'),
-        table(
-          ['Account', 'Name', 'SCF'],
-          [
-            ['3900', 'Current Year Earnings', 'Operating (net income)'],
+            ['Sale of equipment', 'Purchase of kitchen equipment'],
+            ['Return of security deposits', 'Leasehold improvements'],
+            ['Proceeds from selling a location', 'POS system purchases'],
+            ['', 'Security deposits paid'],
+            ['', 'Furniture and fixtures'],
           ]
         ),
 
+        heading(2, 'Financing Activities'),
+        table(
+          ['Cash Inflows (Sources)', 'Cash Outflows (Uses)'],
+          [
+            ['Owner capital contributions', 'Owner distributions/draws'],
+            ['Bank loan proceeds', 'Loan principal payments'],
+            ['Line of credit draws', 'Line of credit paydowns'],
+            ['Equipment financing', 'Equipment loan payments'],
+          ]
+        ),
       ],
     },
   },
 
   {
-    title: 'Revenue Accounts (4000s)',
-    slug: 'revenue-accounts-4000s',
+    title: '1.5 QuickBooks Online Mapping Guide',
+    slug: '1-5-quickbooks-online-mapping-guide',
     section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'Food, beverage, third-party, and other revenue account setup',
-    read_time: 5,
-    is_pinned: false,
+    type: 'guide',
+    excerpt: 'QBO account type mapping and setup best practices',
+    read_time: 8,
+    is_pinned: true,
     order_index: 4,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Revenue Accounts (4000s)'),
-        paragraph('All revenue accounts fall in the 4000-4999 range. This section details each account and when to use it.'),
+        heading(1, '1.5 QuickBooks Online Mapping Guide'),
+        paragraph('When setting up a new client in QBO or converting an existing file to our COA structure, follow this mapping guide to ensure consistency across all FinAcct360 clients.'),
 
-        coaAccountList('Revenue'),
-
-        heading(2, 'Food Sales (4100-4130)'),
-        paragraph('Food sales are the primary revenue driver for most restaurants. We break them down by service type to track channel performance.'),
+        heading(2, 'QBO Account Type Mapping'),
         table(
-          ['Account', 'Name', 'When to Use'],
+          ['Our Range', 'QBO Account Type', 'QBO Detail Type', 'Notes'],
           [
-            ['4100', 'Food Sales', 'Parent account - use sub-accounts when possible'],
-            ['4110', 'Food Sales - Dine In', 'Customer eats in the restaurant'],
-            ['4120', 'Food Sales - Takeout', 'Customer picks up, no delivery'],
-            ['4130', 'Food Sales - Catering', 'Large orders for events, parties'],
-          ]
-        ),
-        proTipBox('If the POS doesn\'t separate dine-in from takeout, use 4100 Food Sales as the catch-all. Getting some data is better than forcing incorrect splits.'),
-
-        heading(2, 'Beverage Sales (4200-4240)'),
-        paragraph('Beverage sales have different margins than food. Bars especially need granular tracking by category.'),
-        table(
-          ['Account', 'Name', 'Typical Margin'],
-          [
-            ['4210', 'Beer Sales', '70-80% gross margin'],
-            ['4220', 'Wine Sales', '65-75% gross margin'],
-            ['4230', 'Spirits Sales', '80-85% gross margin'],
-            ['4240', 'NA Beverage Sales', '85-90% gross margin'],
-          ]
-        ),
-        insightBox('Pour Cost Tracking', 'For bars, tracking each beverage category separately reveals over-pouring or theft. A bar with 28% wine cost (instead of target 25%) is losing $3,000+/month on a $100K revenue bar.'),
-
-        heading(2, 'Third-Party Delivery (4300-4340)'),
-        paragraph('Third-party delivery MUST be tracked separately from regular sales because of the significant commission fees.'),
-        table(
-          ['Account', 'Name', 'Typical Fee'],
-          [
-            ['4310', 'DoorDash Sales', '15-30% commission'],
-            ['4320', 'UberEats Sales', '15-30% commission'],
-            ['4330', 'Grubhub Sales', '15-30% commission'],
-            ['4340', 'Other Delivery Sales', 'Varies by platform'],
-          ]
-        ),
-        warningBox('Record GROSS Sales', 'Record the full order amount the customer paid (before platform fees). The fees go to 8200 Third-Party Fees. This keeps revenue accurate and shows true fee impact.'),
-
-        heading(2, 'Other Revenue (4400-4430)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['4410', 'Gift Card Sales', 'Liability until redeemed - discuss with senior'],
-            ['4420', 'Merchandise Sales', 'T-shirts, mugs, branded items'],
-            ['4430', 'Private Events', 'Event space rental, buyouts'],
+            ['1000-1099', 'Bank', 'Checking/Savings', 'One account per bank acct'],
+            ['1100-1199', 'Accounts Receivable', 'Accounts Receivable', 'Use for catering AR'],
+            ['1200-1299', 'Other Current Assets', 'Inventory', 'Only if tracking inventory'],
+            ['1300-1399', 'Other Current Assets', 'Prepaid Expenses', 'Rent, insurance'],
+            ['1500-1899', 'Fixed Assets', 'Various', 'LHI, Equipment, FF&E'],
+            ['2000-2099', 'Accounts Payable', 'Accounts Payable', 'Vendor payables'],
+            ['2100-2199', 'Credit Card', 'Credit Card', 'One per card'],
+            ['2200-2499', 'Other Current Liabilities', 'Various', 'Accruals, sales tax, gift cards'],
+            ['2500-2899', 'Long Term Liabilities', 'Notes Payable', 'Loans, equipment financing'],
+            ['3000-3999', 'Equity', 'Various', 'Owner equity, retained earnings'],
+            ['4000-4999', 'Income', 'Sales of Product Income', 'All revenue accounts'],
+            ['5000-5999', 'Cost of Goods Sold', 'Supplies & Materials COGS', 'All COGS accounts'],
+            ['6000-6999', 'Expenses', 'Payroll Expenses', 'All labor accounts'],
+            ['7000-7999', 'Expenses', 'Various', 'Operating expenses'],
+            ['8000-8999', 'Other Income/Expense', 'Various', 'Interest, depreciation, other'],
           ]
         ),
 
-        heading(2, 'Discounts (4500-4530)'),
-        paragraph('Discounts are NEGATIVE revenue accounts. They reduce total revenue rather than being expenses.'),
-        table(
-          ['Account', 'Name', 'When to Use'],
-          [
-            ['4500', 'Discounts', 'General discounts'],
-            ['4510', 'Comps', 'Free items given (quality issues, VIP)'],
-            ['4520', 'Employee Meals', 'Staff food allowance'],
-            ['4530', 'Promotions', 'Happy hour, coupons, loyalty'],
-          ]
-        ),
-
-      ],
-    },
-  },
-
-  {
-    title: 'COGS Accounts (5000s)',
-    slug: 'cogs-accounts-5000s',
-    section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'Food cost, beverage cost, packaging, and inventory accounts',
-    read_time: 4,
-    is_pinned: false,
-    order_index: 5,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'COGS Accounts (5000s)'),
-        paragraph('Cost of Goods Sold (COGS) represents the direct cost of items sold to customers. This is one of the most important sections for restaurant profitability.'),
-
-        coaAccountList('COGS'),
-
-        heading(2, 'What Belongs in COGS?'),
-        insightBox('The Simple Test', 'If a customer takes it or consumes it, it\'s COGS. If it stays in the restaurant after the customer leaves, it\'s probably an operating expense.'),
-        
-        table(
-          ['✅ COGS (5000s)', '❌ NOT COGS (7000s)'],
-          [
-            ['Burger patties', 'Kitchen cleaning supplies'],
-            ['To-go containers', 'Mop and bucket'],
-            ['Napkins at customer table', 'Paper towels in kitchen'],
-            ['Coffee beans', 'Coffee machine repair'],
-            ['Wine bottles', 'Wine glasses'],
-          ]
-        ),
-
-        heading(2, 'Food Cost (5100-5160)'),
-        table(
-          ['Account', 'Name', 'Examples'],
-          [
-            ['5100', 'Food Cost', 'Parent account'],
-            ['5110', 'Meat & Poultry', 'Beef, chicken, pork, turkey'],
-            ['5120', 'Seafood', 'Fish, shrimp, crab, lobster'],
-            ['5130', 'Produce', 'Vegetables, fruits, herbs'],
-            ['5140', 'Dairy', 'Milk, cream, cheese, eggs, butter'],
-            ['5150', 'Dry Goods', 'Pasta, rice, flour, spices, canned goods'],
-            ['5160', 'Bakery', 'Bread, rolls, pastries (purchased)'],
-          ]
-        ),
-
-        heading(2, 'Beverage Cost (5200-5240)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['5200', 'Beverage Cost', 'Parent account'],
-            ['5210', 'Beer Cost', 'Kegs, bottles, cans'],
-            ['5220', 'Wine Cost', 'Wine bottles, bag-in-box'],
-            ['5230', 'Spirits Cost', 'Liquor bottles'],
-            ['5240', 'NA Beverage Cost', 'Coffee, tea, soda syrup, juices'],
-          ]
-        ),
-        proTipBox('Soda syrup for fountain drinks goes to 5240. The CO2 for carbonation goes to 7500 Supplies (it\'s equipment-related, not consumed by customer).'),
-
-        heading(2, 'Packaging (5300-5320)'),
-        paragraph('Packaging has grown significantly with delivery. Track it carefully.'),
-        table(
-          ['Account', 'Name', 'Examples'],
-          [
-            ['5300', 'Packaging', 'Parent account'],
-            ['5310', 'Food Packaging', 'To-go boxes, foil, plastic containers'],
-            ['5320', 'Beverage Packaging', 'Cups, lids, straws, sleeves'],
-          ]
-        ),
-
-        heading(2, 'Common Categorization Mistakes'),
-        table(
-          ['Item', 'Wrong Account', 'Correct Account'],
-          [
-            ['Cleaning chemicals', '5100 Food Cost', '7510 Cleaning Supplies'],
-            ['Kitchen equipment repair', '5100 Food Cost', '7610 Equipment Repair'],
-            ['To-go containers', '7500 Supplies', '5310 Food Packaging'],
-            ['Uniforms', '5100 Food Cost', '7500 Supplies'],
-            ['Ice machine', '5100 Food Cost', '1500 Equipment (asset)'],
-          ]
-        ),
-
-      ],
-    },
-  },
-
-  {
-    title: 'Labor Accounts (6000s)',
-    slug: 'labor-accounts-6000s',
-    section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'FOH, BOH, management, benefits, and payroll taxes',
-    read_time: 6,
-    is_pinned: false,
-    order_index: 6,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Labor Accounts (6000s)'),
-        paragraph('Labor is typically the second-largest expense for restaurants (after COGS). Breaking it down by department helps identify staffing issues.'),
-
-        coaAccountList('Labor'),
-
-        heading(2, 'Why We Separate Labor by Department'),
-        insightBox('Department Visibility', 'If labor is just one number, you can\'t tell if you\'re overstaffed in the kitchen or the front. Separation reveals where to focus.'),
-
-        heading(2, 'FOH Labor (6100s)'),
-        paragraph('Front of House staff are customer-facing. Many receive tips.'),
-        table(
-          ['Account', 'Name', 'Typical Pay'],
-          [
-            ['6110', 'Server Wages', 'Hourly + tips'],
-            ['6120', 'Bartender Wages', 'Hourly + tips'],
-            ['6130', 'Host Wages', 'Hourly'],
-            ['6140', 'Busser Wages', 'Hourly + tip share'],
-            ['6150', 'Food Runner Wages', 'Hourly + tip share'],
-          ]
-        ),
-
-        heading(2, 'BOH Labor (6200s)'),
-        paragraph('Back of House staff work in the kitchen. They typically don\'t receive tips.'),
-        table(
-          ['Account', 'Name', 'Typical Pay'],
-          [
-            ['6210', 'Kitchen Wages', 'Hourly (line cooks, prep)'],
-            ['6220', 'Dishwasher Wages', 'Hourly'],
-          ]
-        ),
-
-        heading(2, 'Management (6300s)'),
-        table(
-          ['Account', 'Name', 'Typical Pay'],
-          [
-            ['6310', 'GM Salary', 'Salary (exempt)'],
-            ['6320', 'AGM Salary', 'Salary (exempt)'],
-            ['6330', 'Kitchen Manager', 'Salary (exempt)'],
-          ]
-        ),
-
-        heading(2, 'Payroll Taxes (6400s)'),
-        paragraph('These are the EMPLOYER portion of payroll taxes. Employee withholdings don\'t show here.'),
-        table(
-          ['Account', 'Name', 'Rate'],
-          [
-            ['6410', 'Social Security', '6.2% of wages up to cap'],
-            ['6420', 'Medicare', '1.45% of all wages'],
-            ['6430', 'FUTA', '0.6% (first $7,000 per employee)'],
-            ['6440', 'SUTA', 'Varies by state (1-5%)'],
-          ]
-        ),
-        warningBox('Don\'t Mix Up Tax Types', 'Employee-paid taxes (withheld from paycheck) are liabilities, not expenses. Only employer-paid taxes go in 6400s.'),
-
-        heading(2, 'Benefits (6500s)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['6510', 'Health Insurance', 'Employer contribution'],
-            ['6520', 'Workers Compensation', 'Required insurance'],
-            ['6530', '401k Match', 'Employer match portion'],
-          ]
-        ),
-
-        heading(2, 'Overtime (6600)'),
-        paragraph('This is tricky! Only record the 0.5x PREMIUM here, not the full overtime pay.'),
-        exampleBox('Overtime Example', 'Employee works 45 hours at $15/hour. First 40 hours: $600 → goes to 6110 Server Wages. Next 5 hours at 1.5x: $112.50 total. The base $75 (5 × $15) → goes to 6110. The premium $37.50 (5 × $7.50) → goes to 6600 Overtime. This way, you see true overtime COST, not inflated wage numbers.'),
-
-      ],
-    },
-  },
-
-  {
-    title: 'Operating Expenses (7000s)',
-    slug: 'operating-expenses-7000s',
-    section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'Rent, utilities, marketing, supplies, and other operating costs',
-    read_time: 5,
-    is_pinned: false,
-    order_index: 7,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Operating Expenses (7000s)'),
-        paragraph('Operating expenses are the costs of running the restaurant that aren\'t directly tied to food/beverage or labor.'),
-
-        coaAccountList('Operating'),
-
-        heading(2, 'Rent & Occupancy (7100s)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['7110', 'Base Rent', 'Monthly rent payment'],
-            ['7120', 'CAM Charges', 'Common area maintenance'],
-            ['7130', 'Property Tax', 'Real estate taxes (if paid by tenant)'],
-            ['7140', 'Percentage Rent', 'Rent based on sales (some leases)'],
-          ]
-        ),
-
-        heading(2, 'Utilities (7200s)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['7210', 'Electric', 'Electricity'],
-            ['7220', 'Gas', 'Natural gas'],
-            ['7230', 'Water', 'Water and sewer'],
-            ['7240', 'Trash', 'Waste removal, recycling'],
-            ['7250', 'Internet/Phone', 'Communications'],
-          ]
-        ),
-
-        heading(2, 'Marketing (7300s)'),
-        table(
-          ['Account', 'Name', 'Examples'],
-          [
-            ['7310', 'Digital Marketing', 'Google ads, Facebook ads, Instagram'],
-            ['7320', 'Print Marketing', 'Menus, flyers, business cards'],
-            ['7330', 'Local Marketing', 'Sponsorships, community events'],
-          ]
-        ),
-
-        heading(2, 'Technology (7400s)'),
-        table(
-          ['Account', 'Name', 'Examples'],
-          [
-            ['7410', 'POS Fees', 'Square, Toast, Clover monthly fees'],
-            ['7420', 'Software Subscriptions', '7shifts, MarketMan, etc.'],
-          ]
-        ),
-        proTipBox('POS processing fees (per-transaction) go to 8120 CC Processing, not 7410. 7410 is for the monthly software subscription.'),
-
-        heading(2, 'Supplies (7500s)'),
-        table(
-          ['Account', 'Name', 'Examples'],
-          [
-            ['7510', 'Cleaning Supplies', 'Chemicals, mops, buckets (NOT napkins)'],
-            ['7520', 'Office Supplies', 'Pens, paper, printer ink'],
-            ['7530', 'Smallwares', 'Pots, pans, utensils (under $500)'],
-          ]
-        ),
-
-        heading(2, 'Repairs & Maintenance (7600s)'),
-        table(
-          ['Account', 'Name', 'Examples'],
-          [
-            ['7610', 'Equipment Repair', 'Oven repair, refrigerator service'],
-            ['7620', 'Building Maintenance', 'Plumbing, HVAC, general repairs'],
-          ]
-        ),
-
-        heading(2, 'Insurance (7700s)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['7710', 'General Liability', 'Slip and fall coverage'],
-            ['7720', 'Property Insurance', 'Building and equipment coverage'],
-          ]
-        ),
-
-        heading(2, 'Professional Services (7800s)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['7810', 'Accounting Fees', 'That\'s us!'],
-            ['7820', 'Legal Fees', 'Attorney costs'],
-            ['7830', 'Consulting', 'Restaurant consultants'],
-          ]
-        ),
-
-        heading(2, 'Licenses & Permits (7900s)'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['7910', 'Liquor License', 'Annual liquor license fee'],
-            ['7920', 'Health Permit', 'Health department permit'],
-            ['7930', 'Business License', 'City/county business license'],
-          ]
-        ),
-
-      ],
-    },
-  },
-
-  {
-    title: 'Other Expenses (8000s)',
-    slug: 'other-expenses-8000s',
-    section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'Bank fees, third-party commissions, depreciation, interest',
-    read_time: 4,
-    is_pinned: false,
-    order_index: 8,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Other Expenses (8000s)'),
-        paragraph('These are non-operating expenses that still impact the bottom line.'),
-
-        coaAccountList('Other'),
-
-        heading(2, 'Bank & CC Fees (8100s)'),
-        table(
-          ['Account', 'Name', 'Rate'],
-          [
-            ['8110', 'Bank Fees', 'Monthly account fees'],
-            ['8120', 'CC Processing', '2.5-3.5% per transaction'],
-            ['8130', 'ACH Fees', 'Electronic transfer fees'],
-          ]
-        ),
-        insightBox('CC Processing Impact', 'On $100K/month sales with 80% card payments, CC fees are ~$2,400/month or $28,800/year. This is real money!'),
-
-        heading(2, 'Third-Party Fees (8200s)'),
-        paragraph('This is one of the most important expense categories for modern restaurants.'),
-        table(
-          ['Account', 'Name', 'Typical Rate'],
-          [
-            ['8210', 'DoorDash Fees', '15-30% of order'],
-            ['8220', 'UberEats Fees', '15-30% of order'],
-            ['8230', 'Grubhub Fees', '15-30% of order'],
-          ]
-        ),
-        warningBox('Third-Party Math', 'A $100 DoorDash order at 25% commission: $100 revenue (4310) - $25 fee (8210) - $30 food cost - $5 packaging = $40 margin. Compare to dine-in: $100 - $30 food cost = $70 margin. Clients MUST see this!'),
-
-        heading(2, 'Other Non-Operating'),
-        table(
-          ['Account', 'Name', 'Notes'],
-          [
-            ['8300', 'Interest Expense', 'Loan interest payments'],
-            ['8400', 'Depreciation', 'Equipment depreciation'],
-            ['8500', 'Amortization', 'Intangible amortization'],
-            ['8900', 'Other Expenses', 'Miscellaneous (use sparingly)'],
-          ]
-        ),
-
-      ],
-    },
-  },
-
-  {
-    title: 'COA by Restaurant Type',
-    slug: 'coa-by-restaurant-type',
-    section_slug: 'chart-of-accounts',
-    type: 'guide',
-    excerpt: 'Specific COA configurations for cafe, FSR, bar, QSR, fine dining',
-    read_time: 10,
-    is_pinned: true,
-    order_index: 9,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'COA by Restaurant Type'),
-        paragraph('While the master COA framework applies to all restaurants, different types emphasize different accounts. This guide shows which accounts matter most for each.'),
-
-        heading(2, 'Cafe / Coffee Shop'),
-        scenarioBox('Morning Buzz Cafe: $45,000/month revenue, 65% beverages, 35% food. Owner: Sarah Chen. Key focus: Beverage margins and labor efficiency.'),
-        paragraph('Key accounts for cafes:'),
+        heading(2, 'QBO Setup Best Practices'),
         bulletList([
-          '4240 NA Beverage Sales — Primary revenue (coffee, tea)',
-          '5240 NA Beverage Cost — Coffee beans, milk, syrups',
-          '6100 FOH Labor — Baristas (lower than FSR)',
+          'Account Numbering: Enable account numbers in QBO (Settings > Advanced > Chart of Accounts > Enable account numbers). Use our 4-digit numbering system consistently.',
+          'Sub-accounts: Use parent/sub-account structure for grouping (e.g., 4100 Beverage Sales as parent with 4100 Beer, 4110 Wine, 4120 Spirits as subs).',
+          'Inactive Accounts: Rather than delete accounts from a messy conversion, make unused accounts inactive. This preserves historical data while cleaning the active COA.',
+          'Classes: For multi-unit operators, use QBO Classes for location tracking rather than creating duplicate account numbers per location.',
+          'Import Template: Use our standard COA import template (available in Google Drive > Templates > COA Import Template.xlsx) for new client setups.',
         ]),
-        table(
-          ['KPI', 'Target', 'Why'],
-          [
-            ['Beverage Cost', '18-22%', 'Coffee has high margins'],
-            ['Food Cost', '28-32%', 'Pastries are lower margin'],
-            ['Labor Cost', '25-30%', 'Counter service, less staff'],
-            ['Prime Cost', '55-60%', 'Lower than FSR'],
-          ]
-        ),
-
-        heading(2, 'Full Service Restaurant'),
-        scenarioBox('Olive & Vine: $150,000/month revenue, 70% food, 30% beverage. Owner: Marcus Thompson. Key focus: Labor management with full service.'),
-        paragraph('Key accounts for FSR:'),
-        bulletList([
-          '4100 Food Sales — Primary revenue driver',
-          '4200 Beverage Sales — Wine and cocktails important',
-          '6100 FOH Labor — Significant (servers, hosts, bussers)',
-          '6200 BOH Labor — Full kitchen staff',
-        ]),
-        table(
-          ['KPI', 'Target', 'Why'],
-          [
-            ['Food Cost', '28-32%', 'Standard target'],
-            ['Beverage Cost', '20-24%', 'Wine/cocktails'],
-            ['Labor Cost', '30-35%', 'Full service requires more staff'],
-            ['Prime Cost', '60-65%', 'Higher due to labor'],
-          ]
-        ),
-
-        heading(2, 'Bar & Grill'),
-        scenarioBox('Smokey\'s Bar & Grill: $120,000/month revenue, 55% beverage, 45% food. Owner: Dave Morrison. Key focus: Pour cost control.'),
-        paragraph('Key accounts for bars:'),
-        bulletList([
-          '4210/4220/4230 Beer/Wine/Spirits — Primary revenue',
-          '5210/5220/5230 Beverage Costs — Track separately!',
-          '7910 Liquor License — Higher regulatory costs',
-        ]),
-        table(
-          ['KPI', 'Target', 'Why'],
-          [
-            ['Pour Cost', '18-22%', 'Alcohol has best margins'],
-            ['Food Cost', '30-35%', 'Bar food higher cost'],
-            ['Labor Cost', '25-30%', 'Less service than FSR'],
-            ['Prime Cost', '52-58%', 'Lower due to high bev margin'],
-          ]
-        ),
-        warningBox('Pour Cost Control', 'Bars MUST track beer, wine, and spirits separately. Over-pouring or theft shows up as elevated pour cost. Each category has different margin expectations.'),
-
-        heading(2, 'Fast Casual / QSR'),
-        scenarioBox('Spitz Mediterranean: $80,000/month revenue, 85% food, 15% beverage. Owner: Amir Hassan. Key focus: Third-party delivery impact.'),
-        paragraph('Key accounts for QSR:'),
-        bulletList([
-          '4100 Food Sales — Primary revenue',
-          '4300 Third-Party Delivery — Growing but margin-killing',
-          '5300 Packaging — Higher due to takeout focus',
-          '8200 Third-Party Fees — Must track separately',
-        ]),
-        table(
-          ['KPI', 'Target', 'Why'],
-          [
-            ['Food Cost', '28-32%', 'Standard target'],
-            ['Packaging Cost', '2-4%', 'Significant for QSR'],
-            ['Third-Party Fees', 'Track separately', '15-30% of delivery sales'],
-            ['Prime Cost', '58-62%', 'Watch delivery impact'],
-          ]
-        ),
-
-      ],
-    },
-  },
-
-  {
-    title: 'QBO Mapping Guide',
-    slug: 'qbo-mapping-guide',
-    section_slug: 'chart-of-accounts',
-    type: 'guide',
-    excerpt: 'Step-by-step QuickBooks Online setup with our COA',
-    read_time: 15,
-    is_pinned: true,
-    order_index: 10,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'QBO Mapping Guide'),
-        paragraph('This guide walks you through setting up our COA in QuickBooks Online for a new client.'),
-
-        heading(2, 'Before You Start'),
-        bulletList([
-          'Get admin access to client\'s QBO',
-          'Export current COA for reference',
-          'Get client approval for COA changes',
-          'Schedule time when client won\'t be entering data',
-        ]),
-
-        heading(2, 'Step 1: Export Current COA'),
-        stepFlow([
-          { title: 'Go to Settings', description: 'Click gear icon > Chart of Accounts' },
-          { title: 'Run Report', description: 'Click "Run Report" to see all accounts' },
-          { title: 'Export', description: 'Export to Excel for reference' },
-          { title: 'Review', description: 'Note which accounts have activity' },
-        ]),
-
-        heading(2, 'Step 2: Add Missing Accounts'),
-        paragraph('Add our standard accounts that don\'t exist yet. Use exact names and numbers.'),
-        stepFlow([
-          { title: 'New Account', description: 'Click "New" in Chart of Accounts' },
-          { title: 'Account Type', description: 'Select correct type (Income, COGS, Expense)' },
-          { title: 'Detail Type', description: 'Select appropriate detail type' },
-          { title: 'Name & Number', description: 'Enter exact name and number from our COA' },
-        ]),
-        proTipBox('Add parent accounts first (4100 Food Sales), then sub-accounts (4110 Food Sales - Dine In). QBO needs the parent to exist before creating sub-accounts.'),
-
-        heading(2, 'Step 3: Rename Existing Accounts'),
-        paragraph('Where possible, rename existing accounts to match our structure rather than creating duplicates.'),
-        warningBox('Don\'t Delete Accounts with Transactions', 'If an account has historical transactions, don\'t delete it. Rename it to match our structure or make it inactive after moving balances.'),
-
-        heading(2, 'Step 4: Verify Account Types'),
-        paragraph('QBO sometimes creates accounts with wrong types. Verify these common issues:'),
-        table(
-          ['Account', 'Should Be', 'Common Error'],
-          [
-            ['Food Sales', 'Income', 'Sometimes created as COGS'],
-            ['Discounts', 'Income (negative)', 'Sometimes created as Expense'],
-            ['Packaging', 'COGS', 'Sometimes in Operating Expenses'],
-            ['CC Processing', 'Other Expense', 'Sometimes in COGS'],
-          ]
-        ),
-
-        heading(2, 'Step 5: Set Up Sub-Accounts'),
-        paragraph('Link sub-accounts to parent accounts for proper roll-up.'),
-        stepFlow([
-          { title: 'Edit Sub-Account', description: 'Click on the sub-account' },
-          { title: 'Check "Is Sub-Account"', description: 'Enable sub-account option' },
-          { title: 'Select Parent', description: 'Choose the correct parent account' },
-          { title: 'Save', description: 'Save and verify hierarchy' },
-        ]),
-
-        heading(2, 'Step 6: Verify & Test'),
-        bulletList([
-          'Run a P&L to verify account structure',
-          'Check that totals roll up correctly',
-          'Verify Prime Cost calculation works',
-          'Test one week of transactions',
-        ]),
-
-      ],
-    },
-  },
-
-  {
-    title: 'Account Number Quick Reference',
-    slug: 'account-quick-reference',
-    section_slug: 'chart-of-accounts',
-    type: 'reference',
-    excerpt: 'Copy-paste ready account numbers for daily use',
-    read_time: 2,
-    is_pinned: true,
-    order_index: 11,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Account Number Quick Reference'),
-        paragraph('Use this for quick lookups during daily work. All numbers are copy-paste ready.'),
-
-        heading(2, 'Account Ranges'),
-        table(
-          ['Category', 'Range'],
-          [
-            ['Assets', '1000-1999'],
-            ['Liabilities', '2000-2999'],
-            ['Equity', '3000-3999'],
-            ['Revenue', '4000-4999'],
-            ['COGS', '5000-5999'],
-            ['Labor', '6000-6999'],
-            ['Operating', '7000-7999'],
-            ['Other', '8000-8999'],
-          ]
-        ),
-
-        heading(2, 'Most Used Revenue'),
-        table(
-          ['#', 'Name'],
-          [
-            ['4100', 'Food Sales'],
-            ['4200', 'Beverage Sales'],
-            ['4210', 'Beer Sales'],
-            ['4220', 'Wine Sales'],
-            ['4230', 'Spirits Sales'],
-            ['4240', 'NA Beverage Sales'],
-            ['4310', 'DoorDash Sales'],
-            ['4320', 'UberEats Sales'],
-            ['4510', 'Comps'],
-          ]
-        ),
-
-        heading(2, 'Most Used COGS'),
-        table(
-          ['#', 'Name'],
-          [
-            ['5100', 'Food Cost'],
-            ['5210', 'Beer Cost'],
-            ['5220', 'Wine Cost'],
-            ['5230', 'Spirits Cost'],
-            ['5240', 'NA Beverage Cost'],
-            ['5300', 'Packaging'],
-          ]
-        ),
-
-        heading(2, 'Most Used Labor'),
-        table(
-          ['#', 'Name'],
-          [
-            ['6100', 'FOH Labor'],
-            ['6200', 'BOH Labor'],
-            ['6300', 'Management'],
-            ['6400', 'Payroll Taxes'],
-            ['6600', 'Overtime'],
-          ]
-        ),
-
-        heading(2, 'Most Used Operating'),
-        table(
-          ['#', 'Name'],
-          [
-            ['7110', 'Base Rent'],
-            ['7200', 'Utilities'],
-            ['7300', 'Marketing'],
-            ['7410', 'POS Fees'],
-            ['7510', 'Cleaning Supplies'],
-            ['7610', 'Equipment Repair'],
-          ]
-        ),
-
-        heading(2, 'Most Used Other'),
-        table(
-          ['#', 'Name'],
-          [
-            ['8120', 'CC Processing'],
-            ['8210', 'DoorDash Fees'],
-            ['8220', 'UberEats Fees'],
-            ['8400', 'Depreciation'],
-          ]
-        ),
       ],
     },
   },
 ]
 
 // =============================================================================
-// SECTION 2: STANDARD OPERATING PROCEDURES (7 articles)
+// SECTION 2: STANDARD OPERATING PROCEDURES (5 articles: 2.1 – 2.5)
 // =============================================================================
 
 const sopArticles = [
   {
-    title: 'Client Onboarding Checklist',
-    slug: 'client-onboarding-checklist',
+    title: '2.1 Client Onboarding Procedure',
+    slug: '2-1-client-onboarding-procedure',
     section_slug: 'standard-operating-procedures',
     type: 'checklist',
-    excerpt: 'Complete checklist for setting up new restaurant clients',
-    read_time: 10,
+    excerpt: 'Phases, steps, and checklist for onboarding new restaurant clients',
+    read_time: 12,
     is_pinned: true,
     order_index: 0,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Client Onboarding Checklist'),
-        paragraph('Use this checklist for every new client. Complete all items within the first 2 weeks of engagement.'),
+        heading(1, '2.1 Client Onboarding Procedure'),
+        paragraph('The onboarding process is critical to establishing a successful client relationship. A thorough onboarding ensures we have complete access, understand the client\'s business model, and can set up their books according to FinAcct360 standards.'),
 
-        FINACCT360_COMMUNICATION_BOX,
-        heading(2, 'Day 1: Initial Setup'),
+        heading(2, 'Phase 1: Pre-Onboarding (Day 0)'),
         table(
-          ['Task', 'Owner', 'Notes'],
+          ['Step', 'Action', 'Owner'],
           [
-            ['Create client folder in Google Drive', 'Junior', 'Use template folder'],
-            ['Add client to FinAcct360 workspace', 'Junior', 'Invite client contacts'],
-            ['Request QBO access', 'Senior', 'Admin-level needed'],
-            ['Request POS access', 'Senior', 'Export permissions'],
-            ['Request bank feeds', 'Senior', 'Read-only access'],
-            ['Request payroll access', 'Senior', 'Report access only'],
-            ['Schedule kickoff call', 'Senior', '30-min video call'],
+            ['1.1', 'Receive signed engagement letter and payment info from sales', 'Account Manager'],
+            ['1.2', 'Create client folder in Google Drive using template structure', 'Account Manager'],
+            ['1.3', 'Send Welcome Email with onboarding questionnaire link', 'Account Manager'],
+            ['1.4', 'Schedule kickoff call within 3 business days', 'Account Manager'],
+            ['1.5', 'Add client to project management system (Monday.com)', 'Account Manager'],
           ]
         ),
 
-        heading(2, 'Day 2-3: Information Gathering'),
+        heading(2, 'Phase 2: Kickoff Call (Day 1-3)'),
         table(
-          ['Task', 'Owner', 'Notes'],
+          ['Step', 'Action', 'Owner'],
           [
-            ['Confirm restaurant type', 'Accountant', 'Cafe/FSR/Bar/QSR'],
-            ['Document POS system', 'Accountant', 'Square/Toast/Clover'],
-            ['Document payroll provider', 'Accountant', 'Gusto/ADP/Paychex'],
-            ['Get vendor list', 'Accountant', 'Top 10 vendors'],
-            ['Get current COA', 'Accountant', 'Screenshot from QBO'],
-            ['Identify third-party platforms', 'Accountant', 'DD/UE/GH'],
+            ['2.1', 'Review completed onboarding questionnaire before call', 'Assigned Accountant'],
+            ['2.2', 'Conduct 30-minute kickoff call covering: Confirm restaurant type and business model; Identify POS system and integrations; Discuss reporting preferences; Set communication expectations', 'Account Manager + Accountant'],
+            ['2.3', 'Request QBO login credentials (accountant invite)', 'Accountant'],
+            ['2.4', 'Request POS system read-only access credentials', 'Accountant'],
+            ['2.5', 'Request bank read-only access (Plaid connection or statements)', 'Accountant'],
+            ['2.6', 'Request payroll system access (Gusto, ADP, etc.)', 'Accountant'],
           ]
         ),
 
-        heading(2, 'Day 4-7: System Setup'),
+        heading(2, 'Phase 3: System Setup (Day 3-7)'),
         table(
-          ['Task', 'Owner', 'Notes'],
+          ['Step', 'Action', 'Owner'],
           [
-            ['Map existing COA to FinAcct360', 'Senior', 'Document all changes'],
-            ['Create COA change proposal', 'Senior', 'For client approval'],
-            ['Set up bank feeds in QBO', 'Accountant', 'Verify all accounts'],
-            ['Configure POS integration', 'Accountant', 'If available'],
-            ['Test payroll import', 'Accountant', 'One pay period'],
-          ]
-        ),
-        warningBox('COA Changes', 'NEVER change client\'s COA without written approval. Send the COA mapping document and get confirmation via FinAcct360 (Chat or Task) before making changes.'),
-
-        heading(2, 'Day 8-14: First Close'),
-        table(
-          ['Task', 'Owner', 'Notes'],
-          [
-            ['Complete first weekly close', 'Accountant', 'With senior review'],
-            ['Deliver first P&L', 'Senior', 'Walk through with client'],
-            ['Set up KPI dashboard', 'Senior', 'Configure targets'],
-            ['Document any issues', 'Accountant', 'For process notes'],
-            ['Get client feedback', 'Senior', 'What\'s working?'],
+            ['3.1', 'Complete Books Health Check (see SOP 2.2)', 'Accountant'],
+            ['3.2', 'Implement FinAcct360 Chart of Accounts (COA conversion)', 'Senior Accountant'],
+            ['3.3', 'Set up bank feeds and verify connections', 'Accountant'],
+            ['3.4', 'Configure POS data import process or bank rule mapping', 'Accountant'],
+            ['3.5', 'Set up recurring vendor bills if applicable', 'Accountant'],
+            ['3.6', 'Create client profile in KPI Dashboard system', 'Accountant'],
           ]
         ),
 
-        heading(2, 'Access Request Template'),
-        exampleBox('Email: QBO Access Request', 'Subject: QuickBooks Online Access - FinAcct360 Setup\n\nHi [Client Name],\n\nWe\'re ready to set up your QuickBooks Online for weekly reporting. Please add our team email as an admin user:\n\nEmail: accounting@finacctsolutions.com\n\nSteps:\n1. Go to Settings > Manage Users\n2. Click "Add User"\n3. Enter email above\n4. Select "Company Admin"\n5. Click Invite\n\nLet me know once complete!\n\nBest,\n[Your Name]'),
+        heading(2, 'Phase 4: First Close Cycle (Week 2-4)'),
+        table(
+          ['Step', 'Action', 'Owner'],
+          [
+            ['4.1', 'Complete first weekly close with detailed review', 'Senior Accountant'],
+            ['4.2', 'Present first week KPI dashboard to client', 'Account Manager'],
+            ['4.3', 'Gather client feedback and adjust processes', 'Account Manager'],
+            ['4.4', 'Complete first monthly close with full P&L review', 'Senior Accountant'],
+            ['4.5', 'Schedule 30-day check-in call to review onboarding', 'Account Manager'],
+          ]
+        ),
 
+        heading(2, 'Onboarding Checklist Summary'),
+        table(
+          ['Required Item', 'Status'],
+          [
+            ['Signed engagement letter received', '[ ] Complete'],
+            ['Onboarding questionnaire completed', '[ ] Complete'],
+            ['QBO accountant access granted', '[ ] Complete'],
+            ['POS system access received', '[ ] Complete'],
+            ['Bank feeds connected', '[ ] Complete'],
+            ['Payroll access received', '[ ] Complete'],
+            ['Books Health Check completed', '[ ] Complete'],
+            ['COA converted to FinAcct360 standard', '[ ] Complete'],
+            ['First weekly close completed', '[ ] Complete'],
+            ['First monthly close completed', '[ ] Complete'],
+            ['30-day check-in completed', '[ ] Complete'],
+          ]
+        ),
       ],
     },
   },
 
   {
-    title: 'Weekly Close Process',
-    slug: 'weekly-close-process',
+    title: '2.2 Books Health Check Procedure',
+    slug: '2-2-books-health-check-procedure',
     section_slug: 'standard-operating-procedures',
     type: 'checklist',
-    excerpt: 'Sunday week end through Monday 2 PM ET delivery: data collection, import, reconcile, review, senior approval, P&L delivered',
-    read_time: 12,
-    is_pinned: true,
+    excerpt: 'Scoring system, criteria, and steps for auditing client books',
+    read_time: 10,
+    is_pinned: false,
     order_index: 1,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Weekly Close Process'),
-        paragraph('The week runs Sunday to Saturday. Week ends Sunday close of business. Data collection begins Monday; P&L is delivered by Monday 2 PM ET the following week. Here\'s the process.'),
+        heading(1, '2.2 Books Health Check Procedure'),
+        paragraph('The Books Health Check is performed for every new client and quarterly for existing clients. This systematic review identifies issues, establishes a baseline, and prioritizes cleanup work.'),
 
-        heading(2, 'The Weekly Timeline'),
-        stepFlow([
-          { title: 'Sunday', description: 'Week ends (Sunday close of business)' },
-          { title: 'Monday', description: 'Data collection begins' },
-          { title: 'Tuesday', description: 'Import and categorize' },
-          { title: 'Wednesday', description: 'Reconcile' },
-          { title: 'Thursday', description: 'Review and flag' },
-          { title: 'Friday', description: 'Senior review' },
-          { title: 'Monday 2 PM ET', description: 'P&L delivered' },
-        ]),
-
-        heading(2, 'Monday: Data Collection'),
-        bulletList([
-          'Download POS reports, bank transactions, payroll, third-party reports',
-          'Gather all source documents for the closed week',
-        ]),
-
-        heading(2, 'Tuesday: Import and Categorize'),
-        bulletList([
-          'Import all transactions into QBO',
-          'Categorize to FinAcct360 COA',
-          'Flag uncategorized or unknown items',
-        ]),
-
-        heading(2, 'Wednesday: Reconcile'),
-        bulletList([
-          'Reconcile bank accounts',
-          'Reconcile credit cards',
-          'Resolve any feed or timing issues',
-        ]),
-
-        heading(2, 'Thursday: Review and Flag'),
-        bulletList([
-          'Review P&L for reasonableness',
-          'Document issues and questions',
-          'Export reports and upload to client folder',
-        ]),
-
-        heading(2, 'Friday: Senior Review'),
-        paragraph('Senior reviews all uploads and either approves or returns for fixes.'),
+        heading(2, 'Health Check Scoring System'),
         table(
-          ['Check', 'Pass Criteria'],
+          ['Score', 'Rating', 'Description'],
           [
-            ['Bank reconciliation', 'All accounts reconcile to $0 difference'],
-            ['P&L accuracy', 'No obvious errors, variances explained'],
-            ['KPIs in range', 'Food cost, labor, prime cost within targets'],
-            ['Flags resolved', 'All questions answered or documented'],
+            ['90-100', 'Excellent', 'Books are clean, COA aligned, minimal adjustments needed'],
+            ['70-89', 'Good', 'Minor issues, some COA adjustments, 1-2 weeks cleanup'],
+            ['50-69', 'Fair', 'Moderate issues, COA overhaul needed, 2-4 weeks cleanup'],
+            ['Below 50', 'Poor', 'Major issues, significant reconstruction required, 4+ weeks'],
           ]
         ),
 
-        heading(2, 'Monday 2 PM ET: P&L Delivered'),
-        paragraph('Once approved, the KPI Dashboard publishes to the client by Monday 2 PM ET. If you need to message the client about the close, use FinAcct360 Chat or create a Task.'),
-        FINACCT360_COMMUNICATION_BOX,
-
-        heading(2, 'Common Issues & Solutions'),
+        heading(2, 'Health Check Criteria (100 Points Total)'),
         table(
-          ['Issue', 'Solution'],
+          ['Category', 'Points', 'Evaluation Criteria'],
           [
-            ['Missing bank transactions', 'Check bank feed connection, manually download'],
-            ['POS doesn\'t match deposits', 'Look for cash deposits, timing differences'],
-            ['Payroll doesn\'t match', 'Check for manual checks, adjustments'],
-            ['Third-party fees missing', 'Download settlement report directly'],
-            ['Unknown vendor', 'Ask client via FinAcct360 Chat or create a Task'],
+            ['Bank Reconciliation', '20 pts', 'All bank accounts reconciled within 30 days? No unexplained differences?'],
+            ['Chart of Accounts', '15 pts', 'Logical structure? Appropriate detail level? Consistent with restaurant needs?'],
+            ['Revenue Recording', '15 pts', 'Daily sales recorded? Sales match POS reports? Proper sales tax handling?'],
+            ['COGS Tracking', '15 pts', 'Food/bev costs separated? Purchases properly categorized? Reasonable cost ratios?'],
+            ['Payroll Recording', '10 pts', 'Payroll entries match payroll reports? Taxes properly recorded? Labor categories clear?'],
+            ['Accounts Payable', '10 pts', 'Open bills accurate? Aging reasonable? No duplicate entries?'],
+            ['Fixed Assets', '5 pts', 'Equipment recorded? Depreciation calculated? Proper capitalization?'],
+            ['Loans & Liabilities', '5 pts', 'Loan balances accurate? Payments split principal/interest?'],
+            ['Equity Section', '5 pts', 'Owner contributions/distributions clear? Retained earnings correct?'],
           ]
         ),
-        warningBox('Reconciliation Rules', 'NEVER mark a reconciliation complete if it doesn\'t balance. A $1 difference means something is wrong. Find it.'),
 
+        heading(2, 'Health Check Procedure Steps'),
+        bulletList([
+          'Run Balance Sheet and P&L for last 12 months',
+          'Check bank reconciliation status for all accounts',
+          'Review Chart of Accounts structure and compare to FinAcct360 template',
+          'Cross-reference monthly revenue to POS summary reports',
+          'Calculate food cost % and beverage cost % — flag if outside industry norms',
+          'Verify payroll entries against payroll register totals',
+          'Review AP aging for old/duplicate items',
+          'Check for uncategorized transactions or suspense accounts',
+          'Verify loan balances against lender statements',
+          'Document findings in Health Check Report template',
+        ]),
       ],
     },
   },
 
   {
-    title: 'Monthly Close Process',
-    slug: 'monthly-close-process',
+    title: '2.3 Weekly Close Process',
+    slug: '2-3-weekly-close-process',
     section_slug: 'standard-operating-procedures',
     type: 'checklist',
-    excerpt: 'End of month procedures and additional reconciliations',
-    read_time: 8,
-    is_pinned: false,
+    excerpt: 'Timeline and step-by-step weekly close for KPI dashboard delivery by Wednesday',
+    read_time: 14,
+    is_pinned: true,
     order_index: 2,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Monthly Close Process'),
-        paragraph('Monthly close includes everything in weekly close plus additional procedures.'),
+        heading(1, '2.3 Weekly Close Process'),
+        paragraph('The weekly close is the foundation of our service. Clients receive their KPI dashboard every week, which requires disciplined close procedures completed by Wednesday of each week for the prior week ending Sunday.'),
 
-        heading(2, 'Additional Monthly Tasks'),
+        heading(2, 'Weekly Close Timeline'),
         table(
-          ['Task', 'When', 'Owner'],
+          ['Day', 'Task', 'Deliverable'],
           [
-            ['Accrue unpaid invoices', 'EOM', 'Accountant'],
-            ['Review prepaid expenses', 'EOM', 'Senior'],
-            ['Record depreciation', 'EOM', 'Senior'],
-            ['Reconcile credit cards', 'EOM', 'Accountant'],
-            ['Review inventory counts', 'EOM', 'Accountant'],
-            ['YTD variance analysis', 'EOM', 'Senior'],
+            ['Monday', 'Download POS sales reports (Mon-Sun) Download bank transactions Request vendor invoices if needed', 'Raw data files saved to client folder'],
+            ['Tuesday', 'Reconcile daily sales to bank deposits Categorize all bank transactions Record vendor invoices', 'Sales reconciled Bank transactions coded'],
+            ['Wednesday', 'Run weekly P&L Populate KPI dashboard Quality check all numbers Send dashboard to client', 'Weekly KPI Dashboard delivered by 5pm'],
           ]
         ),
 
-        heading(2, 'Accruals'),
-        paragraph('Record expenses incurred but not yet billed or paid.'),
-        exampleBox('Common Accruals', 'Utilities received but not yet paid\nPayroll earned but not yet processed\nRent for partial month\nProfessional services rendered but not invoiced'),
+        heading(2, 'Step-by-Step Weekly Close'),
+        heading(3, 'Step 1: Export POS Sales Data'),
+        paragraph('Log into client\'s POS system and export the weekly sales summary. See POS & Software Guides section for system-specific instructions. Required data points:'),
+        bulletList([
+          'Gross sales by category (food, beer, wine, spirits, NA beverages)',
+          'Discounts and comps',
+          'Voids and refunds',
+          'Net sales by payment type',
+          'Sales by order type (dine-in, takeout, delivery)',
+          'Third-party delivery sales (DoorDash, Uber Eats, Grubhub)',
+        ]),
 
-        heading(2, 'Depreciation'),
-        paragraph('Monthly depreciation entries for fixed assets.'),
+        heading(3, 'Step 2: Reconcile Sales to Bank Deposits'),
+        paragraph('Daily credit card settlements should match POS credit card totals within a small variance (typically merchant fees are deducted). Document any variances over $50.'),
+
+        heading(3, 'Step 3: Categorize Bank Transactions'),
+        paragraph('Review and categorize all bank transactions using established bank rules. Key categorizations:'),
         table(
-          ['Asset Type', 'Typical Life', 'Monthly Entry'],
+          ['Transaction Type', 'Account'],
           [
-            ['Kitchen Equipment', '7 years', 'Cost / 84 months'],
-            ['Furniture', '5 years', 'Cost / 60 months'],
-            ['Leasehold Improvements', 'Lease term', 'Cost / months of lease'],
+            ['Sysco, US Foods, Restaurant Depot', '5000-5050 Food Cost accounts'],
+            ['Beverage distributors (breakout beer/wine/spirits)', '5100-5120 Beverage Cost accounts'],
+            ['Gusto, ADP, Paychex', '6000s Labor accounts (review register)'],
+            ['Landlord payments', '7000-7020 Rent accounts'],
+            ['Utility companies', '7100-7130 Utilities'],
           ]
         ),
 
+        heading(3, 'Step 4: Run Weekly P&L'),
+        paragraph('Generate P&L for the week (Monday-Sunday). Review for reasonableness:'),
+        bulletList([
+          'Revenue within 10% of prior week (unless event/holiday)?',
+          'Food cost % between 25-35% depending on concept?',
+          'Labor cost % between 25-35% depending on concept?',
+          'No unusual spikes in any expense category?',
+        ]),
+
+        heading(3, 'Step 5: Populate KPI Dashboard'),
+        paragraph('Enter data into the client\'s KPI dashboard. All 30+ data fields must be populated. See KPI field list in COA section. Dashboard auto-calculates:'),
+        bulletList([
+          'Prime Cost % = (COGS + Labor) / Net Sales',
+          'Gross Profit = Net Sales - COGS',
+          'EBITDA = Net Profit + Interest + Taxes + Depreciation + Amortization',
+          'Week-over-week comparisons',
+          'Budget vs. actual variances',
+        ]),
       ],
     },
   },
 
   {
-    title: 'Books Health Check',
-    slug: 'books-health-check',
+    title: '2.4 Monthly Close Process',
+    slug: '2-4-monthly-close-process',
     section_slug: 'standard-operating-procedures',
     type: 'checklist',
-    excerpt: 'How to audit client books for accuracy and completeness',
-    read_time: 10,
+    excerpt: 'Checklist, adjusting entries, and P&L analysis for month-end close by 10th',
+    read_time: 12,
     is_pinned: false,
     order_index: 3,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Books Health Check'),
-        paragraph('Use this checklist to assess the quality of a client\'s books, especially during onboarding or when issues arise.'),
+        heading(1, '2.4 Monthly Close Process'),
+        paragraph('The monthly close builds on weekly closes to produce final financial statements. Monthly closes are completed by the 10th of the following month.'),
 
-        heading(2, 'Quick Assessment (15 minutes)'),
+        heading(2, 'Monthly Close Checklist'),
         table(
-          ['Check', 'Red Flag If...'],
+          ['#', 'Task', 'Due Date'],
           [
-            ['Bank reconciliation date', 'More than 1 month behind'],
-            ['Uncategorized transactions', 'More than 10 items'],
-            ['Negative bank balance', 'Shows negative in QBO'],
-            ['"Ask My Accountant"', 'More than 5 items'],
-            ['Food cost %', 'Over 40% or under 20%'],
-            ['Payroll entries', 'Missing or irregular'],
+            ['1', 'Complete all weekly closes for the month', 'By 5th'],
+            ['2', 'Reconcile all bank accounts to statements', 'By 7th'],
+            ['3', 'Reconcile all credit card accounts', 'By 7th'],
+            ['4', 'Verify payroll register totals match QBO entries', 'By 7th'],
+            ['5', 'Record any accruals (if accrual basis client)', 'By 8th'],
+            ['6', 'Record prepaid expense amortization', 'By 8th'],
+            ['7', 'Record depreciation expense', 'By 8th'],
+            ['8', 'Record loan interest allocation', 'By 8th'],
+            ['9', 'Review P&L for reasonableness and anomalies', 'By 9th'],
+            ['10', 'Review Balance Sheet for reasonableness', 'By 9th'],
+            ['11', 'Generate final P&L and Balance Sheet PDFs', 'By 10th'],
+            ['12', 'Prepare monthly summary commentary', 'By 10th'],
+            ['13', 'Send monthly financial package to client', 'By 10th'],
           ]
         ),
 
-        heading(2, 'Deep Dive (1-2 hours)'),
-        paragraph('If quick assessment reveals issues, dig deeper:'),
+        heading(2, 'Monthly Adjusting Entries'),
         bulletList([
-          'Run bank reconciliation for past 3 months',
-          'Review all "Other Income" and "Other Expense"',
-          'Check for duplicate transactions',
-          'Verify all vendor names are meaningful',
-          'Confirm all credit card accounts are connected',
+          'Prepaid Rent: If rent is paid quarterly or annually, record 1/3 or 1/12 of the prepaid balance as rent expense each month.',
+          'Prepaid Insurance: Amortize annual insurance premiums monthly (1/12 per month).',
+          'Depreciation: Record monthly depreciation for all fixed assets. Typical lives: Equipment 5-7 years, LHI over lease term, FF&E 5-7 years.',
+          'Loan Interest: Split loan payments between principal (reduces liability) and interest (expense). Use amortization schedule from lender.',
         ]),
 
-        heading(2, 'Health Score'),
+        heading(2, 'Monthly P&L Analysis Points'),
+        paragraph('When reviewing the monthly P&L, analyze these key metrics and flag anything outside normal ranges:'),
         table(
-          ['Score', 'Meaning', 'Action'],
+          ['Metric', 'Target Range', 'Red Flag If'],
           [
-            ['Green (90%+)', 'Books are clean', 'Standard weekly close'],
-            ['Yellow (70-89%)', 'Minor issues', 'Clean up within 2 weeks'],
-            ['Red (Below 70%)', 'Significant issues', 'Escalate, may need cleanup project'],
+            ['Food Cost %', '25-35% of food sales', '> 38% or < 22%'],
+            ['Beverage Cost %', '18-24% of bev sales', '> 28% or < 15%'],
+            ['Total Labor %', '28-35% of sales', '> 40%'],
+            ['Prime Cost %', '55-65% of sales', '> 70%'],
+            ['Occupancy Cost %', '6-10% of sales', '> 12%'],
+            ['Net Profit %', '5-15% of sales', '< 3% or negative'],
           ]
         ),
-
       ],
     },
   },
 
   {
-    title: 'QBO Export Procedures',
-    slug: 'qbo-export-procedures',
+    title: '2.5 QBO Export Guides',
+    slug: '2-5-qbo-export-guides',
     section_slug: 'standard-operating-procedures',
     type: 'guide',
-    excerpt: 'How to export reports from QuickBooks Online',
-    read_time: 6,
+    excerpt: 'Standard exports for P&L, Balance Sheet, transactions, and Chart of Accounts',
+    read_time: 8,
     is_pinned: false,
     order_index: 4,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'QBO Export Procedures'),
-        paragraph('Standard procedures for exporting reports from QuickBooks Online.'),
+        heading(1, '2.5 QBO Export Guides'),
+        paragraph('Standard exports we provide to clients and use internally for analysis.'),
 
-        heading(2, 'P&L Export'),
-        stepFlow([
-          { title: 'Navigate', description: 'Reports > Profit and Loss' },
-          { title: 'Set Dates', description: 'Select the reporting period' },
-          { title: 'Customize', description: 'Show all rows, group by none' },
-          { title: 'Run Report', description: 'Click Run Report' },
-          { title: 'Export', description: 'Export to Excel' },
+        heading(2, 'Profit & Loss Export'),
+        bulletList([
+          'Navigate to Reports > Profit and Loss',
+          'Set date range (weekly: specific Mon-Sun, monthly: full month)',
+          'Click Customize > Rows/Columns',
+          'Enable: Show non-zero rows, Show % of Income column',
+          'For comparison: Add columns for Previous Period or Same Period Last Year',
+          'Click Run Report, then Export > Export to PDF',
         ]),
 
         heading(2, 'Balance Sheet Export'),
-        stepFlow([
-          { title: 'Navigate', description: 'Reports > Balance Sheet' },
-          { title: 'Set Date', description: 'Select As of date' },
-          { title: 'Run Report', description: 'Click Run Report' },
-          { title: 'Export', description: 'Export to Excel' },
-        ]),
-
-        heading(2, 'General Ledger Export'),
-        stepFlow([
-          { title: 'Navigate', description: 'Reports > General Ledger' },
-          { title: 'Set Dates', description: 'Select date range' },
-          { title: 'Filter', description: 'Select specific accounts if needed' },
-          { title: 'Run Report', description: 'Click Run Report' },
-          { title: 'Export', description: 'Export to Excel' },
-        ]),
-
-        proTipBox('Always verify the date range before exporting. It\'s easy to accidentally pull the wrong period.'),
-
-      ],
-    },
-  },
-
-  {
-    title: 'Handoff Protocol',
-    slug: 'handoff-protocol',
-    section_slug: 'standard-operating-procedures',
-    type: 'checklist',
-    excerpt: 'Transitioning clients between team members',
-    read_time: 5,
-    is_pinned: false,
-    order_index: 5,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Handoff Protocol'),
-        paragraph('Use this protocol when transitioning a client to another team member (vacation, role change, etc.).'),
-
-        heading(2, 'Before Handoff'),
-        table(
-          ['Task', 'Notes'],
-          [
-            ['Document all client specifics', 'Special requests, preferences'],
-            ['List pending items', 'Open questions, issues'],
-            ['Update process notes', 'Any deviations from standard'],
-            ['Check access levels', 'New person has all access'],
-          ]
-        ),
-
-        heading(2, 'During Handoff'),
-        table(
-          ['Task', 'Notes'],
-          [
-            ['30-minute handoff call', 'Walk through everything'],
-            ['Share screen in QBO', 'Show any unusual items'],
-            ['Review last 2 weeks', 'Recent history'],
-            ['Introduce via email', 'If new person to client'],
-          ]
-        ),
-
-        heading(2, 'After Handoff'),
-        table(
-          ['Task', 'Notes'],
-          [
-            ['Shadow first week', 'Available for questions'],
-            ['Check in mid-week', 'Any issues?'],
-            ['Formal close', 'Handoff complete'],
-          ]
-        ),
-
-      ],
-    },
-  },
-
-  {
-    title: 'Client Communication Standards',
-    slug: 'client-communication-standards',
-    section_slug: 'standard-operating-procedures',
-    type: 'guide',
-    excerpt: 'How to communicate professionally with US clients',
-    read_time: 8,
-    is_pinned: false,
-    order_index: 6,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Client Communication Standards'),
-        paragraph('How to communicate professionally with US restaurant clients.'),
-
-        heading(2, 'Response Time Standards'),
-        table(
-          ['Channel', 'Response Time'],
-          [
-            ['FinAcct360 Chat', 'Within 2 hours'],
-            ['Schedule Meeting', 'Same business day when needed'],
-            ['Task with deadline', 'By due date'],
-            ['Urgent (flagged)', 'Within 1 hour'],
-          ]
-        ),
-
-        heading(2, 'Tone Guidelines'),
-        paragraph('US business communication is casual but professional.'),
-        table(
-          ['Instead Of', 'Use'],
-          [
-            ['Dear Sir/Madam', 'Hi [First Name]'],
-            ['I am writing to inform you', 'Quick update on...'],
-            ['Please do the needful', 'Could you please...'],
-            ['Kindly revert', 'Let me know'],
-            ['As per my previous email', 'Following up on...'],
-          ]
-        ),
-
-        heading(2, 'Good vs Bad Examples'),
-        exampleBox('❌ BAD', 'Dear Sir,\n\nI am writing to inform you that there is a discrepancy in your books. Please do the needful and revert back.\n\nRegards'),
-        exampleBox('✅ GOOD', 'Hi Sarah,\n\nQuick question — your Square shows $5,200 in sales for March 3rd, but the bank deposit was $4,700. Could this be a cash deposit that went elsewhere?\n\nLet me know and I\'ll get it sorted.\n\nThanks!'),
-
-        heading(2, 'When to Escalate'),
         bulletList([
-          'Client is unhappy or frustrated',
-          'Technical issue you can\'t resolve',
-          'Request outside normal scope',
-          'Any legal or compliance concern',
+          'Navigate to Reports > Balance Sheet',
+          'Set As of date to last day of period',
+          'Click Customize > Rows/Columns',
+          'For comparison: Add Previous Year column',
+          'Click Run Report, then Export > Export to PDF',
         ]),
 
+        heading(2, 'Transaction Export for Analysis'),
+        bulletList([
+          'Navigate to Reports > Transaction List by Date',
+          'Set date range for period needed',
+          'Click Customize > Filter > Transaction Type (select specific types if needed)',
+          'Export > Export to Excel for data manipulation',
+        ]),
+
+        heading(2, 'Chart of Accounts Export'),
+        bulletList([
+          'Navigate to Settings (gear) > Chart of Accounts',
+          'Click Run Report (top right)',
+          'Export > Export to Excel',
+          'Use this for COA comparisons and cleanup planning',
+        ]),
       ],
     },
   },
 ]
 
 // =============================================================================
-// SECTION 3: EXCEPTION HANDLING (7 articles)
+// =============================================================================
+// SECTION 3: EXCEPTION HANDLING (8 articles: 3.1 – 3.8)
 // =============================================================================
 
 const exceptionArticles = [
   {
-    title: 'Client Refuses COA Change',
-    slug: 'client-refuses-coa-change',
+    title: '3.1 Client Refuses COA Change',
+    slug: '3-1-client-refuses-coa-change',
     section_slug: 'exception-handling',
     type: 'playbook',
-    excerpt: 'How to handle pushback on Chart of Accounts changes',
-    read_time: 8,
+    excerpt: 'Address client resistance to Chart of Accounts conversion professionally',
+    read_time: 10,
     is_pinned: true,
     order_index: 0,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Client Refuses COA Change'),
-        paragraph('Sometimes clients resist changing their Chart of Accounts. This playbook helps you navigate the conversation professionally.'),
+        heading(1, '3.1 Client Refuses COA Change'),
+        paragraph('Occasionally, a client will resist converting to our standardized Chart of Accounts. This protocol defines how to address resistance professionally while maintaining service quality.'),
 
-        heading(2, 'Why This Happens'),
+        heading(2, 'Common Client Objections & Responses'),
         table(
-          ['Reason', 'Client Says', 'Real Concern'],
+          ['Objection', 'Response Strategy'],
           [
-            ['Familiarity', '"I\'ve always done it this way"', 'Fear of learning new system'],
-            ['Accountant', '"My CPA set this up"', 'Doesn\'t want to upset CPA'],
-            ['Software', '"QuickBooks created these"', 'Thinks QBO is correct'],
-            ['Time', '"I don\'t have time for this"', 'Worried about transition'],
+            ['My CPA set this up', 'We\'re not changing tax categorizations — just adding operational detail. Offer to send a mapping summary to their CPA showing how our COA aligns with tax returns.'],
+            ['I\'ve done it this way for years', 'Acknowledge their experience. Our restaurant-specific COA provides insights generic setups can\'t offer. We can keep their accounts as sub-accounts under our structure.'],
+            ['It seems too complicated', 'Emphasize that THEY won\'t do any additional work — we handle all categorization. Show them a sample KPI dashboard to demonstrate the value they\'ll receive.'],
+            ['I don\'t want to lose historical data', 'We NEVER delete historical data. We reclassify and add structure. We can produce reports in the old format for comparison if needed.'],
           ]
         ),
-
-        heading(2, 'The Conversation Framework'),
-        stepFlow([
-          { title: 'Listen First', description: 'Understand their specific concern' },
-          { title: 'Acknowledge', description: 'Validate their perspective' },
-          { title: 'Educate', description: 'Explain the "why" behind our COA' },
-          { title: 'Show Value', description: 'Demonstrate with real examples' },
-          { title: 'Offer Options', description: 'Phased approach or full transition' },
-        ]),
 
         heading(2, 'Escalation Path'),
-        table(
-          ['If...', 'Then...'],
-          [
-            ['Client is hesitant but open', 'Offer phased approach'],
-            ['Client needs CPA approval', 'Send documentation to their CPA'],
-            ['Client firmly refuses', 'Escalate to Manager'],
-            ['Client threatens to cancel', 'Escalate to Controller immediately'],
-          ]
-        ),
-        warningBox('Never Force It', 'If a client absolutely refuses, we can work with their existing COA temporarily. Document the situation and escalate. Never damage the client relationship over COA changes.'),
-
+        bulletList([
+          'Accountant discusses value proposition with client (first attempt)',
+          'If resistance continues, Account Manager joins call to discuss business impact',
+          'Document client\'s specific objections in client notes',
+          'If client still refuses, escalate to Ganesh for final decision',
+        ]),
+        warningBox('IMPORTANT', 'If a client refuses our COA AND is not willing to accept any exception option, Ganesh must approve continuation. We do not onboard clients where we cannot deliver our standard of service.'),
       ],
     },
   },
 
   {
-    title: 'Messy Books Protocol',
-    slug: 'messy-books-protocol',
+    title: '3.2 Messy Books Protocol',
+    slug: '3-2-messy-books-protocol',
     section_slug: 'exception-handling',
     type: 'playbook',
-    excerpt: 'How to clean up disorganized or incorrect bookkeeping',
-    read_time: 12,
+    excerpt: 'Assess severity, communicate with client, and execute cleanup plan',
+    read_time: 14,
     is_pinned: true,
     order_index: 1,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Messy Books Protocol'),
-        paragraph('New clients often come with months of messy bookkeeping. This protocol helps you clean up systematically.'),
+        heading(1, '3.2 Messy Books Protocol'),
+        paragraph('Some new clients come to us with books in disarray. This protocol defines how to assess the situation, communicate with the client, and develop a cleanup plan.'),
 
-        heading(2, 'Signs of Messy Books'),
+        heading(2, 'Severity Assessment Matrix'),
         table(
-          ['Red Flag', 'What It Means'],
+          ['Level', 'Indicators', 'Cleanup Scope'],
           [
-            ['Negative bank balance in QBO', 'Unreconciled transactions'],
-            ['"Ask My Accountant" everywhere', 'Previous accountant gave up'],
-            ['Uncategorized Expenses > $10K', 'No one categorized'],
-            ['Food cost > 50%', 'Miscategorized expenses'],
-            ['No payroll entries', 'Payroll not recorded'],
+            ['Level 1: Minor', 'Bank not reconciled 1-2 months, some miscategorized transactions, minor COA issues', '1-2 weeks cleanup, proceed with normal onboarding, no additional billing'],
+            ['Level 2: Moderate', 'Bank not reconciled 3-6 months, payroll entries not matching, uncategorized > $5K/month', '2-4 weeks cleanup, $500-$1,500 fee, delay dashboards until complete'],
+            ['Level 3: Severe', 'Bank not reconciled 6+ months, differences > $10K, payroll liability issues, unclear sales tax', '4-8 weeks cleanup, $1,500-$5,000 fee, must complete before service starts'],
+            ['Level 4: Critical', 'Unreliable historical data, possible fraud, tax returns don\'t match books, multiple years of issues', 'Forensic review needed, may need CPA, separate engagement, $5,000-$15,000+'],
           ]
         ),
 
-        heading(2, 'The Cleanup Framework'),
-        stepFlow([
-          { title: 'Stabilize', description: 'Fix bank connections, stop the bleeding' },
-          { title: 'Current First', description: 'Get current week/month clean' },
-          { title: 'Go Backward', description: 'Clean up historical month by month' },
-          { title: 'Reconcile', description: 'Reconcile each month as you go' },
-          { title: 'Document', description: 'Note all major adjustments' },
+        heading(2, 'Cleanup Protocol Steps'),
+        bulletList([
+          'Complete Books Health Check immediately upon receiving access',
+          'Document all issues with specific examples and dollar amounts',
+          'Assign severity level per matrix above',
+          'For Level 2+, schedule client call to present findings and cleanup proposal',
+          'Get written approval before starting cleanup work',
+          'Start with bank reconciliations — work from oldest unreconciled month forward',
+          'Document all adjustments made with explanations',
         ]),
         insightBox('Current First, Always', 'Don\'t spend 3 weeks cleaning up history while current transactions pile up. Get the current week clean and delivering value, THEN work backward.'),
-
-        heading(2, 'Time Estimates'),
-        table(
-          ['Situation', 'Estimated Hours'],
-          [
-            ['1 month behind', '4-8 hours'],
-            ['3 months behind', '15-25 hours'],
-            ['6 months behind', '30-50 hours'],
-            ['12+ months behind', '60-100+ hours'],
-          ]
-        ),
-        warningBox('Scope Creep Alert', 'If cleanup exceeds 20 hours, escalate to Manager. This may require a separate cleanup project with additional billing.'),
-
       ],
     },
   },
 
   {
-    title: 'Missing Data Handling',
-    slug: 'missing-data-handling',
+    title: '3.3 Missing Data Handling',
+    slug: '3-3-missing-data-handling',
     section_slug: 'exception-handling',
     type: 'playbook',
-    excerpt: 'What to do when client data is incomplete or unavailable',
-    read_time: 6,
+    excerpt: 'Immediate actions and escalation when POS, bank, payroll, or vendor data is missing',
+    read_time: 10,
     is_pinned: false,
     order_index: 2,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Missing Data Handling'),
-        paragraph('Sometimes data is missing or incomplete. Here\'s how to handle it. Request from the client via FinAcct360 Chat or create a Task with a deadline.'),
+        heading(1, '3.3 Missing Data Handling'),
+        paragraph('When client data is incomplete or unavailable, follow these scenarios and escalation steps.'),
 
-        FINACCT360_COMMUNICATION_BOX,
-        heading(2, 'Common Missing Data'),
+        heading(2, 'Missing Data Scenarios & Actions'),
         table(
-          ['Missing', 'Source Alternative'],
+          ['Missing Item', 'Immediate Action', 'If Not Received in 48 Hours'],
           [
-            ['POS sales', 'Bank deposits, manual log'],
-            ['Bank statement', 'Client download, bank direct'],
-            ['Payroll report', 'Bank withdrawals, ADP/Gusto portal'],
-            ['Vendor invoices', 'Credit card statements'],
-            ['Third-party reports', 'Platform dashboards'],
+            ['POS Sales Report', 'Email client with specific date range needed and export instructions', 'Delay weekly dashboard with note. Escalate to Account Manager.'],
+            ['Bank Statement', 'Check if bank feed is connected. If not, request PDF statement.', 'Proceed with available data, note unreconciled period.'],
+            ['Payroll Register', 'Log into payroll system if we have access. If not, email client.', 'Record estimated payroll based on prior periods with adjusting entry.'],
+            ['Vendor Invoices', 'Check document folder. Email client for missing items.', 'Categorize based on vendor name and prior patterns. Note as estimated.'],
+            ['3rd Party Delivery Statements', 'Log into DoorDash/Uber/Grubhub portals if we have access.', 'Use bank deposits and standard commission rates (15-30%) to estimate.'],
           ]
         ),
 
-        heading(2, 'Escalation Timeline'),
-        table(
-          ['Day', 'Action'],
-          [
-            ['Day 1', 'Request via FinAcct360 Chat'],
-            ['Day 2', 'Follow up via FinAcct360'],
-            ['Day 3', 'Escalate to senior, call client'],
-            ['Day 4', 'Manager involvement'],
-          ]
-        ),
-
+        heading(2, 'Chronic Missing Data Escalation'),
+        bulletList([
+          'After 3rd instance in a month: Account Manager sends formal reminder email',
+          'After 5th instance: Schedule call to discuss data delivery expectations',
+          'If pattern continues: Escalate to Ganesh to discuss engagement terms',
+        ]),
         warningBox('Never Guess', 'If you can\'t get the data and can\'t find an alternative source, flag it clearly on the P&L. Never estimate without documentation.'),
-
       ],
     },
   },
 
   {
-    title: 'QBO Technical Issues',
-    slug: 'qbo-technical-issues',
+    title: '3.4 QBO Technical Issues',
+    slug: '3-4-qbo-technical-issues',
     section_slug: 'exception-handling',
     type: 'troubleshoot',
-    excerpt: 'Common QuickBooks Online problems and solutions',
-    read_time: 10,
+    excerpt: 'Bank feed, duplicates, reconciliation, payroll sync, and balance sheet issues',
+    read_time: 12,
     is_pinned: false,
     order_index: 3,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'QBO Technical Issues'),
-        paragraph('Common QuickBooks Online issues and how to resolve them.'),
+        heading(1, '3.4 QBO Technical Issues'),
+        paragraph('Common QuickBooks Online problems and resolution steps.'),
 
-        heading(2, 'Bank Feed Issues'),
+        heading(2, 'Common Issues & Solutions'),
         table(
-          ['Problem', 'Solution'],
+          ['Issue', 'Resolution Steps'],
           [
-            ['Bank feed disconnected', 'Reconnect via Settings > Bank Connections'],
-            ['Duplicate transactions', 'Undo/delete duplicates, check date range'],
-            ['Missing transactions', 'Manual import from CSV'],
-            ['Wrong account linked', 'Disconnect, reconnect to correct account'],
+            ['Bank Feed Disconnected', '1. Go to Banking > Link Account > Reconnect. 2. Client may need to re-enter credentials. 3. If persistent, contact bank. 4. Alternative: Import via CSV.'],
+            ['Duplicate Transactions', '1. Check if same transaction imported AND manually entered. 2. Use Exclude feature. 3. NEVER delete — use Match or Exclude. 4. Run Transaction List by Date to identify duplicates.'],
+            ['Reconciliation Won\'t Balance', '1. Check for voided/deleted transactions. 2. Look for wrong date entries. 3. Verify opening balance. 4. Run Reconciliation Discrepancy Report.'],
+            ['Payroll Not Syncing', '1. Verify QBO Payroll subscription. 2. Check Sync preferences. 3. Run Re-sync. 4. If third-party payroll, create journal entries manually.'],
+            ['Balance Sheet Out of Balance', 'RARE — indicates serious issue. 1. Run BS by quarter to identify timing. 2. Check modified reconciliations. 3. Contact Intuit support immediately.'],
           ]
         ),
-
-        heading(2, 'Report Issues'),
-        table(
-          ['Problem', 'Solution'],
-          [
-            ['P&L shows wrong dates', 'Check "Customize" settings, date range'],
-            ['Accounts missing from report', 'Check "Rows/Columns" show all'],
-            ['Totals don\'t match', 'Check for filtering, sub-accounts'],
-          ]
-        ),
-
-        heading(2, 'Access Issues'),
-        table(
-          ['Problem', 'Solution'],
-          [
-            ['Can\'t access company', 'Check FinAcct360 for invite; request re-invite via Chat'],
-            ['Limited access', 'Request admin upgrade from client'],
-            ['Two-factor problems', 'Use backup codes, reach out via FinAcct360'],
-          ]
-        ),
-
+        exampleBox('Intuit ProAdvisor Support', '1-800-488-7330'),
         proTipBox('Clear browser cache and try incognito mode before escalating QBO issues. Many problems are browser-related.'),
-
       ],
     },
   },
 
   {
-    title: 'Bank Feed Errors',
-    slug: 'bank-feed-errors',
+    title: '3.5 Business Model Exceptions',
+    slug: '3-5-business-model-exceptions',
     section_slug: 'exception-handling',
-    type: 'troubleshoot',
-    excerpt: 'Fixing bank connection and import issues',
-    read_time: 8,
+    type: 'playbook',
+    excerpt: 'COA modifications for ghost kitchens, food halls, catering, franchise, and hotel F&B',
+    read_time: 14,
     is_pinned: false,
     order_index: 4,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Bank Feed Errors'),
-        paragraph('Bank feed issues are common. Here\'s how to diagnose and fix them.'),
+        heading(1, '3.5 Business Model Exceptions'),
+        paragraph('Not all restaurant operations fit neatly into our standard COA framework. This section addresses non-standard business models.'),
+
+        heading(2, 'Ghost Kitchens / Virtual Brands'),
+        paragraph('Characteristics: No dine-in, delivery-only, may operate multiple brands from one kitchen, high third-party delivery percentage (often 80-100%).'),
+        paragraph('COA Modifications: Remove dine-in revenue accounts. Expand delivery revenue accounts by platform AND by virtual brand. Track packaging costs carefully (often 5-8% of revenue). Consider separate P&L per brand using QBO Classes.'),
+
+        heading(2, 'Food Halls / Shared Kitchens'),
+        paragraph('Characteristics: Shared facilities, complex rent structures (base + percentage), shared staff arrangements, central POS vs. individual POS.'),
+        paragraph('COA Modifications: Add accounts for common area fees (7030), percentage rent tracking (7020), shared labor allocation if applicable. Track commission fees to food hall operator.'),
+
+        heading(2, 'Catering-Heavy Operations'),
+        paragraph('Characteristics: More than 30% of revenue from catering, deposit-based sales, event staffing costs, transportation/delivery costs.'),
+        paragraph('COA Modifications: Separate catering P&L using QBO Class. Add: Catering Deposits Liability (2410), Event Staffing (6510), Catering Vehicle Expense (7350), Equipment Rental (7360). Track gross margin by event.'),
+
+        heading(2, 'Franchise Operations'),
+        paragraph('Characteristics: Royalty fees, marketing fund contributions, required vendor purchases, franchisor reporting requirements.'),
+        paragraph('COA Modifications: Add: Royalty Expense (7900), Marketing Fund Contribution (7910), Franchisor Required Purchases sub-account under COGS. May need to produce reports matching franchisor format.'),
+
+        heading(2, 'Hotel F&B Operations'),
+        paragraph('Characteristics: Room service, banquet operations, hotel allocations, complex comp meal handling, multiple outlets.'),
+        paragraph('COA Modifications: Separate revenue by outlet (Restaurant, Bar, Room Service, Banquet). Track hotel management fees and allocations. Handle room charges and settlement process. May need custom reporting to match hotel owner requirements.'),
+
+        warningBox('Non-Standard Setup', 'For any non-standard business model: Document the modifications needed, get Ganesh approval before onboarding, and create a custom setup guide for the client file.'),
+      ],
+    },
+  },
+
+  {
+    title: '3.6 Bank Feed Errors',
+    slug: '3-6-bank-feed-errors',
+    section_slug: 'exception-handling',
+    type: 'troubleshoot',
+    excerpt: 'Fixing bank connection and import issues; when to use manual CSV import',
+    read_time: 8,
+    is_pinned: false,
+    order_index: 5,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '3.6 Bank Feed Errors'),
+        paragraph('Bank feed issues are common. See 3.4 for high-level bank feed steps; this article details disconnection causes and manual import fallback.'),
 
         heading(2, 'Disconnection Causes'),
         bulletList([
@@ -1903,24 +1148,23 @@ const exceptionArticles = [
           { title: 'Map Columns', description: 'Match CSV to QBO fields' },
           { title: 'Import', description: 'Review and accept' },
         ]),
-
       ],
     },
   },
 
   {
-    title: 'Payroll Discrepancies',
-    slug: 'payroll-discrepancies',
+    title: '3.7 Payroll Discrepancies',
+    slug: '3-7-payroll-discrepancies',
     section_slug: 'exception-handling',
     type: 'playbook',
-    excerpt: 'When payroll doesn\'t match bank or reports',
-    read_time: 7,
+    excerpt: 'When payroll doesn\'t match bank or reports; investigation and adjustments',
+    read_time: 8,
     is_pinned: false,
-    order_index: 5,
+    order_index: 6,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Payroll Discrepancies'),
+        heading(1, '3.7 Payroll Discrepancies'),
         paragraph('When payroll journal entries don\'t match bank withdrawals or payroll reports.'),
 
         heading(2, 'Common Causes'),
@@ -1952,24 +1196,23 @@ const exceptionArticles = [
             ['Reimbursement included', 'Separate from wages'],
           ]
         ),
-
       ],
     },
   },
 
   {
-    title: 'Third-Party Delivery Issues',
-    slug: 'third-party-delivery-issues',
+    title: '3.8 Third-Party Delivery Issues',
+    slug: '3-8-third-party-delivery-issues',
     section_slug: 'exception-handling',
     type: 'playbook',
-    excerpt: 'DoorDash, UberEats, Grubhub reconciliation problems',
-    read_time: 8,
+    excerpt: 'DoorDash, Uber Eats, Grubhub reconciliation and fee recording',
+    read_time: 9,
     is_pinned: false,
-    order_index: 6,
+    order_index: 7,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Third-Party Delivery Issues'),
+        heading(1, '3.8 Third-Party Delivery Issues'),
         paragraph('Third-party platforms have complex fee structures. Here\'s how to reconcile them.'),
 
         heading(2, 'The Math'),
@@ -1993,201 +1236,406 @@ const exceptionArticles = [
           { title: 'Match to Bank', description: 'Verify deposit amounts' },
           { title: 'Record Fees', description: 'Commission to 8200 accounts' },
         ]),
-
         warningBox('Record Gross Sales', 'Always record the full order amount as revenue (4300). Record the commission as an expense (8200). This keeps revenue accurate for KPIs.'),
-
       ],
     },
   },
 ]
 
 // =============================================================================
-// SECTION 4: SAMPLE FINANCIALS (9 articles) - Abbreviated for space
+// SECTION 4: SAMPLE FINANCIALS (5 articles: 4.1 – 4.5)
 // =============================================================================
 
 const sampleFinancialsArticles = [
   {
-    title: 'Cafe / Coffee Shop P&L',
-    slug: 'cafe-coffee-shop-pl',
+    title: '4.1 Cafe / Coffee Shop P&L (Morning Buzz Profile)',
+    slug: '4-1-cafe-coffee-shop-pl',
     section_slug: 'sample-financials',
     type: 'template',
-    excerpt: 'Sample P&L for Morning Buzz Cafe with KPI analysis',
-    read_time: 8,
+    excerpt: 'Monthly P&L for a typical 1,200 sq ft cafe with $85,000 monthly revenue',
+    read_time: 10,
     is_pinned: true,
     order_index: 0,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Cafe / Coffee Shop P&L'),
-        scenarioBox('Morning Buzz Cafe: $45,000/month revenue, 65% beverages, 35% food. Owner: Sarah Chen.'),
-        
-        heading(2, 'Sample Monthly P&L'),
+        heading(1, '4.1 Cafe / Coffee Shop P&L (Morning Buzz Profile)'),
+        paragraph('Monthly P&L for a typical 1,200 sq ft cafe with $85,000 monthly revenue.'),
+
+        heading(2, 'REVENUE'),
         table(
           ['Account', 'Amount', '% of Sales'],
           [
-            ['Food Sales', '$15,750', '35.0%'],
-            ['NA Beverage Sales', '$27,000', '60.0%'],
-            ['Third-Party Delivery', '$2,700', '6.0%'],
-            ['Discounts', '($450)', '-1.0%'],
-            ['Total Revenue', '$45,000', '100%'],
-            ['', '', ''],
-            ['Food Cost', '$4,725', '10.5%'],
-            ['NA Beverage Cost', '$5,400', '12.0%'],
-            ['Packaging', '$675', '1.5%'],
-            ['Total COGS', '$10,800', '24.0%'],
-            ['', '', ''],
-            ['Gross Profit', '$34,200', '76.0%'],
-            ['', '', ''],
-            ['FOH Labor', '$9,000', '20.0%'],
-            ['Management', '$3,000', '6.7%'],
-            ['Payroll Taxes', '$1,440', '3.2%'],
-            ['Total Labor', '$13,440', '29.9%'],
-            ['', '', ''],
-            ['Prime Cost', '$24,240', '53.9%'],
+            ['Coffee & Espresso Sales', '$51,000', '60.0%'],
+            ['Tea & Other Beverages', '$8,500', '10.0%'],
+            ['Food - Pastries & Bakery', '$17,000', '20.0%'],
+            ['Food - Breakfast/Lunch Items', '$6,800', '8.0%'],
+            ['Retail Merchandise', '$2,550', '3.0%'],
+            ['Less: Discounts & Comps', '($850)', '-1.0%'],
+            ['TOTAL REVENUE', '$85,000', '100.0%'],
           ]
         ),
-        insightBox('Why Cafes Have Higher Margins', 'Morning Buzz achieves strong margins because: Beverage-heavy (65%) with high margins, Lower labor (counter service), Simple menu, Limited third-party delivery.'),
 
+        heading(2, 'COST OF GOODS SOLD'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Coffee Beans & Supplies', '$8,500', '10.0%'],
+            ['Milk & Dairy', '$4,250', '5.0%'],
+            ['Bakery/Pastry Cost', '$5,100', '6.0%'],
+            ['Food Ingredients', '$2,550', '3.0%'],
+            ['Paper Cups & Supplies', '$2,125', '2.5%'],
+            ['TOTAL COGS', '$22,525', '26.5%'],
+          ]
+        ),
+
+        heading(2, 'GROSS PROFIT'),
+        paragraph('$62,475 — 73.5%'),
+
+        heading(2, 'LABOR'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Barista Wages', '$15,300', '18.0%'],
+            ['Manager Salary', '$4,500', '5.3%'],
+            ['Payroll Taxes & Benefits', '$2,380', '2.8%'],
+            ['TOTAL LABOR', '$22,180', '26.1%'],
+          ]
+        ),
+
+        heading(2, 'PRIME COST (COGS + Labor)'),
+        paragraph('$44,705 — 52.6%'),
+
+        heading(2, 'OPERATING EXPENSES'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Rent', '$6,000', '7.1%'],
+            ['Utilities', '$1,275', '1.5%'],
+            ['Insurance', '$850', '1.0%'],
+            ['Marketing', '$1,275', '1.5%'],
+            ['Credit Card Fees', '$2,550', '3.0%'],
+            ['Software & Tech', '$425', '0.5%'],
+            ['Repairs & Maintenance', '$680', '0.8%'],
+            ['Other Operating', '$1,020', '1.2%'],
+            ['TOTAL OPERATING', '$14,075', '16.6%'],
+          ]
+        ),
+
+        heading(2, 'NET OPERATING INCOME'),
+        paragraph('$26,220 — 30.8%'),
+
+        insightBox('Key Benchmarks', 'Beverage cost should be 15-20% of beverage sales. Prime cost target: 50-55%. Rent should stay under 8% of sales.'),
       ],
     },
   },
 
   {
-    title: 'Full Service Restaurant P&L',
-    slug: 'full-service-restaurant-pl',
+    title: '4.2 Full Service Restaurant P&L (Olive & Vine Profile)',
+    slug: '4-2-full-service-restaurant-pl',
     section_slug: 'sample-financials',
     type: 'template',
-    excerpt: 'Sample P&L for Olive & Vine with KPI analysis',
-    read_time: 10,
+    excerpt: 'Monthly P&L for a 4,500 sq ft full-service restaurant with $350,000 monthly revenue',
+    read_time: 12,
     is_pinned: false,
     order_index: 1,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Full Service Restaurant P&L'),
-        scenarioBox('Olive & Vine: $150,000/month revenue, 70% food, 30% beverage. Owner: Marcus Thompson.'),
-        paragraph('Full P&L template for full-service restaurants with higher labor costs and wine/cocktail programs.'),
+        heading(1, '4.2 Full Service Restaurant P&L (Olive & Vine Profile)'),
+        paragraph('Monthly P&L for a 4,500 sq ft full-service restaurant with $350,000 monthly revenue.'),
+
+        heading(2, 'REVENUE'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Sales - Dine In', '$227,500', '65.0%'],
+            ['Food Sales - Takeout', '$21,000', '6.0%'],
+            ['Beer Sales', '$21,000', '6.0%'],
+            ['Wine Sales', '$42,000', '12.0%'],
+            ['Spirits Sales', '$24,500', '7.0%'],
+            ['NA Beverages', '$17,500', '5.0%'],
+            ['Less: Discounts & Comps', '($3,500)', '-1.0%'],
+            ['TOTAL REVENUE', '$350,000', '100.0%'],
+          ]
+        ),
+
+        heading(2, 'COST OF GOODS SOLD'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Cost', '$77,000', '22.0%'],
+            ['Beer Cost', '$4,900', '1.4%'],
+            ['Wine Cost', '$12,600', '3.6%'],
+            ['Spirits Cost', '$4,900', '1.4%'],
+            ['NA Beverage Cost', '$2,800', '0.8%'],
+            ['Paper & Supplies', '$3,500', '1.0%'],
+            ['TOTAL COGS', '$105,700', '30.2%'],
+          ]
+        ),
+
+        heading(2, 'GROSS PROFIT'),
+        paragraph('$244,300 — 69.8%'),
+
+        heading(2, 'LABOR'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['FOH Wages (Servers, Bartenders, Hosts)', '$42,000', '12.0%'],
+            ['BOH Wages (Cooks, Prep, Dish)', '$38,500', '11.0%'],
+            ['Management Salaries', '$21,000', '6.0%'],
+            ['Payroll Taxes & Benefits', '$12,250', '3.5%'],
+            ['TOTAL LABOR', '$113,750', '32.5%'],
+          ]
+        ),
+
+        heading(2, 'PRIME COST'),
+        paragraph('$219,450 — 62.7%'),
+
+        heading(2, 'OPERATING EXPENSES'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Rent & CAM', '$28,000', '8.0%'],
+            ['Utilities', '$7,000', '2.0%'],
+            ['Insurance', '$3,500', '1.0%'],
+            ['Marketing', '$7,000', '2.0%'],
+            ['Credit Card Processing', '$10,500', '3.0%'],
+            ['Repairs & Maintenance', '$5,250', '1.5%'],
+            ['Professional Services', '$3,500', '1.0%'],
+            ['Other Operating', '$5,250', '1.5%'],
+            ['TOTAL OPERATING', '$70,000', '20.0%'],
+          ]
+        ),
+
+        heading(2, 'NET OPERATING INCOME'),
+        paragraph('$60,550 — 17.3%'),
       ],
     },
   },
 
   {
-    title: 'Bar & Grill P&L',
-    slug: 'bar-grill-pl',
+    title: '4.3 Bar & Grill P&L (Smokeys/Tailgators Profile)',
+    slug: '4-3-bar-grill-pl',
     section_slug: 'sample-financials',
     type: 'template',
-    excerpt: 'Sample P&L for Smokey\'s Bar & Grill with pour cost analysis',
-    read_time: 10,
+    excerpt: 'Monthly P&L for a 3,500 sq ft sports bar with $275,000 monthly revenue',
+    read_time: 12,
     is_pinned: false,
     order_index: 2,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Bar & Grill P&L'),
-        scenarioBox('Smokey\'s Bar & Grill: $120,000/month revenue, 55% beverage, 45% food. Owner: Dave Morrison.'),
+        heading(1, '4.3 Bar & Grill P&L (Smokeys/Tailgators Profile)'),
+        paragraph('Monthly P&L for a 3,500 sq ft sports bar with $275,000 monthly revenue.'),
+
+        heading(2, 'REVENUE'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Sales', '$110,000', '40.0%'],
+            ['Beer Sales', '$96,250', '35.0%'],
+            ['Spirits Sales', '$55,000', '20.0%'],
+            ['Wine Sales', '$8,250', '3.0%'],
+            ['NA Beverages', '$8,250', '3.0%'],
+            ['Less: Discounts (Happy Hour, etc.)', '($2,750)', '-1.0%'],
+            ['TOTAL REVENUE', '$275,000', '100.0%'],
+          ]
+        ),
+
+        heading(2, 'COST OF GOODS SOLD'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Cost (wings, burgers, apps)', '$35,750', '13.0%'],
+            ['Beer Cost', '$19,250', '7.0%'],
+            ['Spirits Cost', '$11,000', '4.0%'],
+            ['Wine Cost', '$2,200', '0.8%'],
+            ['NA Beverage Cost', '$1,375', '0.5%'],
+            ['Paper & Supplies', '$2,750', '1.0%'],
+            ['TOTAL COGS', '$72,325', '26.3%'],
+          ]
+        ),
+
+        heading(2, 'GROSS PROFIT'),
+        paragraph('$202,675 — 73.7%'),
+
+        heading(2, 'LABOR'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['FOH Wages', '$38,500', '14.0%'],
+            ['BOH Wages', '$27,500', '10.0%'],
+            ['Management', '$13,750', '5.0%'],
+            ['Payroll Taxes & Benefits', '$9,625', '3.5%'],
+            ['TOTAL LABOR', '$89,375', '32.5%'],
+          ]
+        ),
+
+        heading(2, 'PRIME COST'),
+        paragraph('$161,700 — 58.8%'),
+
+        heading(2, 'OPERATING (incl. entertainment, TVs)'),
+        paragraph('$55,000 — 20.0%'),
+
+        heading(2, 'NET OPERATING INCOME'),
+        paragraph('$58,300 — 21.2%'),
+
+        insightBox('Key Benchmarks', 'Beer cost should be 20-24% of beer sales. Total beverage cost target: 18-22%. Entertainment costs (TV packages, music) typically 1-2% of sales.'),
       ],
     },
   },
 
   {
-    title: 'Fast Casual / QSR P&L',
-    slug: 'fast-casual-qsr-pl',
+    title: '4.4 Fast Casual / QSR P&L (Brij Foods / Spitz Profile)',
+    slug: '4-4-fast-casual-qsr-pl',
     section_slug: 'sample-financials',
     type: 'template',
-    excerpt: 'Sample P&L for Spitz with third-party delivery impact',
-    read_time: 10,
+    excerpt: 'Monthly P&L for a 2,000 sq ft fast-casual with heavy delivery mix — $200,000 monthly revenue',
+    read_time: 14,
     is_pinned: false,
     order_index: 3,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Fast Casual / QSR P&L'),
-        scenarioBox('Spitz Mediterranean: $80,000/month revenue, 85% food, 15% beverage. 40% from third-party delivery. Owner: Amir Hassan.'),
+        heading(1, '4.4 Fast Casual / QSR P&L (Brij Foods / Spitz Profile)'),
+        paragraph('Monthly P&L for a 2,000 sq ft fast-casual with heavy delivery mix — $200,000 monthly revenue.'),
+
+        heading(2, 'REVENUE'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Sales - Dine In', '$60,000', '30.0%'],
+            ['Food Sales - Takeout', '$40,000', '20.0%'],
+            ['Food Sales - DoorDash', '$40,000', '20.0%'],
+            ['Food Sales - Uber Eats', '$30,000', '15.0%'],
+            ['Food Sales - Grubhub', '$20,000', '10.0%'],
+            ['NA Beverages', '$12,000', '6.0%'],
+            ['Less: Discounts', '($2,000)', '-1.0%'],
+            ['TOTAL REVENUE', '$200,000', '100.0%'],
+          ]
+        ),
+
+        heading(2, 'COST OF GOODS SOLD'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Cost', '$56,000', '28.0%'],
+            ['NA Beverage Cost', '$2,400', '1.2%'],
+            ['Paper & Packaging (HIGH)', '$10,000', '5.0%'],
+            ['TOTAL COGS', '$68,400', '34.2%'],
+          ]
+        ),
+
+        heading(2, 'THIRD-PARTY DELIVERY FEES'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['DoorDash Commission (25%)', '$10,000', '5.0%'],
+            ['Uber Eats Commission (30%)', '$9,000', '4.5%'],
+            ['Grubhub Commission (25%)', '$5,000', '2.5%'],
+            ['TOTAL DELIVERY FEES', '$24,000', '12.0%'],
+          ]
+        ),
+
+        heading(2, 'GROSS PROFIT (after delivery fees)'),
+        paragraph('$107,600 — 53.8%'),
+
+        heading(2, 'LABOR'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Hourly Wages (Counter, Kitchen)', '$42,000', '21.0%'],
+            ['Management', '$10,000', '5.0%'],
+            ['Payroll Taxes & Benefits', '$6,240', '3.1%'],
+            ['TOTAL LABOR', '$58,240', '29.1%'],
+          ]
+        ),
+
+        heading(2, 'OPERATING EXPENSES'),
+        paragraph('$32,000 — 16.0%'),
+
+        heading(2, 'NET OPERATING INCOME'),
+        paragraph('$17,360 — 8.7%'),
+
+        warningBox('Third-Party Delivery Impact', 'Third-party delivery fees significantly impact margin. At 45% delivery mix, fees consume 12% of total revenue. Help clients understand true profitability by channel.'),
       ],
     },
   },
 
   {
-    title: 'Fine Dining P&L',
-    slug: 'fine-dining-pl',
+    title: '4.5 Sample Balance Sheet',
+    slug: '4-5-sample-balance-sheet',
     section_slug: 'sample-financials',
     type: 'template',
-    excerpt: 'Sample P&L for upscale restaurant',
+    excerpt: 'Balance sheet for a typical full-service restaurant',
     read_time: 10,
     is_pinned: false,
     order_index: 4,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Fine Dining P&L'),
-      ],
-    },
-  },
+        heading(1, '4.5 Sample Balance Sheet'),
+        paragraph('Balance sheet for a typical full-service restaurant.'),
 
-  {
-    title: 'Multi-Unit Consolidated P&L',
-    slug: 'multi-unit-pl',
-    section_slug: 'sample-financials',
-    type: 'template',
-    excerpt: 'Consolidated P&L for restaurant chains',
-    read_time: 12,
-    is_pinned: false,
-    order_index: 5,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Multi-Unit Consolidated P&L'),
-      ],
-    },
-  },
+        heading(2, 'ASSETS'),
+        table(
+          ['Account', 'Amount'],
+          [
+            ['Current Assets', ''],
+            ['1000 Operating Checking', '$45,000'],
+            ['1010 Payroll Account', '$12,000'],
+            ['1020 Savings/Reserve', '$25,000'],
+            ['1100 Accounts Receivable', '$3,500'],
+            ['1200 Food Inventory', '$8,000'],
+            ['1210 Beverage Inventory', '$15,000'],
+            ['1300 Prepaid Rent', '$14,000'],
+            ['1310 Prepaid Insurance', '$6,000'],
+            ['Total Current Assets', '$128,500'],
+            ['', ''],
+            ['Fixed Assets', ''],
+            ['1400 Security Deposits', '$14,000'],
+            ['1500 Leasehold Improvements', '$250,000'],
+            ['1510 Accumulated Depr - LHI', '($75,000)'],
+            ['1600 Kitchen Equipment', '$120,000'],
+            ['1610 Accumulated Depr - Equipment', '($48,000)'],
+            ['1700 Furniture & Fixtures', '$65,000'],
+            ['1710 Accumulated Depr - FF&E', '($26,000)'],
+            ['Total Fixed Assets', '$300,000'],
+            ['', ''],
+            ['TOTAL ASSETS', '$428,500'],
+          ]
+        ),
 
-  {
-    title: 'Sample Balance Sheet',
-    slug: 'sample-balance-sheet',
-    section_slug: 'sample-financials',
-    type: 'template',
-    excerpt: 'Standard restaurant balance sheet structure',
-    read_time: 8,
-    is_pinned: false,
-    order_index: 6,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Sample Balance Sheet'),
-      ],
-    },
-  },
-
-  {
-    title: 'Sample Cash Flow Statement',
-    slug: 'sample-cash-flow',
-    section_slug: 'sample-financials',
-    type: 'template',
-    excerpt: 'Restaurant cash flow statement structure',
-    read_time: 8,
-    is_pinned: false,
-    order_index: 7,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Sample Cash Flow Statement'),
-      ],
-    },
-  },
-
-  {
-    title: 'KPI Dashboard Sample',
-    slug: 'kpi-dashboard-sample',
-    section_slug: 'sample-financials',
-    type: 'template',
-    excerpt: 'What clients see on their FinAcct360 dashboard',
-    read_time: 6,
-    is_pinned: false,
-    order_index: 8,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'KPI Dashboard Sample'),
+        heading(2, 'LIABILITIES & EQUITY'),
+        table(
+          ['Account', 'Amount'],
+          [
+            ['Current Liabilities', ''],
+            ['2000 Accounts Payable', '$32,000'],
+            ['2100 Credit Cards', '$8,500'],
+            ['2200 Accrued Payroll', '$12,000'],
+            ['2300 Sales Tax Payable', '$6,500'],
+            ['2400 Gift Card Liability', '$4,200'],
+            ['Total Current Liabilities', '$63,200'],
+            ['', ''],
+            ['Long-Term Liabilities', ''],
+            ['2600 Equipment Loan', '$45,000'],
+            ['2700 SBA Loan', '$85,000'],
+            ['Total Long-Term Liabilities', '$130,000'],
+            ['TOTAL LIABILITIES', '$193,200'],
+            ['', ''],
+            ['Equity', ''],
+            ['3000 Owner Capital', '$150,000'],
+            ['3100 Retained Earnings', '$45,300'],
+            ['3200 Owner Distributions', '($20,000)'],
+            ['3300 Current Year Net Income', '$60,000'],
+            ['TOTAL EQUITY', '$235,300'],
+            ['', ''],
+            ['TOTAL LIABILITIES & EQUITY', '$428,500'],
+          ]
+        ),
+        insightBox('Use for Client Expectations', 'Share this structure when onboarding. It aligns with FinAcct360 COA and shows typical account ranges (e.g. inventory, prepaid, loans) for benchmarking.'),
       ],
     },
   },
@@ -2346,237 +1794,477 @@ const clientEducationArticles = [
 ]
 
 // =============================================================================
-// SECTION 6: POS & SOFTWARE GUIDES (9 articles)
+// SECTION 6: POS & SOFTWARE GUIDES (8 articles: 5.1 – 5.8)
 // =============================================================================
 
 const posGuidesArticles = [
   {
-    title: 'Square Export Guide',
-    slug: 'square-export-guide',
+    title: '5.1 Square POS Export Guide',
+    slug: '5-1-square-pos-export-guide',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'Step-by-step guide to exporting reports from Square',
-    read_time: 8,
+    excerpt: 'Daily sales summary, item sales detail, and COA mapping for Square',
+    read_time: 12,
     is_pinned: true,
     order_index: 0,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Square Export Guide'),
-        paragraph('Step-by-step guide to exporting sales reports from Square Dashboard.'),
+        heading(1, '5.1 Square POS Export Guide'),
+        paragraph('Square is popular with cafes, coffee shops, and quick-service restaurants. This guide covers extracting sales data for weekly and monthly close.'),
 
-        heading(2, 'Accessing Square Dashboard'),
+        heading(2, 'Daily Sales Summary Export'),
         stepFlow([
-          { title: 'Step 1', description: 'Go to squareup.com/dashboard' },
-          { title: 'Step 2', description: 'Log in with client credentials' },
-          { title: 'Step 3', description: 'Navigate to Reports > Sales' },
+          { title: 'Step 1: Access Square Dashboard', description: 'Log in to squareup.com → Dashboard → Reports' },
+          { title: 'Step 2: Select Date Range', description: "Click 'Date Range' dropdown → Select 'Custom' → Enter weekly close dates (Monday-Sunday)" },
+          { title: 'Step 3: Navigate to Sales Summary', description: "Click 'Reports' → 'Sales Summary' → Verify date range is correct" },
+          { title: 'Step 4: Export CSV', description: "Click 'Export' button (top right) → Select 'CSV' → Click 'Download'" },
+          { title: 'Step 5: Save with Naming Convention', description: 'Rename file: [ClientCode]_Square_Sales_[YYYYMMDD-YYYYMMDD].csv' },
         ]),
 
-        heading(2, 'Reports to Export Weekly'),
+        heading(2, 'Item Sales Detail Export'),
+        stepFlow([
+          { title: 'Step 1: Access Item Sales Report', description: "Reports → 'Sales by Item' → Set date range" },
+          { title: 'Step 2: Filter Categories', description: 'Filter by: Food, Beverages, Alcohol, Merchandise (export separately if needed)' },
+          { title: 'Step 3: Export Detailed View', description: "Ensure 'Include modifiers' is checked → Export CSV" },
+        ]),
+
+        heading(2, 'Square Data Mapping to COA'),
         table(
-          ['Report', 'Where', 'What It Shows'],
+          ['Square Category', 'FinAcct360 Account', 'Account #'],
           [
-            ['Sales Summary', 'Reports > Sales', 'Total sales by category'],
-            ['Itemized Sales', 'Reports > Sales', 'Sales by item'],
-            ['Payment Methods', 'Reports > Sales', 'Cash vs card breakdown'],
-            ['Deposits', 'Balance > Deposits', 'Bank deposit amounts'],
+            ['Food Sales', 'Dine-In Food Revenue', '4010'],
+            ['Beverage Sales (non-alc)', 'N/A Beverage Revenue', '4050'],
+            ['Beer Sales', 'Beer Revenue', '4030'],
+            ['Wine Sales', 'Wine Revenue', '4035'],
+            ['Liquor Sales', 'Spirits Revenue', '4040'],
+            ['Gift Card Redemptions', 'Gift Card Liability (reduce)', '2300'],
+            ['Tips Collected', 'Tips Payable', '2200'],
+            ['Discounts', 'Discounts & Comps', '4080'],
+            ['Refunds', 'Refunds', '4085'],
           ]
         ),
+        proTipBox('Square\'s category sales don\'t always map cleanly. Create a Category Mapping spreadsheet for each client showing their Square categories → FinAcct360 accounts.'),
 
-        proTipBox('Always verify the date range before exporting. It\'s easy to accidentally pull the wrong week.'),
-
+        heading(2, 'Common Square Issues'),
+        table(
+          ['Issue', 'Cause', 'Resolution'],
+          [
+            ['Sales don\'t match bank deposit', 'Tips held separately, timing difference', 'Reconcile tips payable, check deposit dates'],
+            ['Missing alcohol sales', 'Items miscategorized', 'Review item library, fix categories in Square'],
+            ['Duplicate transactions', 'Manual entry + POS ring', 'Filter by payment method, dedupe'],
+            ['Gift card sales inflated', 'Counting redemptions as sales', 'Use Gift Card report separately'],
+          ]
+        ),
       ],
     },
   },
 
   {
-    title: 'Toast Export Guide',
-    slug: 'toast-export-guide',
+    title: '5.2 Toast POS Export Guide',
+    slug: '5-2-toast-pos-export-guide',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'Step-by-step guide to exporting reports from Toast',
-    read_time: 8,
+    excerpt: 'Sales summary, menu mix, labor reports, and COA mapping for Toast',
+    read_time: 14,
     is_pinned: false,
     order_index: 1,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Toast Export Guide'),
+        heading(1, '5.2 Toast POS Export Guide'),
+        paragraph('Toast is the most common POS for full-service restaurants. It provides robust reporting but requires specific export procedures for accurate data.'),
+
+        heading(2, 'Accessing Toast Reports'),
+        stepFlow([
+          { title: 'Step 1: Log In to Toast', description: 'Go to pos.toasttab.com → Enter credentials → Select location (for multi-unit)' },
+          { title: 'Step 2: Navigate to Reports', description: "Click hamburger menu (☰) → 'Reports' → 'Sales'" },
+          { title: 'Step 3: Set Report Parameters', description: "Date Range: Custom → Enter dates → Time: 'Business Day' (not calendar day)" },
+        ]),
+        warningBox('Toast Business Day', "Toast uses 'Business Day' which may end at 2 AM or 4 AM. Always confirm client's business day settings before exporting."),
+
+        heading(2, 'Sales Summary Export'),
+        stepFlow([
+          { title: 'Step 1: Select Sales Summary', description: "Reports → Sales → 'Sales Summary'" },
+          { title: 'Step 2: Verify Metrics', description: 'Ensure you see: Gross Sales, Discounts, Net Sales, Tax, Tips, Service Charges' },
+          { title: 'Step 3: Export Data', description: "Click 'Export' → Select 'Excel' or 'CSV' → Download" },
+          { title: 'Step 4: Naming Convention', description: 'Rename: [ClientCode]_Toast_SalesSummary_[YYYYMMDD-YYYYMMDD].xlsx' },
+        ]),
+
+        heading(2, 'Menu Mix Report (for COGS Analysis)'),
+        stepFlow([
+          { title: 'Step 1: Access Menu Mix', description: "Reports → 'Menu' → 'Product Mix'" },
+          { title: 'Step 2: Group by Category', description: "Group: 'Menu Group' → Sub-group: 'Menu Item'" },
+          { title: 'Step 3: Include Cost Data', description: "If theoretical cost is set up, include 'Item Cost' column" },
+          { title: 'Step 4: Export', description: 'Export to Excel for COGS theoretical vs actual analysis' },
+        ]),
+
+        heading(2, 'Toast Data Mapping to COA'),
+        table(
+          ['Toast Field', 'FinAcct360 Account', 'Account #'],
+          [
+            ['Net Food Sales', 'Food Revenue (split dine-in/takeout)', '4010/4020'],
+            ['Net Beverage Sales', 'N/A Beverage Revenue', '4050'],
+            ['Net Beer Sales', 'Beer Revenue', '4030'],
+            ['Net Wine Sales', 'Wine Revenue', '4035'],
+            ['Net Liquor Sales', 'Spirits Revenue', '4040'],
+            ['Delivery Revenue (1st party)', 'Delivery Revenue (In-House)', '4070'],
+            ['Service Charges', 'Service Charge Revenue', '4090'],
+            ['Auto Gratuity', 'Tips Payable (if distributed)', '2200'],
+            ['Voids (Manager)', 'Voids & Comps', '4085'],
+            ['Comps & Discounts', 'Discounts & Comps', '4080'],
+          ]
+        ),
+
+        heading(2, 'Labor Report Export'),
+        stepFlow([
+          { title: 'Step 1: Access Labor Reports', description: "Reports → 'Labor' → 'Labor Summary'" },
+          { title: 'Step 2: Set Parameters', description: 'Date range, include: Regular Hours, Overtime, Job Codes' },
+          { title: 'Step 3: Export by Job Code', description: 'This allows mapping FOH vs BOH labor accurately' },
+        ]),
+        proTipBox('Toast\'s labor report should reconcile to payroll. If discrepancies exist, check for salaried managers (not in Toast timeclock) and tip credits.'),
       ],
     },
   },
 
   {
-    title: 'Clover Export Guide',
-    slug: 'clover-export-guide',
+    title: '5.3 Clover POS Export Guide',
+    slug: '5-3-clover-pos-export-guide',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'Step-by-step guide to exporting reports from Clover',
-    read_time: 8,
+    excerpt: 'Dashboard access, sales reports, COA mapping, and Clover-specific challenges',
+    read_time: 12,
     is_pinned: false,
     order_index: 2,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Clover Export Guide'),
+        heading(1, '5.3 Clover POS Export Guide'),
+        paragraph('Clover is common in bars, small restaurants, and quick-service. The reporting interface varies by Clover app installed.'),
+
+        heading(2, 'Accessing Clover Dashboard'),
+        stepFlow([
+          { title: 'Step 1: Log In', description: 'Go to clover.com → Dashboard → Select merchant' },
+          { title: 'Step 2: Check Installed Apps', description: "Settings → 'Installed Apps' → Note which reporting apps are available" },
+          { title: 'Step 3: Navigate to Reports', description: "Most clients use: 'Reporting & Analytics' or 'Advanced Reports'" },
+        ]),
+
+        heading(2, 'Sales Report Export'),
+        stepFlow([
+          { title: 'Step 1: Select Report Type', description: "For weekly close: 'Sales Report' or 'Transactions'" },
+          { title: 'Step 2: Set Date Range', description: 'Custom dates → Monday-Sunday of close week' },
+          { title: 'Step 3: Choose Detail Level', description: 'Summary for P&L, Detail for audit/reconciliation' },
+          { title: 'Step 4: Export Options', description: 'CSV preferred → Download → Rename with convention' },
+        ]),
+
+        heading(2, 'Clover Data Mapping'),
+        table(
+          ['Clover Field', 'FinAcct360 Account', 'Account #'],
+          [
+            ['Total Revenue (Category: Food)', 'Food Revenue', '4010'],
+            ['Total Revenue (Category: Drinks)', 'N/A Beverage Revenue', '4050'],
+            ['Total Revenue (Category: Alcohol)', 'Alcohol Revenue (split)', '4030-4040'],
+            ['Tips', 'Tips Payable', '2200'],
+            ['Discounts', 'Discounts & Comps', '4080'],
+            ['Refunds', 'Refunds', '4085'],
+            ['Cash Sales', 'Cash drawer reconciliation', '1010'],
+            ['Card Sales', 'Bank deposit reconciliation', '1000'],
+          ]
+        ),
+
+        heading(2, 'Clover-Specific Challenges'),
+        bulletList([
+          'Category Inconsistency: Clover allows custom categories; each client may have different setups',
+          'Multiple Apps: Different reporting apps = different export formats. Document which app client uses',
+          'Offline Transactions: If Clover goes offline, transactions sync later. Verify all transactions posted',
+          'Tip Adjustment: Tips may adjust after initial transaction. Pull reports 2+ days after period end',
+        ]),
+        warningBox('Clover Alcohol Split', "Clover's default reports may not split alcohol by type (beer/wine/spirits). Client may need to set up proper inventory categories."),
       ],
     },
   },
 
   {
-    title: 'SpotOn Export Guide',
-    slug: 'spoton-export-guide',
+    title: '5.4 SpotOn POS Export Guide',
+    slug: '5-4-spoton-pos-export-guide',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'Step-by-step guide to exporting reports from SpotOn',
-    read_time: 8,
+    excerpt: 'Sales summary, labor export, and COA mapping for SpotOn',
+    read_time: 11,
     is_pinned: false,
     order_index: 3,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'SpotOn Export Guide'),
+        heading(1, '5.4 SpotOn POS Export Guide'),
+        paragraph('SpotOn is growing in popularity, especially with full-service and bar concepts. It offers strong reporting but has a unique interface.'),
+
+        heading(2, 'SpotOn Dashboard Access'),
+        stepFlow([
+          { title: 'Step 1: Login', description: 'Go to dashboard.spoton.com → Enter credentials' },
+          { title: 'Step 2: Select Location', description: 'For multi-unit: Use location selector dropdown' },
+          { title: 'Step 3: Reports Section', description: "Main menu → 'Reports' → 'Sales Reports'" },
+        ]),
+
+        heading(2, 'Daily/Weekly Sales Export'),
+        stepFlow([
+          { title: 'Step 1: Sales Summary', description: "Reports → 'Sales Summary' → Set custom date range" },
+          { title: 'Step 2: Revenue Breakdown', description: 'Ensure report shows: Gross Sales, Taxes, Discounts, Net Sales by category' },
+          { title: 'Step 3: Export Format', description: "Click 'Export' → CSV or Excel → Download" },
+        ]),
+
+        heading(2, 'SpotOn Data Mapping'),
+        table(
+          ['SpotOn Field', 'FinAcct360 Account', 'Account #'],
+          [
+            ['Food Category Sales', 'Food Revenue', '4010'],
+            ['Non-Alc Bev Sales', 'N/A Beverage Revenue', '4050'],
+            ['Beer Sales', 'Beer Revenue', '4030'],
+            ['Wine Sales', 'Wine Revenue', '4035'],
+            ['Liquor Sales', 'Spirits Revenue', '4040'],
+            ['Online Orders', 'Takeout Revenue or Delivery', '4020/4060'],
+            ['Gift Card Sales', 'Gift Card Liability', '2300'],
+            ['Service Charges', 'Service Charge Revenue', '4090'],
+            ['Manager Voids', 'Voids & Comps', '4085'],
+          ]
+        ),
+
+        heading(2, 'SpotOn Labor Export'),
+        stepFlow([
+          { title: 'Step 1: Access Labor Reports', description: "Reports → 'Labor' → 'Timecard Summary'" },
+          { title: 'Step 2: Set Date Range', description: "Match pay period (verify client's pay period)" },
+          { title: 'Step 3: Include Details', description: 'Include: Employee name, Job code, Regular hours, OT hours, Total pay' },
+          { title: 'Step 4: Reconcile to Payroll', description: 'SpotOn labor should match payroll register ± salaried employees' },
+        ]),
+        proTipBox('SpotOn\'s reporting API can connect to QBO directly. Ask client if they\'ve enabled the integration—it may eliminate manual exports.'),
       ],
     },
   },
 
   {
-    title: 'QBO P&L Export Guide',
-    slug: 'qbo-pl-export',
+    title: '5.5 QuickBooks Online P&L Export',
+    slug: '5-5-quickbooks-online-pl-export',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'How to export P&L from QuickBooks Online',
-    read_time: 5,
+    excerpt: 'Standard P&L export, P&L by Class, and export checklist',
+    read_time: 12,
     is_pinned: false,
     order_index: 4,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'QBO P&L Export Guide'),
+        heading(1, '5.5 QuickBooks Online P&L Export'),
+        paragraph('Generating accurate P&L exports from QBO is essential for client delivery and KPI dashboard population.'),
+
+        heading(2, 'Standard P&L Export'),
+        stepFlow([
+          { title: 'Step 1: Access Reports', description: "QBO → Reports → Type 'Profit and Loss' in search" },
+          { title: 'Step 2: Select Report', description: "Choose 'Profit and Loss' (standard, not Detail or by Customer)" },
+          { title: 'Step 3: Set Date Range', description: 'Report period: Custom → Enter month dates (1st to last day)' },
+          { title: 'Step 4: Set Comparison', description: "For monthly: Add 'Previous Period' and 'Year over Year' columns" },
+          { title: 'Step 5: Customize Columns', description: "Click 'Customize' → Columns: Add '% of Revenue' if needed" },
+          { title: 'Step 6: Run Report', description: "Click 'Run Report' → Verify totals look reasonable" },
+          { title: 'Step 7: Export', description: "Click 'Export' → 'Export to Excel' → Save" },
+          { title: 'Step 8: Naming Convention', description: '[ClientCode]_QBO_PL_[YYYY-MM].xlsx' },
+        ]),
+
+        heading(2, 'P&L by Class (Multi-Location)'),
+        paragraph('For multi-unit clients using Classes for locations:'),
+        stepFlow([
+          { title: 'Step 1: Run P&L by Class', description: "Reports → 'Profit and Loss by Class'" },
+          { title: 'Step 2: Set All Classes', description: 'Ensure all location classes are included' },
+          { title: 'Step 3: Review Unclassified', description: "Check 'Not Specified' column—should be minimal" },
+          { title: 'Step 4: Export for Analysis', description: 'Export to Excel for location comparison' },
+        ]),
+
+        heading(2, 'P&L Export Checklist'),
+        table(
+          ['Checkpoint', 'What to Verify', 'Action if Wrong'],
+          [
+            ['Revenue Total', 'Matches POS net sales ± discounts', 'Reconcile POS to GL'],
+            ['COGS %', 'Food 28-35%, Bev 18-25%', 'Review purchase categorization'],
+            ['Labor %', '25-35% depending on type', 'Check payroll journal entries'],
+            ['Net Income', 'Positive unless startup/seasonal', 'Review unusual expenses'],
+            ['Uncategorized', '$0 in uncategorized', 'Categorize before export'],
+            ['Suspense Account', '$0 balance', 'Clear suspense items'],
+          ]
+        ),
       ],
     },
   },
 
   {
-    title: 'QBO Balance Sheet Export Guide',
-    slug: 'qbo-balance-sheet-export',
+    title: '5.6 QuickBooks Online Balance Sheet Export',
+    slug: '5-6-quickbooks-online-balance-sheet-export',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'How to export Balance Sheet from QuickBooks Online',
-    read_time: 5,
+    excerpt: 'Standard balance sheet export and review checklist',
+    read_time: 11,
     is_pinned: false,
     order_index: 5,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'QBO Balance Sheet Export Guide'),
+        heading(1, '5.6 QuickBooks Online Balance Sheet Export'),
+        paragraph('Balance sheet exports are required for monthly close packages and loan/investor reporting.'),
+
+        heading(2, 'Standard Balance Sheet Export'),
+        stepFlow([
+          { title: 'Step 1: Access Reports', description: "QBO → Reports → Search 'Balance Sheet'" },
+          { title: 'Step 2: Select Report', description: "Choose 'Balance Sheet' (standard)" },
+          { title: 'Step 3: Set As-Of Date', description: "Report period: 'As of' → Last day of month" },
+          { title: 'Step 4: Add Comparison', description: "Customize → Add 'Previous Period' column for comparison" },
+          { title: 'Step 5: Run and Review', description: 'Verify Assets = Liabilities + Equity (must balance)' },
+          { title: 'Step 6: Export', description: 'Export to Excel → Rename: [ClientCode]_QBO_BS_[YYYY-MM].xlsx' },
+        ]),
+
+        heading(2, 'Balance Sheet Review Checklist'),
+        table(
+          ['Account', 'What to Check', 'Common Issues'],
+          [
+            ['Cash (1000)', 'Matches bank statement', 'Outstanding checks, deposits in transit'],
+            ['A/R (1100)', 'Minimal for restaurant', 'Gift cards miscoded, timing'],
+            ['Inventory (1200)', 'Month-end count if tracked', 'COGS timing, purchase vs inventory'],
+            ['Fixed Assets (1500)', 'Depreciation posted', 'Missing depreciation entries'],
+            ['A/P (2000)', 'Open bills cleared', 'Duplicate bills, missed payments'],
+            ['Credit Cards (2100)', 'Matches CC statement', 'Missing payments, interest'],
+            ['Payroll Liabilities (2150)', 'Near zero after deposits', 'Missed tax deposits'],
+            ['Loans (2400)', 'Amortization posted', 'Missed principal reduction'],
+            ['Retained Earnings (3900)', 'Auto-calculated', 'Prior period adjustments'],
+          ]
+        ),
+        warningBox('Balance Sheet Must Balance', "If Balance Sheet doesn't balance, DO NOT export. Find the discrepancy first—common causes: voided transactions, duplicates, or corrupted data."),
       ],
     },
   },
 
   {
-    title: 'Gusto Payroll Export Guide',
-    slug: 'gusto-payroll-export',
+    title: '5.7 Payroll Register Export Guide',
+    slug: '5-7-payroll-register-export-guide',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'How to export payroll reports from Gusto',
-    read_time: 6,
+    excerpt: 'Gusto and ADP exports, payroll-to-COA mapping, and reconciliation steps',
+    read_time: 11,
     is_pinned: false,
     order_index: 6,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'Gusto Payroll Export Guide'),
+        heading(1, '5.7 Payroll Register Export Guide'),
+        paragraph('Accurate payroll data is critical for labor cost analysis. This guide covers exports from common payroll providers.'),
+
+        heading(2, 'Gusto Payroll Export'),
+        stepFlow([
+          { title: 'Step 1: Login', description: 'gusto.com → Company dashboard' },
+          { title: 'Step 2: Access Reports', description: "Reports → 'Payroll Journal'" },
+          { title: 'Step 3: Set Pay Period', description: 'Select specific pay periods for the month' },
+          { title: 'Step 4: Export', description: 'Download CSV → Rename: [ClientCode]_Gusto_Payroll_[YYYY-MM].csv' },
+        ]),
+
+        heading(2, 'ADP Payroll Export'),
+        stepFlow([
+          { title: 'Step 1: Login', description: 'ADP portal → Run Payroll' },
+          { title: 'Step 2: Payroll Reports', description: "Reports → 'Payroll Summary' or 'Payroll Register'" },
+          { title: 'Step 3: Set Parameters', description: 'Date range covering full month' },
+          { title: 'Step 4: Export to Excel', description: 'Download → Rename with convention' },
+        ]),
+
+        heading(2, 'Payroll Data Mapping'),
+        table(
+          ['Payroll Field', 'FinAcct360 Account', 'Account #'],
+          [
+            ['Gross Wages - FOH Hourly', 'FOH Wages', '6100'],
+            ['Gross Wages - BOH Hourly', 'BOH Wages', '6200'],
+            ['Gross Wages - Management', 'Management Salaries', '6300'],
+            ['Overtime Pay (all)', 'Overtime Expense', '6400'],
+            ['Tips Paid (payroll)', 'Tips Paid (offset Tips Payable)', '6150/2200'],
+            ['Employer Payroll Taxes', 'Payroll Taxes', '6600'],
+            ['Workers Comp', 'Workers Compensation', '6700'],
+            ['Health Insurance (ER portion)', 'Employee Benefits', '6800'],
+            ['401k Match', 'Retirement Benefits', '6850'],
+          ]
+        ),
+
+        heading(2, 'Payroll Reconciliation Steps'),
+        bulletList([
+          'Total payroll register = Bank withdrawals for payroll (net pay + taxes)',
+          'Gross wages by department should map to correct GL accounts',
+          'Employer taxes should match tax liability accounts',
+          'Tips paid through payroll should reduce Tips Payable liability',
+          'Any differences > $50 require investigation before close',
+        ]),
+        proTipBox('Many payroll providers can integrate directly with QBO. Recommend client enable this to eliminate manual journal entries.'),
       ],
     },
   },
 
   {
-    title: 'ADP Payroll Export Guide',
-    slug: 'adp-payroll-export',
+    title: '5.8 Third-Party Delivery Platform Exports',
+    slug: '5-8-third-party-delivery-platform-exports',
     section_slug: 'pos-guides',
     type: 'guide',
-    excerpt: 'How to export payroll reports from ADP',
-    read_time: 6,
+    excerpt: 'DoorDash, Uber Eats, Grubhub exports; gross vs net revenue; reconciliation',
+    read_time: 14,
     is_pinned: false,
     order_index: 7,
     content: {
       type: 'doc',
       content: [
-        heading(1, 'ADP Payroll Export Guide'),
-      ],
-    },
-  },
+        heading(1, '5.8 Third-Party Delivery Platform Exports'),
+        paragraph('DoorDash, Uber Eats, and Grubhub require special handling. Revenue is reported gross but deposits are net of fees.'),
 
-  {
-    title: 'Abbreviations & Glossary',
-    slug: 'abbreviations-glossary',
-    section_slug: 'pos-guides',
-    type: 'reference',
-    excerpt: 'Complete reference for all abbreviations and terms',
-    read_time: 5,
-    is_pinned: true,
-    order_index: 8,
-    content: {
-      type: 'doc',
-      content: [
-        heading(1, 'Abbreviations & Glossary'),
-        paragraph('Quick reference for all abbreviations and terminology.'),
+        heading(2, 'DoorDash Merchant Portal Export'),
+        stepFlow([
+          { title: 'Step 1: Login', description: 'merchants.doordash.com → Dashboard' },
+          { title: 'Step 2: Access Financials', description: "Menu → 'Financials' → 'Payouts'" },
+          { title: 'Step 3: Set Date Range', description: 'Filter for month being closed' },
+          { title: 'Step 4: Download Statement', description: "Click 'Download' → Save PDF and CSV" },
+          { title: 'Step 5: Key Data Points', description: 'Gross Sales, Commission %, Marketing Fees, Tips, Net Payout' },
+        ]),
 
-        heading(2, 'Restaurant Operations'),
+        heading(2, 'Uber Eats Restaurant Dashboard Export'),
+        stepFlow([
+          { title: 'Step 1: Login', description: 'restaurant.uber.com → Dashboard' },
+          { title: 'Step 2: Payments Section', description: "Navigate to 'Payments' → 'Payment Statements'" },
+          { title: 'Step 3: Download Statements', description: 'Select week/month → Download' },
+          { title: 'Step 4: Review Fees', description: 'Note: Service fee, Marketing fee, Delivery fee breakdown' },
+        ]),
+
+        heading(2, 'Grubhub for Restaurants Export'),
+        stepFlow([
+          { title: 'Step 1: Login', description: 'restaurant.grubhub.com → Sign in' },
+          { title: 'Step 2: Reports', description: "Navigate to 'Financials' → 'Statements'" },
+          { title: 'Step 3: Download', description: 'Select period → Export CSV' },
+        ]),
+
+        heading(2, 'Third-Party Delivery Accounting'),
+        paragraph('There are two acceptable methods for recording delivery revenue:'),
+        bulletList([
+          'Method 1 — Gross Revenue (Preferred): Record full gross sales as Delivery Revenue (4060-4075). Record fees as Delivery Fees Expense (5300). Bank deposit = Net (Gross - Fees). Pros: Shows true revenue volume, fees visible in P&L.',
+          'Method 2 — Net Revenue: Record only net payout as revenue. Pros: Simpler, matches bank deposits. Cons: Understates revenue, hides true fee impact.',
+        ]),
+
+        heading(2, 'Platform Fee Accounts'),
         table(
-          ['Abbrev', 'Full Term', 'Meaning'],
+          ['Platform', 'Typical Commission', 'Account for Fees'],
           [
-            ['FOH', 'Front of House', 'Customer-facing staff'],
-            ['BOH', 'Back of House', 'Kitchen staff'],
-            ['POS', 'Point of Sale', 'Register system'],
-            ['QSR', 'Quick Service Restaurant', 'Fast food'],
-            ['FSR', 'Full Service Restaurant', 'Sit-down dining'],
-            ['GM', 'General Manager', 'Runs operations'],
-            ['COGS', 'Cost of Goods Sold', 'Direct costs'],
+            ['DoorDash', '15-30%', '5310 - DoorDash Fees'],
+            ['Uber Eats', '15-30%', '5320 - Uber Eats Fees'],
+            ['Grubhub', '15-30%', '5330 - Grubhub Fees'],
+            ['Generic/Other', 'Varies', '5300 - Third-Party Delivery Fees'],
           ]
         ),
+        warningBox('Deposit Lag', 'Delivery platform deposits often have 2-7 day lag. Match statements to bank deposits by date, not by order date.'),
 
-        heading(2, 'Financial Terms'),
-        table(
-          ['Abbrev', 'Full Term', 'Meaning'],
-          [
-            ['P&L', 'Profit & Loss', 'Income statement'],
-            ['KPI', 'Key Performance Indicator', 'Performance metric'],
-            ['AR', 'Accounts Receivable', 'Money owed to you'],
-            ['AP', 'Accounts Payable', 'Money you owe'],
-            ['COA', 'Chart of Accounts', 'Account structure'],
-            ['YTD', 'Year to Date', 'Since Jan 1'],
-            ['MTD', 'Month to Date', 'Since 1st of month'],
-          ]
-        ),
-
-        heading(2, 'Tax & Payroll'),
-        table(
-          ['Abbrev', 'Full Term', 'Meaning'],
-          [
-            ['FICA', 'Federal Insurance Contributions Act', 'SS + Medicare'],
-            ['FUTA', 'Federal Unemployment Tax', 'Federal unemployment'],
-            ['SUTA', 'State Unemployment Tax', 'State unemployment'],
-            ['W-2', 'Wage and Tax Statement', 'Employee form'],
-            ['1099', 'Miscellaneous Income', 'Contractor form'],
-            ['OT', 'Overtime', 'Hours over 40/week'],
-          ]
-        ),
-
-        heading(2, 'Time & Communication'),
-        table(
-          ['Abbrev', 'Full Term', 'Meaning'],
-          [
-            ['ET/EST', 'Eastern Time', 'New York'],
-            ['CT/CST', 'Central Time', 'Texas'],
-            ['PT/PST', 'Pacific Time', 'California'],
-            ['EOD', 'End of Day', 'Close of business'],
-            ['EOM', 'End of Month', 'Last day of month'],
-            ['ASAP', 'As Soon As Possible', 'Urgent'],
-          ]
-        ),
-
+        heading(2, 'Monthly Reconciliation Process'),
+        bulletList([
+          'Pull statements from all delivery platforms for the month',
+          'Create reconciliation spreadsheet: Platform | Gross Sales | Fees | Net Payout',
+          'Match net payouts to bank deposits (may need to combine multiple deposits)',
+          'Verify total gross from platforms = POS delivery orders (if tracked separately)',
+          'Post journal entry for any unreconciled differences',
+        ]),
+        proTipBox('Create a recurring \'Delivery Reconciliation\' template in Google Sheets. Link to client\'s folder for easy monthly updates.'),
       ],
     },
   },
@@ -2597,6 +2285,27 @@ async function seed() {
     console.log('✓ Cleared existing articles')
     console.log('')
   }
+
+  // Ensure all 6 sections exist (upsert by slug so missing sections like standard-operating-procedures are created)
+  console.log('📁 Ensuring sections exist...')
+  const sectionRows = sections.map(({ id: _id, ...s }) => ({
+    title: s.title,
+    slug: s.slug,
+    description: s.description ?? null,
+    icon: s.icon ?? 'fa-folder',
+    order_index: s.order_index,
+    is_published: true,
+  }))
+  const { error: sectionsUpsertError } = await supabase.from('kb_sections').upsert(sectionRows, {
+    onConflict: 'slug',
+    ignoreDuplicates: false,
+  })
+  if (sectionsUpsertError) {
+    console.error('Error upserting sections:', sectionsUpsertError)
+    return
+  }
+  console.log(`✓ Ensured ${sectionRows.length} sections`)
+  console.log('')
 
   // Get section IDs
   console.log('📁 Fetching section IDs...')

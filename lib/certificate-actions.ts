@@ -1,6 +1,9 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function getOrCreateCertificate() {
   const supabase = await createClient()
@@ -53,4 +56,41 @@ export async function getOrCreateCertificate() {
 
   if (error) return { data: null, error: error.message }
   return { data: inserted, error: null }
+}
+
+/**
+ * Sends the certificate PDF to the current user's email (successful completion notification).
+ * Requires RESEND_API_KEY. Optional RESEND_FROM (e.g. "FinAcct360 Academy <onboarding@resend.dev>").
+ */
+export async function sendCertificateToEmail(pdfBase64: string): Promise<{ ok: boolean; error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user?.email) return { ok: false, error: 'Not authenticated' }
+
+  const { data: profile } = await supabase.from('profiles').select('training_completed').eq('id', user.id).single()
+  if (!profile?.training_completed) return { ok: false, error: 'Training not completed' }
+
+  if (!process.env.RESEND_API_KEY) return { ok: false, error: 'Email is not configured. Please contact support.' }
+
+  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <onboarding@resend.dev>'
+  const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '').replace(/^data:.*?;base64,/, '')
+  if (!base64Data || base64Data.length < 100) return { ok: false, error: 'Invalid certificate data' }
+
+  const { error } = await resend.emails.send({
+    from,
+    to: [user.email],
+    subject: 'Your FinAcct360 Academy Certificate of Completion',
+    html: `
+      <p>Congratulations!</p>
+      <p>You have successfully completed the FinAcct360 Academy Restaurant Accounting Training Program. Your certificate is attached to this email.</p>
+      <p>Keep it for your records and share it with your team or clients as needed.</p>
+      <p>— FinAcct360 Academy</p>
+    `,
+    attachments: [
+      { filename: 'FinAcct360-Certificate.pdf', content: base64Data },
+    ],
+  })
+
+  if (error) return { ok: false, error: error.message }
+  return { ok: true }
 }

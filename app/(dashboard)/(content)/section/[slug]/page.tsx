@@ -25,12 +25,28 @@ export default async function SectionPage({
     .eq('is_published', true)
     .order('order_index', { ascending: true })
 
-  const articles = (articlesRaw ?? []).map((a) => {
-    const words = a.content ? JSON.stringify(a.content).split(/\s+/).length : 0
-    const reading_minutes = Math.max(2, Math.ceil(words / 200))
-    const { content: _, ...rest } = a
-    return { ...rest, reading_minutes }
-  })
+  const articles = (articlesRaw ?? [])
+    .filter((a) => {
+      const c = a.content
+      if (c == null || typeof c !== 'object') return false
+      if ((c as { type?: string }).type !== 'doc') return false
+      const content = (c as { content?: unknown[] }).content
+      if (!Array.isArray(content) || content.length === 0) return false
+      const words = JSON.stringify(c).split(/\s+/).length
+      const minWords =
+        section.slug === 'chart-of-accounts'
+          ? 50
+          : section.slug === 'exception-handling' || section.slug === 'standard-operating-procedures' || section.slug === 'sample-financials' || section.slug === 'pos-guides'
+            ? 50
+            : 100
+      return words >= minWords
+    })
+    .map((a) => {
+      const words = a.content ? JSON.stringify(a.content).split(/\s+/).length : 0
+      const reading_minutes = Math.max(2, Math.ceil(words / 200))
+      const { content: _, ...rest } = a
+      return { ...rest, reading_minutes }
+    })
 
   let recentReads: { article_id: string; article_title: string; article_slug: string; section_slug: string; read_at: string }[] = []
   let canEdit = false
@@ -38,6 +54,7 @@ export default async function SectionPage({
   if (user) {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle()
     const role = (profile?.role as string)?.toLowerCase()
+    /** Section-level actions (e.g. create first article from section) are admin-only. */
     canEdit = role === 'admin'
     const { data: reads } = await supabase
       .from('kb_reads')

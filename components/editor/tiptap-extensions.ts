@@ -6,11 +6,12 @@ import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import Highlight from '@tiptap/extension-highlight'
 import { common, createLowlight } from 'lowlight'
 
 const lowlight = createLowlight(common)
 
-/** Shared TipTap extensions for full article editing: tables, code blocks, links, images. */
+/** Shared TipTap extensions for full article editing: tables, code blocks, links, images, highlight. */
 export const tiptapExtensions = [
   StarterKit.configure({
     heading: { levels: [1, 2, 3] },
@@ -27,4 +28,5 @@ export const tiptapExtensions = [
   TableHeader,
   TableCell,
   CodeBlockLowlight.configure({ lowlight }),
+  Highlight.configure({ HTMLAttributes: { class: 'bg-amber-200/80 dark:bg-amber-400/30 rounded px-0.5' } }),
 ]

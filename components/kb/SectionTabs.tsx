@@ -25,7 +25,7 @@ export function SectionTabs({ sections }: SectionTabsProps) {
   const trainingSection = sections.find((s) => s.is_training_section)
 
   return (
-    <div className="sticky top-0 z-20 border-b border-slate-800/50 bg-slate-900/95 backdrop-blur supports-[backdrop-filter]:bg-slate-900/80 no-print" data-section-tabs>
+    <div className="sticky top-0 z-20 border-b border-slate-800/50 bg-slate-900 no-print" data-section-tabs>
       <div className="max-w-[1600px] mx-auto px-6 lg:px-8">
         <nav className="flex items-center gap-1 overflow-x-auto py-2.5 scrollbar-thin" aria-label="Section tabs">
           {mainSections.map((section) => {
@@ -39,7 +39,7 @@ export function SectionTabs({ sections }: SectionTabsProps) {
                 href={href}
                 className={`
                   flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium tracking-tight whitespace-nowrap transition-colors
-                  ${isActive ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}
+                  ${isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}
                 `}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -52,7 +52,7 @@ export function SectionTabs({ sections }: SectionTabsProps) {
               href="/training"
               className={`
                 flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors
-                ${pathname.startsWith('/training') ? 'bg-amber-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}
+                ${pathname.startsWith('/training') ? 'bg-amber-600 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'}
               `}
             >
               <GraduationCap className="w-4 h-4 shrink-0" />

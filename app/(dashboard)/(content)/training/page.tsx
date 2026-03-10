@@ -146,8 +146,8 @@ export default async function TrainingPage() {
         })}
       </ul>
 
-      {profile?.training_completed && (
-        <div className="mt-8 text-center">
+      <div className="mt-8 text-center">
+        {profile?.training_completed ? (
           <Link
             href="/certificate"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium"
@@ -155,8 +155,17 @@ export default async function TrainingPage() {
             <CheckCircle className="w-5 h-5" />
             View certificate
           </Link>
-        </div>
-      )}
+        ) : (
+          <div
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-700/50 border border-slate-600/50 text-slate-500 cursor-not-allowed"
+            title="Complete all modules and pass the quizzes to unlock your certificate"
+          >
+            <Lock className="w-5 h-5 shrink-0" />
+            <span>View certificate</span>
+            <span className="text-slate-500 text-sm font-normal">— Complete all modules to unlock</span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

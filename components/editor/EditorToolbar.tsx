@@ -50,6 +50,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       {toolbarBtn(() => editor.chain().focus().toggleBold().run(), editor.isActive('bold'), 'Bold', 'B')}
       {toolbarBtn(() => editor.chain().focus().toggleItalic().run(), editor.isActive('italic'), 'Italic', 'I')}
       {toolbarBtn(() => editor.chain().focus().toggleStrike().run(), editor.isActive('strike'), 'Strike', 'S')}
+      {toolbarBtn(() => editor.chain().focus().toggleHighlight().run(), editor.isActive('highlight'), 'Highlight', 'H')}
       <span className="w-px h-5 bg-slate-600 mx-1" />
       {toolbarBtn(() => editor.chain().focus().toggleHeading({ level: 1 }).run(), editor.isActive('heading', { level: 1 }), 'H1')}
       {toolbarBtn(() => editor.chain().focus().toggleHeading({ level: 2 }).run(), editor.isActive('heading', { level: 2 }), 'H2')}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { Profile, UserRole } from '@/lib/types'
 
-const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'admin']
+const ROLE_OPTIONS: UserRole[] = ['trainee', 'accountant', 'editor', 'admin']
 
 interface EditUserModalProps {
   profile: Profile
