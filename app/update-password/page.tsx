@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
@@ -8,11 +8,26 @@ import { BookOpen, CheckCircle } from 'lucide-react'
 
 export default function UpdatePasswordPage() {
   const router = useRouter()
+  const [email, setEmail] = useState<string | null>(null)
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const [checkingSession, setCheckingSession] = useState(true)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user?.email) {
+        setEmail(session.user.email)
+      } else {
+        router.replace('/login')
+        return
+      }
+      setCheckingSession(false)
+    })
+  }, [router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -38,6 +53,14 @@ export default function UpdatePasswordPage() {
     router.refresh()
   }
 
+  if (checkingSession || email === null) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
+        <p className="text-slate-400">Loading…</p>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
       <div className="w-full max-w-md">
@@ -48,7 +71,7 @@ export default function UpdatePasswordPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900">FinAcct360 Academy</h1>
-              <p className="text-sm text-slate-500">Set new password</p>
+              <p className="text-sm text-slate-500">Set your password</p>
             </div>
           </div>
           {done ? (
@@ -58,8 +81,22 @@ export default function UpdatePasswordPage() {
             </div>
           ) : (
             <>
-              <h2 className="text-2xl font-semibold text-slate-800 mb-6">Update password</h2>
+              <h2 className="text-2xl font-semibold text-slate-800 mb-2">Create your password</h2>
+              <p className="text-sm text-slate-500 mb-6">You were invited to FinAcct360 Academy. Set a password below to finish setting up your account.</p>
               <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    readOnly
+                    className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-100 text-slate-700 cursor-not-allowed"
+                    aria-readonly
+                  />
+                </div>
                 <div>
                   <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
                     New password
@@ -78,7 +115,7 @@ export default function UpdatePasswordPage() {
                 </div>
                 <div>
                   <label htmlFor="confirm" className="block text-sm font-medium text-slate-700 mb-1.5">
-                    Confirm password
+                    Re-enter password
                   </label>
                   <input
                     id="confirm"
@@ -102,7 +139,7 @@ export default function UpdatePasswordPage() {
                   disabled={loading}
                   className="w-full py-3 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 transition"
                 >
-                  {loading ? 'Updating…' : 'Update password'}
+                  {loading ? 'Setting password…' : 'Set password'}
                 </button>
               </form>
             </>
