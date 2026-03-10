@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { UserRole } from '@/lib/types'
 
-const PUBLIC_PATHS = ['/', '/login', '/reset-password', '/auth/confirm', '/auth/accept-invite', '/update-password']
+const PUBLIC_PATHS = ['/', '/login', '/reset-password', '/auth/confirm', '/auth/accept-invite', '/auth/accept-invite/confirm', '/update-password']
 const TRAINING_PATH = '/training'
 const ADMIN_PATH = '/admin'
 const SECTION_PATH = '/section'
@@ -85,7 +85,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Invited users must set a password before using the app; send them to set-password page
-  if (profile?.needs_password_set === true && pathname !== '/update-password' && pathname !== '/auth/accept-invite' && pathname !== '/login') {
+  if (profile?.needs_password_set === true && pathname !== '/update-password' && pathname !== '/auth/accept-invite' && pathname !== '/auth/accept-invite/confirm' && pathname !== '/login') {
     const url = request.nextUrl.clone()
     url.pathname = '/update-password'
     return NextResponse.redirect(url)

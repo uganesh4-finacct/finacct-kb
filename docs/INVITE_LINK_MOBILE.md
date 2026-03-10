@@ -9,11 +9,11 @@ In **Supabase Dashboard → Authentication → Email Templates → Invite user**
 **Replace the default link** (which uses `{{ .ConfirmationURL }}`) with:
 
 ```html
-<a href="{{ .SiteURL }}/auth/accept-invite?token_hash={{ .TokenHash }}&type=invite">Accept Invitation</a>
+<a href="{{ .SiteURL }}/auth/accept-invite/confirm?token_hash={{ .TokenHash }}&type=invite">Accept Invitation</a>
 ```
 
-- Use your real site URL. If `Site URL` in Supabase is `https://kb.finacct360.io`, the link will be `https://kb.finacct360.io/auth/accept-invite?token_hash=...&type=invite`.
-- The app’s `/auth/accept-invite` route reads `token_hash` and `type=invite` from the query, verifies the token on the server, and redirects to the set-password page. This works on mobile and desktop.
+- Use your real site URL. If `Site URL` in Supabase is `https://kb.finacct360.io`, the link will be `https://kb.finacct360.io/auth/accept-invite/confirm?token_hash=...&type=invite`.
+- The app’s `/auth/accept-invite/confirm` route reads `token_hash` and `type=invite` from the query, verifies the token on the server, and redirects to the set-password page. This works on mobile and desktop.
 
 Keep the rest of your template (subject, body, signature) as is; only change the **href** of the “Accept” / “Accept Invitation” button or link to the above.
 
