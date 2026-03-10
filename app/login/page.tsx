@@ -17,14 +17,15 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(errorParam === 'invalid_reset_link' ? 'Reset link invalid or expired. Request a new one.' : null)
   const [loading, setLoading] = useState(false)
 
-  // If we landed here with an invite hash (e.g. Supabase redirected to login), send to accept-invite to set password
+  // If we landed here with an invite hash, send to accept-invite (full page nav so mobile keeps hash).
   useEffect(() => {
     const hash = typeof window !== 'undefined' ? window.location.hash : ''
     const params = new URLSearchParams(hash.replace(/^#/, ''))
     if (params.get('access_token') || params.get('type') === 'invite') {
-      router.replace(`/auth/accept-invite${hash ? `#${hash.replace(/^#/, '')}` : ''}`)
+      const base = typeof window !== 'undefined' ? window.location.origin : ''
+      window.location.replace(`${base}/auth/accept-invite${hash ? `#${hash.replace(/^#/, '')}` : ''}`)
     }
-  }, [router])
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

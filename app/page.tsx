@@ -17,9 +17,16 @@ export default function RootPage() {
     const accessToken = params.get('access_token')
     const type = params.get('type')
 
-    // Supabase often redirects to Site URL (/) with hash; we need to preserve it and send to accept-invite
+    // Supabase often redirects to Site URL (/) with hash; preserve it and send to accept-invite.
+    // Use full page navigation so mobile browsers keep the hash (router.replace can drop it).
     if (accessToken || type === 'invite') {
-      router.replace(`/auth/accept-invite${hash ? `#${hash.replace(/^#/, '')}` : ''}`)
+      const base = typeof window !== 'undefined' ? window.location.origin : ''
+      const path = `/auth/accept-invite${hash ? `#${hash.replace(/^#/, '')}` : ''}`
+      if (typeof window !== 'undefined') {
+        window.location.replace(base + path)
+      } else {
+        router.replace(path)
+      }
       return
     }
 

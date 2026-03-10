@@ -37,7 +37,12 @@ export default function AcceptInvitePage() {
       const { data: { session } } = await supabase.auth.getSession()
       if (session) {
         setStatus('redirect')
-        router.replace('/update-password')
+        // Full page nav so cookies are applied before update-password loads (helps on mobile)
+        if (typeof window !== 'undefined') {
+          window.location.replace(`${window.location.origin}/update-password`)
+        } else {
+          router.replace('/update-password')
+        }
       } else {
         setStatus('login')
         router.replace('/login')
