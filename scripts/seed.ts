@@ -143,6 +143,7 @@ async function clearData() {
   console.log('Clearing existing data…')
   const order = [
     'quiz_questions',
+    'quiz_progress',
     'training_progress',
     'quiz_attempts',
     'training_modules',
@@ -885,19 +886,19 @@ const MODULE_CONTENT_FNS: (() => ReturnType<typeof doc>)[] = [
 ]
 
 const TRAINING_MODULES = [
-  { title: 'US Restaurant Industry', slug: 'us-restaurant-industry', description: 'Understand restaurant types, business models, and economics', estimated_minutes: 15, order_index: 0 },
-  { title: 'Restaurant Roles & Operations', slug: 'restaurant-roles-operations', description: 'Who works in restaurants and how daily operations flow', estimated_minutes: 12, order_index: 1 },
-  { title: 'Restaurant Finances & Taxes', slug: 'restaurant-finances-taxes', description: 'How money flows, US taxes, tips, and payment processing', estimated_minutes: 15, order_index: 2 },
-  { title: 'Restaurant Accounting Basics', slug: 'restaurant-accounting-basics', description: 'Learn how restaurant accounting differs from other industries', estimated_minutes: 15, order_index: 3 },
-  { title: 'Chart of Accounts', slug: 'chart-of-accounts', description: 'Understand account ranges and their purpose', estimated_minutes: 15, order_index: 4 },
-  { title: 'Reading a Restaurant P&L', slug: 'reading-restaurant-pl', description: 'Line-by-line breakdown of a restaurant P&L', estimated_minutes: 18, order_index: 5 },
-  { title: 'KPI Fundamentals', slug: 'kpi-fundamentals', description: 'Key performance indicators every accountant must know', estimated_minutes: 15, order_index: 6 },
-  { title: 'QBO Essentials', slug: 'qbo-essentials', description: 'Navigate QuickBooks Online for restaurant clients', estimated_minutes: 15, order_index: 7 },
-  { title: 'POS Systems — Square', slug: 'pos-square', description: 'Pull and understand Square sales reports', estimated_minutes: 12, order_index: 8 },
-  { title: 'POS Systems — Toast', slug: 'pos-toast', description: 'Pull and understand Toast sales reports', estimated_minutes: 12, order_index: 9 },
-  { title: 'POS Systems — Clover', slug: 'pos-clover', description: 'Pull and understand Clover sales reports', estimated_minutes: 12, order_index: 10 },
-  { title: 'Weekly Close Process', slug: 'weekly-close-process', description: 'Step-by-step weekly close procedure', estimated_minutes: 15, order_index: 11 },
-  { title: 'Common Mistakes', slug: 'common-mistakes', description: 'Avoid the top errors new accountants make', estimated_minutes: 12, order_index: 12 },
+  { title: 'US Restaurant Industry', slug: 'us-restaurant-industry', description: 'Understand restaurant types, business models, and economics', estimated_minutes: 20, order_index: 0 },
+  { title: 'Restaurant Roles & Operations', slug: 'restaurant-roles-operations', description: 'Who works in restaurants and how daily operations flow', estimated_minutes: 20, order_index: 1 },
+  { title: 'Restaurant Finances & Taxes', slug: 'restaurant-finances-taxes', description: 'How money flows, US taxes, tips, and payment processing', estimated_minutes: 20, order_index: 2 },
+  { title: 'Restaurant Accounting Basics', slug: 'restaurant-accounting-basics', description: 'Learn how restaurant accounting differs from other industries', estimated_minutes: 20, order_index: 3 },
+  { title: 'Chart of Accounts', slug: 'chart-of-accounts', description: 'Understand account ranges and their purpose', estimated_minutes: 20, order_index: 4 },
+  { title: 'Reading a Restaurant P&L', slug: 'reading-restaurant-pl', description: 'Line-by-line breakdown of a restaurant P&L', estimated_minutes: 20, order_index: 5 },
+  { title: 'KPI Fundamentals', slug: 'kpi-fundamentals', description: 'Key performance indicators every accountant must know', estimated_minutes: 20, order_index: 6 },
+  { title: 'QBO Essentials', slug: 'qbo-essentials', description: 'Navigate QuickBooks Online for restaurant clients', estimated_minutes: 20, order_index: 7 },
+  { title: 'POS Systems — Square', slug: 'pos-square', description: 'Pull and understand Square sales reports', estimated_minutes: 20, order_index: 8 },
+  { title: 'POS Systems — Toast', slug: 'pos-toast', description: 'Pull and understand Toast sales reports', estimated_minutes: 20, order_index: 9 },
+  { title: 'POS Systems — Clover', slug: 'pos-clover', description: 'Pull and understand Clover sales reports', estimated_minutes: 20, order_index: 10 },
+  { title: 'Weekly Close Process', slug: 'weekly-close-process', description: 'Step-by-step weekly close procedure', estimated_minutes: 20, order_index: 11 },
+  { title: 'Common Mistakes', slug: 'common-mistakes', description: 'Avoid the top errors new accountants make', estimated_minutes: 20, order_index: 12 },
 ]
 
 async function seedTrainingModules(): Promise<Map<string, string>> {

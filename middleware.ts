@@ -63,6 +63,11 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const pathname = request.nextUrl.pathname
 
+  if (pathname === '/update-password') {
+    const cookieNames = request.cookies.getAll().map((c) => c.name)
+    console.log('[Middleware] /update-password request — user:', user ? user.email : 'none', 'cookies:', cookieNames.filter((n) => n.includes('auth') || n.includes('supabase')).join(', ') || 'none')
+  }
+
   if (!user) {
     if (!isPublicPath(pathname)) {
       const url = request.nextUrl.clone()

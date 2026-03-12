@@ -61,7 +61,7 @@ export async function getOrCreateCertificate() {
   const adminEmail = process.env.ADMIN_COMPLETION_EMAIL || 'ganesh@finacctsolutions.com'
   if (process.env.RESEND_API_KEY && adminEmail) {
     try {
-      const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <onboarding@resend.dev>'
+      const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <academy@finacct360.io>'
       await resend.emails.send({
         from,
         to: [adminEmail],
@@ -78,7 +78,7 @@ export async function getOrCreateCertificate() {
 
 /**
  * Sends the certificate PDF to the current user's email (successful completion notification).
- * Requires RESEND_API_KEY. Optional RESEND_FROM (e.g. "FinAcct360 Academy <onboarding@resend.dev>").
+ * Requires RESEND_API_KEY. Optional RESEND_FROM (e.g. "FinAcct360 Academy <academy@finacct360.io>").
  */
 export async function sendCertificateToEmail(pdfBase64: string): Promise<{ ok: boolean; error?: string }> {
   const supabase = await createClient()
@@ -90,7 +90,7 @@ export async function sendCertificateToEmail(pdfBase64: string): Promise<{ ok: b
 
   if (!process.env.RESEND_API_KEY) return { ok: false, error: 'Email is not configured. Please contact support.' }
 
-  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <onboarding@resend.dev>'
+  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <academy@finacct360.io>'
   const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '').replace(/^data:.*?;base64,/, '')
   if (!base64Data || base64Data.length < 100) return { ok: false, error: 'Invalid certificate data' }
 

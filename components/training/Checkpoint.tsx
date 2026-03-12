@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { CheckCircle, BookOpen } from 'lucide-react'
+import { clearQuizProgress } from '@/lib/training-actions'
 
 export const CHECKPOINT_STORAGE_KEY = 'finacct-module-checkpoints'
 
@@ -39,6 +41,8 @@ interface CheckpointProps {
   /** When true and user completes all checkpoints, call onFullReviewComplete (e.g. clear quiz lock) */
   fullReview?: boolean
   onFullReviewComplete?: () => void
+  /** When set, show Resume Quiz (Question X/Y) and Start Over instead of Take Quiz */
+  quizProgress?: { currentIndex: number; totalQuestions: number } | null
 }
 
 function getCheckpoints(items: string[]): string[] {
@@ -60,8 +64,16 @@ export function Checkpoint({
   passScore,
   fullReview = false,
   onFullReviewComplete,
+  quizProgress = null,
 }: CheckpointProps) {
+  const router = useRouter()
   const checkpoints = getCheckpoints(checkpointItems)
+  const hasProgress = quizProgress != null && quizProgress.totalQuestions > 0
+
+  const handleStartOver = async () => {
+    await clearQuizProgress(moduleId)
+    router.refresh()
+  }
   const totalCheckpoints = checkpoints.length
   const fullReviewCalled = useRef(false)
 
@@ -161,14 +173,34 @@ export function Checkpoint({
 
       <div className="mt-6 pt-6 border-t border-slate-800/50">
         {allCheckpointsChecked ? (
-          <Link href={`/training/${moduleSlug}/quiz`}>
-            <button
-              type="button"
-              className="w-full py-3 bg-green-600 text-white rounded-xl hover:bg-green-500 font-medium transition-colors"
-            >
-              Take Quiz →
-            </button>
-          </Link>
+          <div className="space-y-2">
+            {hasProgress ? (
+              <>
+                <Link
+                  href={`/training/${moduleSlug}/quiz?resume=1`}
+                  className="block w-full py-3 rounded-xl font-medium transition-colors text-center bg-[#E67E22] hover:bg-[#d35400] text-white"
+                >
+                  Resume Quiz (Question {quizProgress!.currentIndex + 1}/{quizProgress!.totalQuestions})
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleStartOver}
+                  className="w-full text-sm text-slate-400 hover:text-slate-300 transition-colors"
+                >
+                  Start Over
+                </button>
+              </>
+            ) : (
+              <Link href={`/training/${moduleSlug}/quiz`}>
+                <button
+                  type="button"
+                  className="w-full py-3 bg-green-600 text-white rounded-xl hover:bg-green-500 font-medium transition-colors"
+                >
+                  Take Quiz →
+                </button>
+              </Link>
+            )}
+          </div>
         ) : (
           <button
             type="button"

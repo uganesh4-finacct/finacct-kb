@@ -90,6 +90,9 @@ export async function submitQuizAttempt(moduleId: string, answers: Record<string
   })
   if (error) return { ok: false as const, error: error.message, score: 0, passed: false, upgraded: false, attemptNumber }
 
+  // Clear in-progress quiz state when attempt is submitted (pass or fail)
+  await supabase.from('quiz_progress').delete().eq('user_id', user.id).eq('module_id', moduleId)
+
   if (passed) {
     await recordModuleComplete(moduleId)
     await clearQuizLockInternal(supabase, user.id, moduleId)
@@ -167,4 +170,109 @@ export async function clearQuizLock(moduleId: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
   await clearQuizLockInternal(supabase, user.id, moduleId)
+}
+
+// ---- Quiz progress (resume) ----
+
+export type QuizProgressRow = {
+  id: string
+  current_question_index: number
+  question_ids: string[]
+  answers: string[]
+  started_at: string
+  updated_at: string
+}
+
+export async function getQuizProgress(moduleId: string): Promise<QuizProgressRow | null> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+  const { data } = await supabase
+    .from('quiz_progress')
+    .select('id, current_question_index, question_ids, answers, started_at, updated_at')
+    .eq('user_id', user.id)
+    .eq('module_id', moduleId)
+    .maybeSingle()
+  if (!data) return null
+  return {
+    id: data.id,
+    current_question_index: data.current_question_index ?? 0,
+    question_ids: Array.isArray(data.question_ids) ? data.question_ids : [],
+    answers: Array.isArray(data.answers) ? data.answers : [],
+    started_at: data.started_at ?? '',
+    updated_at: data.updated_at ?? '',
+  }
+}
+
+export async function getQuizProgressForUser(): Promise<Array<QuizProgressRow & { module_id: string }>> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+  const { data } = await supabase
+    .from('quiz_progress')
+    .select('id, module_id, current_question_index, question_ids, answers, started_at, updated_at')
+    .eq('user_id', user.id)
+  if (!data?.length) return []
+  return data.map((row) => ({
+    id: row.id,
+    module_id: row.module_id,
+    current_question_index: row.current_question_index ?? 0,
+    question_ids: Array.isArray(row.question_ids) ? row.question_ids : [],
+    answers: Array.isArray(row.answers) ? row.answers : [],
+    started_at: row.started_at ?? '',
+    updated_at: row.updated_at ?? '',
+  }))
+}
+
+export async function saveQuizProgress(
+  moduleId: string,
+  currentQuestionIndex: number,
+  answers: string[],
+  questionIds: string[]
+): Promise<{ ok: boolean; error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'Not authenticated' }
+  const { error } = await supabase
+    .from('quiz_progress')
+    .upsert(
+      {
+        user_id: user.id,
+        module_id: moduleId,
+        current_question_index: currentQuestionIndex,
+        answers,
+        question_ids: questionIds,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id,module_id' }
+    )
+  return error ? { ok: false, error: error.message } : { ok: true }
+}
+
+export async function clearQuizProgress(moduleId: string): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('quiz_progress').delete().eq('user_id', user.id).eq('module_id', moduleId)
+}
+
+/** Create or reset quiz progress (e.g. when starting quiz). questionIds = ordered question ids for this attempt. */
+export async function startOrResetQuizProgress(moduleId: string, questionIds: string[]): Promise<{ ok: boolean; error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'Not authenticated' }
+  const { error } = await supabase
+    .from('quiz_progress')
+    .upsert(
+      {
+        user_id: user.id,
+        module_id: moduleId,
+        current_question_index: 0,
+        answers: [],
+        question_ids: questionIds,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id,module_id' }
+    )
+  return error ? { ok: false, error: error.message } : { ok: true }
 }

@@ -19,14 +19,51 @@ export default function UpdatePasswordPage() {
 
   useEffect(() => {
     const supabase = createClient()
+
+    const hash = typeof window !== 'undefined' ? window.location.hash.substring(1) : ''
+    const params = new URLSearchParams(hash)
+    const access_token = params.get('access_token')
+    const refresh_token = params.get('refresh_token')
+
+    if (access_token && refresh_token) {
+      supabase.auth
+        .setSession({ access_token, refresh_token })
+        .then(({ data: { session } }) => {
+          if (session?.user?.email) {
+            setEmail(session.user.email)
+            setCheckingSession(false)
+            if (typeof window !== 'undefined') {
+              window.history.replaceState(null, '', '/update-password')
+            }
+          } else {
+            router.replace('/login?error=session_invalid')
+            setCheckingSession(false)
+          }
+        })
+        .catch((err) => {
+          console.error('[update-password] setSession from hash failed:', err)
+          router.replace('/login?error=session_invalid')
+          setCheckingSession(false)
+        })
+      return
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user?.email) {
         setEmail(session.user.email)
-      } else {
-        router.replace('/login')
+        setCheckingSession(false)
         return
       }
-      setCheckingSession(false)
+      setTimeout(() => {
+        supabase.auth.getSession().then(({ data: { session: retrySession } }) => {
+          if (retrySession?.user?.email) {
+            setEmail(retrySession.user.email)
+          } else {
+            router.replace('/login?error=session_expired')
+          }
+          setCheckingSession(false)
+        })
+      }, 300)
     })
   }, [router])
 

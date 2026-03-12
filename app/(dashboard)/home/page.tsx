@@ -200,8 +200,31 @@ export default async function HomePage() {
     const moduleList = mods ?? []
     const totalModules = moduleList.length
 
+    // In-progress quizzes for "Continue Where You Left Off"
+    const { data: progressRows } = await supabase
+      .from('quiz_progress')
+      .select('module_id, current_question_index, question_ids')
+      .eq('user_id', user.id)
+    const inProgressQuizzes: Array<{ moduleId: string; moduleSlug: string; moduleTitle: string; currentIndex: number; totalQuestions: number }> = []
+    if (progressRows?.length && moduleList.length) {
+      const modMap = new Map(moduleList.map((m) => [m.id, m]))
+      for (const p of progressRows) {
+        const mod = modMap.get(p.module_id)
+        if (!mod) continue
+        const totalQuestions = Array.isArray(p.question_ids) ? p.question_ids.length : 0
+        if (totalQuestions === 0) continue
+        inProgressQuizzes.push({
+          moduleId: p.module_id,
+          moduleSlug: mod.slug,
+          moduleTitle: mod.title,
+          currentIndex: p.current_question_index ?? 0,
+          totalQuestions,
+        })
+      }
+    }
+
     let completedCount = 0
-    let nextModule: { slug: string; title: string; description: string | null } | null = null
+    let nextModule: { slug: string; title: string; description: string | null; hasProgress: boolean } | null = null
     let hoursCompleted = 0
     let avgQuizScore: number | null = null
     const completedIds = new Set<string>()
@@ -218,7 +241,9 @@ export default async function HomePage() {
       completedCount = moduleList.filter((m) => completedIds.has(m.id)).length
       for (const m of moduleList) {
         if (!completedIds.has(m.id)) {
-          nextModule = { slug: m.slug, title: m.title, description: m.description }
+          const hasProgress =
+            inProgressQuizzes.some((q) => q.moduleId === m.id) || (prog ?? []).some((p) => p.module_id === m.id)
+          nextModule = { slug: m.slug, title: m.title, description: m.description, hasProgress }
           break
         }
       }
@@ -274,6 +299,7 @@ export default async function HomePage() {
             hoursRemaining={Math.round(hoursRemaining * 10) / 10}
             avgQuizScore={avgQuizScore != null ? Math.round(avgQuizScore) : null}
             quickAccess={quickAccess}
+            inProgressQuizzes={inProgressQuizzes}
           />
         </div>
         <UpdatesSidebar items={[]} viewAllHref="/search" />

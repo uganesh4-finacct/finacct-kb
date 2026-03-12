@@ -142,7 +142,7 @@ export async function inviteUserWithOurEmail(formData: FormData): Promise<{ ok: 
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://kb.finacct360.io'
   const setPasswordUrl = `${siteUrl.replace(/\/$/, '')}/set-password?token=${token}`
 
-  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <noreply@finacct360.io>'
+  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <academy@finacct360.io>'
   const { error: emailError } = await resend.emails.send({
     from,
     to: [email],

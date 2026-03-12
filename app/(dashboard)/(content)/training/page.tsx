@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { GraduationCap, Lock, CheckCircle, Clock, BookOpen, ChevronRight } from 'lucide-react'
+import { ProgressBar } from '@/components/ui/ProgressBar'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,16 +70,12 @@ export default async function TrainingPage() {
 
       <div className="mb-6 rounded-xl border border-slate-800/50 bg-slate-800/30 p-4 overflow-hidden">
         <h2 className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Progress overview</h2>
-        <div className="flex justify-between text-sm mb-2">
-          <span className="text-slate-400">Overall progress</span>
-          <span className="text-white font-medium">{completedCount} of {moduleList.length} modules completed</span>
-        </div>
-        <div className="h-2 rounded-full bg-slate-700 overflow-hidden">
-          <div
-            className="h-full bg-indigo-500 rounded-full transition-all duration-300"
-            style={{ width: moduleList.length ? `${(completedCount / moduleList.length) * 100}%` : 0 }}
-          />
-        </div>
+        <ProgressBar
+          value={moduleList.length ? (completedCount / moduleList.length) * 100 : 0}
+          label="Overall progress"
+          valueLabel={`${completedCount} of ${moduleList.length} modules completed`}
+          variant="indigo"
+        />
       </div>
 
       <ul className="space-y-2">

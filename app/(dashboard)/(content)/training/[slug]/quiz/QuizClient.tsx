@@ -2,7 +2,13 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
-import { submitQuizAttempt } from '@/lib/training-actions'
+import { useRouter } from 'next/navigation'
+import {
+  submitQuizAttempt,
+  saveQuizProgress,
+  startOrResetQuizProgress,
+  type QuizProgressRow,
+} from '@/lib/training-actions'
 import { ChevronLeft, ArrowRight } from 'lucide-react'
 import { QuizQuestion } from '@/components/training/QuizQuestion'
 import { QuizCompletePass } from '@/components/training/QuizComplete'
@@ -14,6 +20,20 @@ import type { QuizQuestionInput } from '@/lib/quiz-utils'
 
 type QuizQuestionType = QuizQuestionInput
 const MAX_ATTEMPTS = 3
+
+/** Reorder questions to match saved question_ids; append any missing at end. */
+function orderQuestionsByIds<T extends { id: string }>(questions: T[], ids: string[]): T[] {
+  const byId = new Map(questions.map((q) => [q.id, q]))
+  const ordered: T[] = []
+  for (const id of ids) {
+    const q = byId.get(id)
+    if (q) ordered.push(q)
+  }
+  for (const q of questions) {
+    if (!ids.includes(q.id)) ordered.push(q)
+  }
+  return ordered.length ? ordered : questions
+}
 
 function formatElapsed(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000)
@@ -35,6 +55,7 @@ export function QuizClient({
   nextModuleSlug,
   nextModuleTitle = null,
   lockStatus = { locked: false, nextRetryAt: null },
+  initialProgress = null,
 }: {
   moduleId: string
   moduleTitle: string
@@ -46,16 +67,34 @@ export function QuizClient({
   nextModuleSlug: string | null
   nextModuleTitle?: string | null
   lockStatus?: { locked: boolean; nextRetryAt: string | null }
+  initialProgress?: QuizProgressRow | null
 }) {
-  const [questions, setQuestions] = useState<QuizQuestionType[]>(() =>
-    prepareQuiz(initialQuestions)
+  const isResuming = initialProgress != null && initialProgress.question_ids.length > 0
+  const [questions, setQuestions] = useState<QuizQuestionType[]>(() => {
+    if (isResuming && initialProgress?.question_ids?.length) {
+      return orderQuestionsByIds(initialQuestions, initialProgress.question_ids)
+    }
+    return prepareQuiz(initialQuestions)
+  })
+  const [quizStarted, setQuizStarted] = useState(isResuming)
+  const [startedAt, setStartedAt] = useState<number | null>(() =>
+    isResuming && initialProgress?.started_at
+      ? new Date(initialProgress.started_at).getTime()
+      : null
   )
-  const [quizStarted, setQuizStarted] = useState(false)
-  const [startedAt, setStartedAt] = useState<number | null>(null)
   const [elapsedMs, setElapsedMs] = useState(0)
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(() => (isResuming && initialProgress ? Math.min(initialProgress.current_question_index, initialProgress.question_ids.length - 1) : 0))
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
-  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [answers, setAnswers] = useState<Record<string, string>>(() => {
+    if (!isResuming || !initialProgress) return {}
+    const record: Record<string, string> = {}
+    const ids = initialProgress.question_ids
+    const ans = initialProgress.answers
+    for (let i = 0; i < ids.length && i < ans.length; i++) {
+      record[ids[i]] = ans[i]
+    }
+    return record
+  })
   const [finalSubmitted, setFinalSubmitted] = useState<{
     score: number
     passed: boolean
@@ -64,6 +103,8 @@ export function QuizClient({
     attemptNumber?: number
   } | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [saveExitMessage, setSaveExitMessage] = useState<string | null>(null)
+  const router = useRouter()
 
   const currentQ = questions[step]
   const isLast = step === questions.length - 1
@@ -95,8 +136,10 @@ export function QuizClient({
   }, [moduleId])
 
   function handleStartQuiz() {
-    setQuizStarted(true)
-    setStartedAt(Date.now())
+    startOrResetQuizProgress(moduleId, questions.map((q) => q.id)).then(() => {
+      setQuizStarted(true)
+      setStartedAt(Date.now())
+    })
   }
 
   function handleSelectAnswer(optionId: string) {
@@ -127,6 +170,9 @@ export function QuizClient({
         }
       })
     } else {
+      const nextIndex = step + 1
+      const answersArray = questions.slice(0, nextIndex).map((q) => answers[q.id]).filter(Boolean)
+      saveQuizProgress(moduleId, nextIndex, answersArray, questions.map((q) => q.id))
       setSelectedAnswer(null)
       setStep((s) => s + 1)
     }
@@ -138,6 +184,16 @@ export function QuizClient({
     setAnswers({})
     setSelectedAnswer(null)
     setStartedAt(Date.now())
+  }
+
+  async function handleSaveAndExit() {
+    const nextIndex = hasSubmittedCurrent ? step + 1 : step
+    const answersArray = questions.slice(0, nextIndex).map((q) => answers[q.id]).filter(Boolean)
+    const res = await saveQuizProgress(moduleId, nextIndex, answersArray, questions.map((q) => q.id))
+    if (res.ok) {
+      setSaveExitMessage('Progress saved! You can resume anytime.')
+      setTimeout(() => router.push('/training'), 2000)
+    }
   }
 
   // Wrong answers for "Areas to Review" on fail screen (topic = question snippet, sectionSlug = module)
@@ -226,6 +282,22 @@ export function QuizClient({
     )
   }
 
+  // —— Save & Exit confirmation (before redirect) ——
+  if (saveExitMessage) {
+    return (
+      <div className="rounded-2xl border border-slate-800/50 bg-slate-800/30 p-8 w-full max-w-xl mx-auto page-content text-center">
+        <p className="text-lg text-green-400 font-medium mb-4">{saveExitMessage}</p>
+        <Link
+          href="/training"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B4F72] hover:bg-[#2a6a94] text-white font-medium transition-colors"
+        >
+          Go to Training
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+    )
+  }
+
   // —— Active quiz: one question per screen ——
   return (
     <div className="rounded-2xl border border-slate-800/50 bg-slate-800/30 p-8 overflow-hidden w-full max-w-xl mx-auto page-content">
@@ -257,12 +329,19 @@ export function QuizClient({
       />
 
       {!hasSubmittedCurrent ? (
-        <div className="flex justify-end mt-8">
+        <div className="flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-3 mt-8">
+          <button
+            type="button"
+            onClick={handleSaveAndExit}
+            className="px-4 py-2.5 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors text-sm order-2 sm:order-1"
+          >
+            Save & Exit
+          </button>
           <button
             type="button"
             onClick={handleSubmit}
             disabled={selectedAnswer == null}
-            className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors order-1 sm:order-2"
           >
             Submit
           </button>
@@ -272,12 +351,19 @@ export function QuizClient({
           <p className="text-base text-slate-400 mt-6">
             <span className="font-medium text-white">{correctCountSoFar}/{step + 1}</span> correct so far
           </p>
-          <div className="flex justify-end mt-6">
+          <div className="flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-3 mt-6">
+            <button
+              type="button"
+              onClick={handleSaveAndExit}
+              className="px-4 py-2.5 rounded-xl border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white font-medium transition-colors text-sm"
+            >
+              Save & Exit
+            </button>
             <button
               type="button"
               onClick={handleNext}
               disabled={submitting}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium disabled:opacity-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium disabled:opacity-50 transition-colors"
             >
               {submitting ? 'Submitting…' : isLast ? 'See Results' : 'Next Question'}
               {!submitting && !isLast && <ArrowRight className="w-4 h-4" />}

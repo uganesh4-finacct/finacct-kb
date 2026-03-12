@@ -77,6 +77,21 @@ export default async function TrainingModulePage({
     .select('*', { count: 'exact', head: true })
     .eq('module_id', module.id)
 
+  const { data: quizProgressRow } = await supabase
+    .from('quiz_progress')
+    .select('current_question_index, question_ids')
+    .eq('user_id', user.id)
+    .eq('module_id', module.id)
+    .maybeSingle()
+  const totalFromProgress = Array.isArray(quizProgressRow?.question_ids) ? quizProgressRow.question_ids.length : 0
+  const quizProgress =
+    quizProgressRow && totalFromProgress > 0
+      ? {
+          currentIndex: quizProgressRow.current_question_index ?? 0,
+          totalQuestions: totalFromProgress,
+        }
+      : null
+
   const content = module.content as import('@/components/TipTapContent').TipTapNode | null
 
   return (
@@ -86,7 +101,7 @@ export default async function TrainingModulePage({
       moduleId={module.id}
       title={module.title}
       description={module.description ?? ''}
-      estimatedMinutes={module.estimated_minutes ?? 45}
+      estimatedMinutes={module.estimated_minutes ?? 20}
       questionCount={questionCount ?? 7}
       passScore={80}
       content={content}
@@ -95,6 +110,7 @@ export default async function TrainingModulePage({
       nextModule={nextModule ? { slug: nextModule.slug, title: nextModule.title } : undefined}
       journeyModules={journeyModules}
       fullReview={fullReview}
+      quizProgress={quizProgress}
     />
   )
 }

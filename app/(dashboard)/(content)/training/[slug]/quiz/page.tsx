@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getQuizLockStatus } from '@/lib/training-actions'
+import { getQuizLockStatus, getQuizProgress } from '@/lib/training-actions'
 import { QuizClient } from './QuizClient'
 
 export const dynamic = 'force-dynamic'
@@ -51,6 +51,7 @@ export default async function QuizPage({
   const nextModuleTitle = nextModule?.title ?? null
 
   const lockStatus = await getQuizLockStatus(module.id)
+  const initialProgress = await getQuizProgress(module.id)
 
   return (
     <div className="max-w-4xl px-8 py-6 lg:px-12 lg:py-6 mx-auto">
@@ -61,11 +62,12 @@ export default async function QuizPage({
           moduleSlug={module.slug}
           moduleNumber={moduleNumber}
           totalModules={totalModules}
-          estimatedMinutes={module.estimated_minutes ?? 10}
+          estimatedMinutes={module.estimated_minutes ?? 20}
           questions={questions}
           nextModuleSlug={nextModuleSlug}
           nextModuleTitle={nextModuleTitle}
           lockStatus={lockStatus}
+          initialProgress={initialProgress}
         />
       </div>
     </div>

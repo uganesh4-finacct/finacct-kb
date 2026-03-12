@@ -31,7 +31,7 @@ export default function EditTrainingModulePage() {
   const [slug, setSlug] = useState('')
   const [description, setDescription] = useState('')
   const [content, setContent] = useState<object | null>(null)
-  const [estimatedMinutes, setEstimatedMinutes] = useState(30)
+  const [estimatedMinutes, setEstimatedMinutes] = useState(20)
   const [isPublished, setIsPublished] = useState(false)
   const [showAddQuestion, setShowAddQuestion] = useState(false)
   const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null)

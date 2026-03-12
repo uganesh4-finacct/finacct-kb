@@ -17,7 +17,7 @@ export default function NewTrainingModulePage() {
   const [slug, setSlug] = useState('')
   const [description, setDescription] = useState('')
   const [content, setContent] = useState<object | null>(null)
-  const [estimatedMinutes, setEstimatedMinutes] = useState(30)
+  const [estimatedMinutes, setEstimatedMinutes] = useState(20)
   const [isPublished, setIsPublished] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)

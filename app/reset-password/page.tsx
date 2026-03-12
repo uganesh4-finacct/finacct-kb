@@ -16,8 +16,9 @@ export default function ResetPasswordPage() {
     setError(null)
     setLoading(true)
     const supabase = createClient()
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '') || 'https://kb.finacct360.io'
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/confirm`,
+      redirectTo: `${baseUrl.replace(/\/$/, '')}/auth/confirm`,
     })
     setLoading(false)
     if (resetError) {
@@ -45,14 +46,8 @@ export default function ResetPasswordPage() {
               <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-slate-800 mb-2">Check your email</h2>
               <p className="text-slate-600 mb-6">
-                If an account exists for <strong>{email}</strong>, we’ve sent a link to reset your password.
+                If an account exists for <strong>{email}</strong>, we've sent a link to reset your password.
               </p>
-              <Link
-                href="/login"
-                className="inline-block py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium"
-              >
-                Back to sign in
-              </Link>
             </div>
           ) : (
             <>

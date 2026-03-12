@@ -101,6 +101,7 @@ interface TrainingModuleViewProps {
   nextModule?: { slug: string; title: string }
   journeyModules: JourneyModule[]
   fullReview?: boolean
+  quizProgress?: { currentIndex: number; totalQuestions: number } | null
 }
 
 export function TrainingModuleView(props: TrainingModuleViewProps) {
@@ -118,6 +119,7 @@ export function TrainingModuleView(props: TrainingModuleViewProps) {
     previousModule,
     nextModule,
     journeyModules,
+    quizProgress = null,
   } = props
   const fullReview = props.fullReview ?? false
   const contentRef = useRef<HTMLDivElement>(null)
@@ -335,6 +337,7 @@ export function TrainingModuleView(props: TrainingModuleViewProps) {
             passScore={passScore}
             fullReview={fullReview}
             onFullReviewComplete={() => clearQuizLock(moduleId)}
+            quizProgress={quizProgress}
           />
 
           <SectionNav

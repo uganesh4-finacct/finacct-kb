@@ -85,7 +85,7 @@ CREATE TABLE public.training_modules (
   description TEXT,
   content JSONB, -- TipTap JSON content
   order_index INTEGER NOT NULL DEFAULT 0,
-  estimated_minutes INTEGER DEFAULT 30,
+  estimated_minutes INTEGER DEFAULT 20,
   is_published BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

@@ -2,21 +2,31 @@
 
 import Link from 'next/link'
 import { ArrowRight, BookOpen, FileText, LayoutGrid } from 'lucide-react'
+import { ProgressBar } from '@/components/ui/ProgressBar'
 import { ProgressRing } from './ProgressRing'
 import { ModuleJourney, type ModuleStep } from './ModuleJourney'
 import { QuickAccessCard } from './QuickAccessCard'
+
+export interface InProgressQuiz {
+  moduleId: string
+  moduleSlug: string
+  moduleTitle: string
+  currentIndex: number
+  totalQuestions: number
+}
 
 export interface TraineeHomeProps {
   fullName: string
   greeting: string
   completedCount: number
   totalModules: number
-  nextModule: { slug: string; title: string; description: string | null } | null
+  nextModule: { slug: string; title: string; description: string | null; hasProgress?: boolean } | null
   moduleSteps: ModuleStep[]
   hoursCompleted: number
   hoursRemaining: number
   avgQuizScore: number | null
   quickAccess: Array<{ title: string; href: string; description?: string }>
+  inProgressQuizzes?: InProgressQuiz[]
 }
 
 const QUICK_ICONS = [BookOpen, FileText, LayoutGrid] as const
@@ -32,6 +42,7 @@ export function TraineeHome({
   hoursRemaining,
   avgQuizScore,
   quickAccess,
+  inProgressQuizzes = [],
 }: TraineeHomeProps) {
   return (
     <div className="space-y-8">
@@ -43,6 +54,45 @@ export function TraineeHome({
           Continue your training to get certified.
         </p>
       </header>
+
+      {/* Continue Where You Left Off (in-progress quizzes) */}
+      {inProgressQuizzes.length > 0 && (
+        <section className="rounded-xl border border-slate-800/50 bg-slate-800/40 p-6">
+          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <span aria-hidden>📚</span>
+            Continue Where You Left Off
+          </h2>
+          <div className="space-y-4">
+            {inProgressQuizzes.map((q) => (
+              <div
+                key={q.moduleId}
+                className="rounded-lg border border-slate-700/50 bg-slate-800/60 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-white">{q.moduleTitle}</p>
+                  <p className="text-sm text-slate-400 mt-0.5">
+                    Question {q.currentIndex + 1} of {q.totalQuestions}
+                  </p>
+                  <div className="mt-2 max-w-xs">
+                    <ProgressBar
+                      value={q.totalQuestions ? (q.currentIndex / q.totalQuestions) * 100 : 0}
+                      showLabel={false}
+                      compact
+                      valueLabel={`${q.currentIndex + 1}/${q.totalQuestions}`}
+                    />
+                  </div>
+                </div>
+                <Link
+                  href={`/training/${q.moduleSlug}/quiz?resume=1`}
+                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-[#E67E22] hover:bg-[#d35400] text-white font-medium text-sm transition-colors shrink-0"
+                >
+                  Resume Quiz
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Hero: Progress ring + stats + CTA */}
       <section className="rounded-xl border border-slate-800/50 bg-slate-800/40 p-6 lg:p-8">
@@ -65,13 +115,21 @@ export function TraineeHome({
             </div>
           </div>
         </div>
+        <div className="mt-6">
+          <ProgressBar
+            value={totalModules ? (completedCount / totalModules) * 100 : 0}
+            label="Overall progress"
+            valueLabel={`${completedCount} of ${totalModules} modules`}
+            variant="indigo"
+          />
+        </div>
         {nextModule && (
           <div className="mt-6 pt-6 border-t border-slate-800/50">
             <Link
               href={`/training/${nextModule.slug}`}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-base transition-colors"
             >
-              Continue — {nextModule.title}
+              {nextModule.hasProgress ? `Resume — ${nextModule.title}` : `Start your training — ${nextModule.title}`}
               <ArrowRight className="w-4 h-4" />
             </Link>
             {nextModule.description && (
