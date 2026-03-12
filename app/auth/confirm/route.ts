@@ -1,12 +1,12 @@
 import { createServerClient } from '@supabase/ssr'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * Auth callback for password reset. Supabase sends user here with ?token_hash=...&type=recovery.
  * We verify the OTP (sets session cookies) then redirect to /update-password.
  * Session cookies must be set on the redirect response so the client receives them.
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const url = new URL(request.url)
   const { searchParams } = url
 
