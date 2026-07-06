@@ -10,9 +10,15 @@
     "seed": "npx tsx scripts/seed.ts",
     "seed:kb": "npx ts-node scripts/seed-kb-articles.ts",
     "seed:kb:clear": "npx ts-node scripts/seed-kb-articles.ts --clear",
+    "verify:kb": "npx tsx scripts/verify-kb.ts",
     "delete-minimal-kb": "npx ts-node scripts/delete-minimal-kb-articles.ts",
     "seed:coa": "npx tsx scripts/seed-coa-templates.ts",
-    "seed:coa-detailed": "npx tsx scripts/seed-coa-detailed.ts"
+    "seed:coa-detailed": "npx tsx scripts/seed-coa-detailed.ts",
+    "seed:payroll": "npx tsx scripts/seed-payroll-track.ts",
+    "seed:tech-stack": "npx tsx scripts/seed-tech-stack-module.ts",
+    "migrate:deploy": "npx tsx scripts/run-migrations.ts",
+    "assign:tracks": "npx tsx scripts/assign-training-tracks.ts",
+    "deploy:academy": "npx tsx scripts/deploy-academy.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.9.0",
@@ -40,12 +46,14 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "dotenv": "^16.6.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
+    "pg": "^8.22.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",

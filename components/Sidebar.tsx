@@ -9,6 +9,7 @@ import {
   Lock,
   FileText,
   LayoutGrid,
+  Award,
   Settings,
   ChevronLeft,
 } from 'lucide-react'
@@ -34,7 +35,7 @@ interface SidebarProps {
 export function Sidebar({ role, sections, onCollapse, collapsed }: SidebarProps) {
   const pathname = usePathname()
   const isTrainee = role === 'trainee'
-  const isAdmin = role === 'admin'
+  const isAdminOrEditor = role === 'admin' || role === 'editor'
 
   const mainSections = isTrainee
     ? []
@@ -100,6 +101,11 @@ export function Sidebar({ role, sections, onCollapse, collapsed }: SidebarProps)
               'Training',
               <IconTraining className="w-5 h-5 shrink-0" />
             )}
+            {navLink(
+              '/certification',
+              'Certification',
+              <Award className="w-5 h-5 shrink-0" />
+            )}
           </>
         ) : (
           <>
@@ -135,7 +141,7 @@ export function Sidebar({ role, sections, onCollapse, collapsed }: SidebarProps)
               'Training',
               <IconTraining className="w-5 h-5 shrink-0" />
             )}
-            {isAdmin && (
+            {isAdminOrEditor && (
               <>
                 <p className="px-3 py-1.5 mt-4 text-xs font-medium text-slate-500 uppercase tracking-wide">
                   Admin

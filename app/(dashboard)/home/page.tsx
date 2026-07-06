@@ -238,6 +238,13 @@ export default async function HomePage() {
         if (p.is_completed) completedIds.add(p.module_id)
         hoursCompleted += (p.time_spent_seconds ?? 0) / 3600
       }
+      const { data: attempts } = await supabase
+        .from('quiz_attempts')
+        .select('module_id, score, passed')
+        .eq('user_id', user.id)
+      for (const a of attempts ?? []) {
+        if (a.passed) completedIds.add(a.module_id)
+      }
       completedCount = moduleList.filter((m) => completedIds.has(m.id)).length
       for (const m of moduleList) {
         if (!completedIds.has(m.id)) {
@@ -247,11 +254,6 @@ export default async function HomePage() {
           break
         }
       }
-
-      const { data: attempts } = await supabase
-        .from('quiz_attempts')
-        .select('score')
-        .eq('user_id', user.id)
       if (attempts?.length) {
         const sum = attempts.reduce((s, a) => s + Number(a.score), 0)
         avgQuizScore = sum / attempts.length

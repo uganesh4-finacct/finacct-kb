@@ -9,6 +9,7 @@ import { randomBytes } from 'crypto'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 const TOKEN_EXPIRY_HOURS = 168 // 7 days
+const INVITE_FROM = 'FinAcct360 Academy <academy@finacct360.io>'
 
 function generateToken(): string {
   return randomBytes(32).toString('hex')
@@ -31,30 +32,57 @@ export async function getSetPasswordTokenInfo(token: string | null): Promise<
   { email: string; fullName: string } | { error: string }
 > {
   if (!token?.trim()) return { error: 'Invalid or expired link' }
-  if (!hasAdminClient()) return { error: 'Server configuration error' }
+  if (!hasAdminClient()) return { error: 'Server configuration error. Please contact support.' }
 
-  const admin = createAdminClient()
-  const { data: row, error } = await admin
-    .from('invite_tokens')
-    .select('user_id, expires_at')
-    .eq('token', token.trim())
-    .single()
+  try {
+    const admin = createAdminClient()
+    const { data: row, error } = await admin
+      .from('invite_tokens')
+      .select('user_id, expires_at')
+      .eq('token', token.trim())
+      .single()
 
-  if (error || !row) return { error: 'Invalid or expired link' }
-  if (new Date(row.expires_at) < new Date()) return { error: 'This link has expired' }
+    if (error || !row) {
+      console.error('[getSetPasswordTokenInfo] invite_tokens lookup:', { error: error?.message, code: error?.code })
+      return { error: 'Invalid or expired link' }
+    }
+    if (new Date(row.expires_at) < new Date()) return { error: 'This link has expired' }
 
-  const { data: profile } = await admin
-    .from('profiles')
-    .select('email, full_name')
-    .eq('id', row.user_id)
-    .single()
+    const { data: profile } = await admin
+      .from('profiles')
+      .select('email, full_name')
+      .eq('id', row.user_id)
+      .single()
 
-  if (!profile?.email) return { error: 'User not found' }
+    if (!profile?.email) {
+      console.error('[getSetPasswordTokenInfo] profile not found for user_id:', row.user_id)
+      return { error: 'User not found' }
+    }
 
-  return {
-    email: profile.email,
-    fullName: (profile.full_name as string) || profile.email.split('@')[0],
+    return {
+      email: profile.email,
+      fullName: (profile.full_name as string) || profile.email.split('@')[0],
+    }
+  } catch (err) {
+    const obj = err as Error & { cause?: unknown }
+    console.error('[getSetPasswordTokenInfo] unexpected error:', {
+      message: obj?.message,
+      name: obj?.name,
+      cause: obj?.cause,
+    })
+    return { error: 'Something went wrong loading this link. Please try again or contact support.' }
   }
+}
+
+function toUserFriendlyPasswordError(msg: string): string {
+  const lower = msg?.toLowerCase() ?? ''
+  if (lower.includes('fetch') || lower.includes('network') || lower.includes('failed to fetch')) {
+    return "We couldn't reach the server. Check your connection and try again."
+  }
+  if (lower.includes('session') || lower.includes('expired') || lower.includes('invalid')) {
+    return 'This link may have expired. Please ask your admin for a new invite link.'
+  }
+  return msg || 'Something went wrong. Please try again.'
 }
 
 /**
@@ -67,28 +95,53 @@ export async function setPasswordWithToken(
 ): Promise<{ ok: boolean; error?: string }> {
   if (!token?.trim()) return { ok: false, error: 'Invalid or expired link' }
   if (!password || password.length < 6) return { ok: false, error: 'Password must be at least 6 characters' }
-  if (!hasAdminClient()) return { ok: false, error: 'Server configuration error' }
+  if (!hasAdminClient()) return { ok: false, error: 'Server configuration error. Please contact support.' }
 
-  const admin = createAdminClient()
-  const { data: row, error } = await admin
-    .from('invite_tokens')
-    .select('user_id, expires_at')
-    .eq('token', token.trim())
-    .single()
+  try {
+    const admin = createAdminClient()
+    const { data: row, error } = await admin
+      .from('invite_tokens')
+      .select('user_id, expires_at')
+      .eq('token', token.trim())
+      .single()
 
-  if (error || !row) return { ok: false, error: 'Invalid or expired link' }
-  if (new Date(row.expires_at) < new Date()) return { ok: false, error: 'This link has expired' }
+    if (error || !row) {
+      console.error('[setPasswordWithToken] invite_tokens lookup:', { error: error?.message, code: error?.code })
+      return { ok: false, error: 'Invalid or expired link' }
+    }
+    if (new Date(row.expires_at) < new Date()) return { ok: false, error: 'This link has expired' }
 
-  const { error: updateError } = await admin.auth.admin.updateUserById(row.user_id, { password })
-  if (updateError) return { ok: false, error: updateError.message }
+    const { error: updateError } = await admin.auth.admin.updateUserById(row.user_id, { password })
+    if (updateError) {
+      console.error('[setPasswordWithToken] updateUserById error:', {
+        message: updateError.message,
+        name: updateError.name,
+        status: (updateError as unknown as { status?: number })?.status,
+      })
+      return { ok: false, error: toUserFriendlyPasswordError(updateError.message) }
+    }
 
-  await admin.from('invite_tokens').delete().eq('token', token.trim())
-  await admin
-    .from('profiles')
-    .update({ needs_password_set: false, updated_at: new Date().toISOString() })
-    .eq('id', row.user_id)
-
-  return { ok: true }
+    const { error: deleteError } = await admin.from('invite_tokens').delete().eq('token', token.trim())
+    if (deleteError) {
+      console.warn('[setPasswordWithToken] invite_tokens delete failed (password was set):', deleteError.message)
+    }
+    const { error: profileError } = await admin
+      .from('profiles')
+      .update({ needs_password_set: false, updated_at: new Date().toISOString() })
+      .eq('id', row.user_id)
+    if (profileError) {
+      console.warn('[setPasswordWithToken] profiles update failed (password was set):', profileError.message)
+    }
+    return { ok: true }
+  } catch (err) {
+    const obj = err as Error & { cause?: unknown }
+    console.error('[setPasswordWithToken] unexpected error:', {
+      message: obj?.message,
+      name: obj?.name,
+      cause: obj?.cause,
+    })
+    return { ok: false, error: toUserFriendlyPasswordError(obj?.message ?? 'Something went wrong') }
+  }
 }
 
 /**
@@ -142,7 +195,7 @@ export async function inviteUserWithOurEmail(formData: FormData): Promise<{ ok: 
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://kb.finacct360.io'
   const setPasswordUrl = `${siteUrl.replace(/\/$/, '')}/set-password?token=${token}`
 
-  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <academy@finacct360.io>'
+  const from = process.env.RESEND_FROM ?? INVITE_FROM
   const { error: emailError } = await resend.emails.send({
     from,
     to: [email],

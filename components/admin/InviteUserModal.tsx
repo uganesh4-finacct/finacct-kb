@@ -12,7 +12,7 @@ function isValidEmail(value: string): boolean {
 interface InviteUserModalProps {
   onClose: () => void
   onSubmit: (data: { fullName: string; email: string; role: UserRole }) => Promise<{ ok: boolean; error?: string; tempPassword?: string; userId?: string }>
-  onSuccess: (email: string, tempPassword: string, fullName?: string) => void
+  onSuccess: (email: string, tempPassword?: string, fullName?: string) => void
 }
 
 export function InviteUserModal({ onClose, onSubmit, onSuccess }: InviteUserModalProps) {
@@ -38,11 +38,11 @@ export function InviteUserModal({ onClose, onSubmit, onSuccess }: InviteUserModa
     setLoading(true)
     const res = await onSubmit({ fullName: name, email: emailTrim, role })
     setLoading(false)
-    if (res.ok && res.tempPassword) {
+    if (res.ok) {
       onSuccess(emailTrim, res.tempPassword, name !== 'New User' ? name : undefined)
       onClose()
     } else {
-      setError(res.error ?? 'Failed to create user.')
+      setError(res.error ?? 'Failed to send invite.')
     }
   }
 
@@ -104,7 +104,7 @@ export function InviteUserModal({ onClose, onSubmit, onSuccess }: InviteUserModa
               disabled={loading}
               className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium disabled:opacity-60"
             >
-              {loading ? 'Creating…' : 'Create User'}
+              {loading ? 'Sending invite…' : 'Send Invite'}
             </button>
             <button
               type="button"

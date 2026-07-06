@@ -4,6 +4,7 @@ import type { UserRole } from '@/lib/types'
 
 const PUBLIC_PATHS = ['/', '/login', '/reset-password', '/auth/confirm', '/auth/accept-invite', '/auth/accept-invite/confirm', '/set-password', '/update-password']
 const TRAINING_PATH = '/training'
+const CERTIFICATION_PATH = '/certification'
 const ADMIN_PATH = '/admin'
 const SECTION_PATH = '/section'
 const TEMPLATES_PATH = '/templates'
@@ -34,6 +35,10 @@ function isHomePath(pathname: string): boolean {
 
 function isCertificatePath(pathname: string): boolean {
   return pathname === '/certificate' || pathname.startsWith('/certificate/')
+}
+
+function isCertificationPath(pathname: string): boolean {
+  return pathname === CERTIFICATION_PATH || pathname.startsWith(CERTIFICATION_PATH + '/')
 }
 
 function isSearchPath(pathname: string): boolean {
@@ -107,10 +112,10 @@ export async function middleware(request: NextRequest) {
     console.log('[Middleware] User role:', role, '| Source: profiles table | profile:', profile ? 'found' : 'null', '| rawRole:', rawRole ?? 'undefined')
   }
 
-  // Certificate: only if training completed (all modules passed)
-  if (isCertificatePath(pathname) && !profile?.training_completed) {
+  // FCRA certificate: accountants only (full certification after admin promotion)
+  if (isCertificatePath(pathname) && role !== 'accountant' && role !== 'admin') {
     const url = request.nextUrl.clone()
-    url.pathname = TRAINING_PATH
+    url.pathname = '/certification'
     return NextResponse.redirect(url)
   }
 
@@ -121,7 +126,7 @@ export async function middleware(request: NextRequest) {
       url.pathname = TRAINING_PATH
       return NextResponse.redirect(url)
     }
-    if (!isHomePath(pathname) && !isTrainingPath(pathname) && !isCertificatePath(pathname) && !isSearchPath(pathname) && pathname !== '/') {
+    if (!isHomePath(pathname) && !isTrainingPath(pathname) && !isCertificatePath(pathname) && !isCertificationPath(pathname) && !isSearchPath(pathname) && pathname !== '/') {
       const url = request.nextUrl.clone()
       url.pathname = '/home'
       return NextResponse.redirect(url)

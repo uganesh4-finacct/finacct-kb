@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { GraduationCap, Lock, CheckCircle, Clock, BookOpen, ChevronRight } from 'lucide-react'
+import { GraduationCap, Lock, CheckCircle, Clock, BookOpen, ChevronRight, Award } from 'lucide-react'
 import { ProgressBar } from '@/components/ui/ProgressBar'
+import { recordModuleComplete } from '@/lib/training-actions'
+import { fetchUserGates, isFullyCertified } from '@/lib/certification'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +12,10 @@ export default async function TrainingPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const { data: profile } = await supabase.from('profiles').select('training_completed').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  const gates = await fetchUserGates(supabase, user.id)
+  const fullyCertified = isFullyCertified(gates)
+  const canViewCertificate = fullyCertified && profile?.role === 'accountant'
 
   const { data: modules } = await supabase
     .from('training_modules')
@@ -33,7 +38,14 @@ export default async function TrainingPage() {
     .eq('user_id', user.id)
     .in('module_id', moduleIds)
 
-  const completedSet = new Set((progress ?? []).filter((p) => p.is_completed).map((p) => p.module_id))
+  const completedFromProgress = new Set((progress ?? []).filter((p) => p.is_completed).map((p) => p.module_id))
+  const passedModuleIds = new Set((attempts ?? []).filter((a) => a.passed).map((a) => a.module_id))
+  for (const moduleId of passedModuleIds) {
+    if (!completedFromProgress.has(moduleId)) {
+      await recordModuleComplete(moduleId)
+    }
+  }
+  const completedSet = new Set([...completedFromProgress, ...passedModuleIds])
   const bestScoreByModule: Record<string, number> = {}
   for (const a of attempts ?? []) {
     const s = Number(a.score)
@@ -144,23 +156,22 @@ export default async function TrainingPage() {
       </ul>
 
       <div className="mt-8 text-center">
-        {profile?.training_completed ? (
+        {canViewCertificate ? (
           <Link
             href="/certificate"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium"
           >
             <CheckCircle className="w-5 h-5" />
-            View certificate
+            View FCRA certificate
           </Link>
         ) : (
-          <div
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-700/50 border border-slate-600/50 text-slate-500 cursor-not-allowed"
-            title="Complete all modules and pass the quizzes to unlock your certificate"
+          <Link
+            href="/certification"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-600 text-slate-200 hover:bg-slate-800 font-medium transition-colors"
           >
-            <Lock className="w-5 h-5 shrink-0" />
-            <span>View certificate</span>
-            <span className="text-slate-500 text-sm font-normal">— Complete all modules to unlock</span>
-          </div>
+            <Award className="w-5 h-5 shrink-0" style={{ color: '#E67E22' }} />
+            Certification Center
+          </Link>
         )}
       </div>
     </div>

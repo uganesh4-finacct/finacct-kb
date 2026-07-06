@@ -26,26 +26,32 @@ export default function AcceptInvitePage() {
     }
 
     async function establishAndRedirect() {
-      const supabase = createClient()
-      if (accessToken && refreshToken) {
-        const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
-        if (error) {
-          router.replace('/login?error=invalid_reset_link')
-          return
+      try {
+        const supabase = createClient()
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+          if (error) {
+            console.error('[accept-invite] setSession error:', { message: error.message, name: error.name })
+            router.replace('/login?error=invalid_reset_link')
+            return
+          }
         }
-      }
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        setStatus('redirect')
-        // Full page nav so cookies are applied before update-password loads (helps on mobile)
-        if (typeof window !== 'undefined') {
-          window.location.replace(`${window.location.origin}/update-password`)
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          setStatus('redirect')
+          if (typeof window !== 'undefined') {
+            window.location.replace(`${window.location.origin}/update-password`)
+          } else {
+            router.replace('/update-password')
+          }
         } else {
-          router.replace('/update-password')
+          setStatus('login')
+          router.replace('/login')
         }
-      } else {
-        setStatus('login')
-        router.replace('/login')
+      } catch (err) {
+        const obj = err as Error
+        console.error('[accept-invite] establishAndRedirect error:', { message: obj?.message, name: obj?.name })
+        router.replace('/login?error=connection_failed')
       }
     }
 

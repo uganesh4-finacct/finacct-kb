@@ -53,11 +53,15 @@ export default async function TrainingModulePage({
     .select('module_id, is_completed')
     .eq('user_id', user.id)
 
-  const completedSet = new Set(
-    (progressRows ?? [])
-      .filter((r) => r.is_completed)
-      .map((r) => r.module_id)
+  const completedFromProgress = new Set(
+    (progressRows ?? []).filter((r) => r.is_completed).map((r) => r.module_id)
   )
+  const { data: passedAttempts } = await supabase
+    .from('quiz_attempts')
+    .select('module_id')
+    .eq('user_id', user.id)
+    .eq('passed', true)
+  const completedSet = new Set([...completedFromProgress, ...(passedAttempts ?? []).map((a) => a.module_id)])
 
   const journeyModules = list.map((m, index) => {
     const completed = completedSet.has(m.id)

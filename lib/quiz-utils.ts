@@ -15,6 +15,8 @@ export interface QuizQuestionInput {
   correct_option_id: string
   explanation: string | null
   order_index: number
+  /** When multiple questions share a group, one is chosen at random per attempt */
+  variant_group?: string | null
 }
 
 export type PreparedQuestion = QuizQuestionInput
@@ -29,9 +31,30 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled
 }
 
-/** Prepare quiz: shuffle question order and option order. correct_option_id unchanged for checking. */
+/** Pick one question per variant_group; include all questions without a group. */
+export function selectQuizQuestions(questions: QuizQuestionInput[]): QuizQuestionInput[] {
+  const selected: QuizQuestionInput[] = []
+  const seenGroups = new Set<string>()
+
+  for (const q of questions) {
+    const group = q.variant_group?.trim()
+    if (!group) {
+      selected.push(q)
+      continue
+    }
+    if (seenGroups.has(group)) continue
+    seenGroups.add(group)
+    const groupQuestions = questions.filter((item) => item.variant_group === group)
+    const pick = groupQuestions[Math.floor(Math.random() * groupQuestions.length)]
+    selected.push(pick)
+  }
+
+  return selected
+}
+
+/** Prepare quiz: apply variant groups, shuffle question order and option order. */
 export function prepareQuiz(questions: QuizQuestionInput[]): PreparedQuestion[] {
-  const shuffledQuestions = shuffleArray(questions)
+  const shuffledQuestions = shuffleArray(selectQuizQuestions(questions))
   return shuffledQuestions.map((q) => ({
     ...q,
     options: shuffleArray(q.options),

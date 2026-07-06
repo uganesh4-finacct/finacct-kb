@@ -11,7 +11,7 @@ export const SECTION_DISPLAY_ORDER = [
 ] as const
 
 /** Sections to hide from sidebar and home (e.g. not ready yet). */
-const HIDDEN_SECTION_SLUGS = new Set<string>(['client-education'])
+const HIDDEN_SECTION_SLUGS = new Set<string>()
 
 const preferredSlugs = new Set<string>(SECTION_DISPLAY_ORDER)
 

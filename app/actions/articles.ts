@@ -2,20 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-
-const EDITABLE_ROLES = ['admin', 'editor'] as const
-
-async function getAuthAndRole() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, userId: null, error: 'Not authenticated' }
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  const role = (profile?.role as string)?.toLowerCase()
-  if (!role || !EDITABLE_ROLES.includes(role as typeof EDITABLE_ROLES[number])) {
-    return { ok: false as const, userId: user.id, error: 'Admin or Editor only' }
-  }
-  return { ok: true as const, userId: user.id, error: null }
-}
+import { ensureEditorOrAdmin } from '@/lib/auth-helpers'
 
 async function getSectionSlug(sectionId: string): Promise<string | null> {
   const supabase = await createClient()
@@ -28,7 +15,7 @@ async function getSectionSlug(sectionId: string): Promise<string | null> {
  * Allowed for admin or editor role. User is resolved server-side.
  */
 export async function updateArticle(articleId: string, content: object) {
-  const check = await getAuthAndRole()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { ok: false as const, error: check.error }
   const userId = check.userId!
 
@@ -74,7 +61,7 @@ export async function saveArticleVersion(
   version: number,
   userId: string
 ) {
-  const check = await getAuthAndRole()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { ok: false as const, error: check.error }
 
   const supabase = await createClient()
@@ -93,7 +80,7 @@ export async function saveArticleVersion(
  * Get version history for an article (for future version history UI).
  */
 export async function getArticleVersions(articleId: string) {
-  const check = await getAuthAndRole()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { data: null, error: check.error }
 
   const supabase = await createClient()

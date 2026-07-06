@@ -68,6 +68,8 @@ export interface TrainingModule {
   order_index: number
   estimated_minutes: number
   is_published: boolean
+  track_id?: string | null
+  module_code?: string | null
   created_at: string
   updated_at: string
 }
@@ -78,6 +80,7 @@ export interface QuizQuestion {
   question: string
   options: QuizOption[]
   correct_option_id: string
+  variant_group?: string | null
   explanation: string | null
   order_index: number
 }

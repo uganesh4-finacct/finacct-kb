@@ -3,16 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient, hasAdminClient } from '@/lib/supabase/admin'
+import { ensureAdmin, ensureEditorOrAdmin } from '@/lib/auth-helpers'
 import type { UserRole } from '@/lib/types'
 
-export async function ensureAdmin() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, error: 'Not authenticated' }
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') return { ok: false as const, error: 'Admin only' }
-  return { ok: true as const, userId: user.id }
-}
+export { ensureAdmin, ensureEditorOrAdmin }
 
 // ---- Team ----
 export async function getTeamProfiles() {
@@ -269,7 +263,7 @@ export async function deleteSection(id: string) {
 
 // ---- Articles ----
 export async function getArticlesAdmin(sectionId?: string) {
-  const check = await ensureAdmin()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { data: null, error: check.error }
   const supabase = await createClient()
   let q = supabase
@@ -285,7 +279,7 @@ export async function getArticlesAdmin(sectionId?: string) {
 }
 
 export async function getSectionsForSelect() {
-  const check = await ensureAdmin()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { data: [], error: check.error }
   const supabase = await createClient()
   const { data, error } = await supabase.from('kb_sections').select('id, title, slug').order('order_index')
@@ -293,7 +287,7 @@ export async function getSectionsForSelect() {
 }
 
 export async function getArticleById(id: string) {
-  const check = await ensureAdmin()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { data: null, error: check.error }
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -314,7 +308,7 @@ export async function saveArticle(params: {
   is_published: boolean
   order_index: number
 }) {
-  const check = await ensureAdmin()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { ok: false as const, error: check.error, id: undefined }
   const supabase = await createClient()
   const userId = check.userId!
@@ -361,7 +355,7 @@ export async function saveArticle(params: {
 }
 
 export async function getArticleVersions(articleId: string) {
-  const check = await ensureAdmin()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { data: [], error: check.error }
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -373,7 +367,7 @@ export async function getArticleVersions(articleId: string) {
 }
 
 export async function restoreArticleVersion(articleId: string, versionId: string) {
-  const check = await ensureAdmin()
+  const check = await ensureEditorOrAdmin()
   if (!check.ok) return { ok: false as const, error: check.error }
   const supabase = await createClient()
   const { data: ver } = await supabase.from('kb_article_versions').select('content').eq('id', versionId).single()

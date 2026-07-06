@@ -99,7 +99,7 @@ export function QuizClient({
     score: number
     passed: boolean
     correctCount: number
-    upgraded?: boolean
+    courseworkJustCompleted?: boolean
     attemptNumber?: number
   } | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -164,7 +164,7 @@ export function QuizClient({
             score: res.score,
             passed: res.passed,
             correctCount,
-            upgraded: res.upgraded ?? false,
+            courseworkJustCompleted: res.courseworkJustCompleted ?? false,
             attemptNumber: res.attemptNumber ?? 1,
           })
         }
@@ -248,7 +248,7 @@ export function QuizClient({
 
   // —— Quiz complete: pass or fail ——
   if (finalSubmitted !== null) {
-    const { score, passed, correctCount, upgraded } = finalSubmitted
+    const { score, passed, correctCount, courseworkJustCompleted } = finalSubmitted
     const timeSpentFormatted = startedAt != null ? formatElapsed(Date.now() - startedAt) : undefined
     if (passed) {
       return (
@@ -262,7 +262,7 @@ export function QuizClient({
           nextModuleTitle={nextModuleTitle}
           moduleSlug={moduleSlug}
           timeSpentFormatted={timeSpentFormatted}
-          trainingJustCompleted={upgraded}
+          courseworkJustCompleted={courseworkJustCompleted}
         />
       )
     }

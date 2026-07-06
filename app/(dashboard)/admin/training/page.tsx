@@ -48,6 +48,11 @@ export default function AdminTrainingPage() {
                   <div className="flex items-center gap-3">
                     <span className="text-white font-medium">{m.title}</span>
                     <span className="text-slate-500 text-sm">{m.slug}</span>
+                    {m.module_code && (
+                      <span className="text-xs px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
+                        {m.module_code}
+                      </span>
+                    )}
                     <span className={`text-xs px-1.5 py-0.5 rounded ${m.is_published ? 'bg-green-500/20 text-green-400' : 'bg-slate-600 text-slate-400'}`}>
                       {m.is_published ? 'Published' : 'Draft'}
                     </span>

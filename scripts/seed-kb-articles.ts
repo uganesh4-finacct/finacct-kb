@@ -1,7 +1,7 @@
 /**
  * FinAcct360 Knowledge Base - Article Seed Script
  * 
- * This script seeds all 50 KB articles across 6 sections.
+ * This script seeds all 45 KB articles across 6 sections (40 published + 5 POS ecosystem drafts).
  * 
  * Usage:
  *   npm run seed:kb          - Add articles (skip existing)
@@ -155,6 +155,24 @@ const warningBox = (title: string, content: string) => ({
 const proTipBox = (content: string) => ({
   type: 'proTipBox',
   content: [paragraph(content)],
+})
+
+const paragraphLink = (before: string, linkText: string, href: string, after = '') => ({
+  type: 'paragraph',
+  content: [
+    text(before),
+    { type: 'text', marks: [{ type: 'link', attrs: { href, target: '_blank' } }], text: linkText },
+    text(after),
+  ],
+})
+
+const paragraphLinks = (parts: Array<string | { text: string; href: string }>) => ({
+  type: 'paragraph',
+  content: parts.map((part) =>
+    typeof part === 'string'
+      ? text(part)
+      : { type: 'text', marks: [{ type: 'link', attrs: { href: part.href, target: '_blank' } }], text: part.text }
+  ),
 })
 
 const exampleBox = (title: string, content: string) => ({
@@ -1639,6 +1657,283 @@ const sampleFinancialsArticles = [
       ],
     },
   },
+
+  {
+    title: '4.6 Fine Dining Restaurant P&L',
+    slug: '4-6-fine-dining-restaurant-pl',
+    section_slug: 'sample-financials',
+    type: 'template',
+    excerpt: 'Monthly P&L for a fine dining restaurant with $180,000 revenue and a heavy wine program',
+    read_time: 12,
+    is_pinned: false,
+    order_index: 5,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '4.6 Fine Dining Restaurant P&L'),
+        paragraph('Monthly P&L for a 3,200 sq ft fine dining restaurant with $180,000 monthly revenue, a curated wine list (wine ~28% of sales), and elevated labor standards. This profile teaches how wine-heavy concepts differ from casual dining benchmarks.'),
+
+        heading(2, 'REVENUE (4000s)'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['4100 Food Sales', '$97,200', '54.0%'],
+            ['4200 Beer Sales', '$10,800', '6.0%'],
+            ['4300 Wine Sales', '$50,400', '28.0%'],
+            ['4400 Spirits Sales', '$14,400', '8.0%'],
+            ['4500 NA Beverages', '$5,400', '3.0%'],
+            ['Less: Discounts & Comps', '($2,160)', '-1.2%'],
+            ['TOTAL REVENUE', '$180,000', '100.0%'],
+          ]
+        ),
+        insightBox('Average Check Drives Everything', 'At fine dining, average check is the primary lever. A $15 shift in average check on 3,000 covers/month moves revenue $45,000 annually without adding a single seat.'),
+
+        heading(2, 'COST OF GOODS SOLD (5000s)'),
+        table(
+          ['Account', 'Amount', '% of Sales', '% of Category'],
+          [
+            ['5100 Food Cost', '$27,540', '15.3%', '28.3% of food'],
+            ['5200 Beer Cost', '$2,700', '1.5%', '25.0% of beer'],
+            ['5300 Wine Cost', '$15,120', '8.4%', '30.0% of wine'],
+            ['5400 Spirits Cost', '$3,600', '2.0%', '25.0% of spirits'],
+            ['5500 NA Beverage Cost', '$1,080', '0.6%', '20.0% of NA bev'],
+            ['5600 Paper & Supplies', '$1,800', '1.0%', ''],
+            ['TOTAL COGS', '$51,840', '28.8%', ''],
+          ]
+        ),
+        proTipBox('Wine COGS runs a higher percentage of sales than food (8.4% vs 15.3% of total revenue), but wine delivers higher gross margin dollars per cover. A $60 bottle at 30% cost still contributes $42 — more than most entrées.'),
+
+        heading(2, 'GROSS PROFIT'),
+        paragraph('$128,160 — 71.2%'),
+
+        heading(2, 'LABOR (6000s)'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['6100 FOH Wages (Servers, Sommelier, Host)', '$25,200', '14.0%'],
+            ['6200 BOH Wages (Chefs, Prep, Dish)', '$21,600', '12.0%'],
+            ['6300 Management Salaries', '$12,600', '7.0%'],
+            ['6400 Payroll Taxes & Benefits', '$8,100', '4.5%'],
+            ['TOTAL LABOR', '$67,500', '37.5%'],
+          ]
+        ),
+        insightBox('Labor at 32–35% Is Normal for Fine Dining', 'Labor at 37.5% looks high against a 32% casual-dining target — but fine dining sits at the top of the band. More courses, wine service, and lower table turns justify higher labor. This is not automatically a red flag.'),
+
+        heading(2, 'PRIME COST (COGS + Labor)'),
+        paragraph('$119,340 — 66.3%'),
+        warningBox('Prime Cost Context', 'Prime cost touching 62–63% is common in fine dining when occupancy is low. This location runs 66.3% — still workable if net margin holds because rent and fixed costs are controlled.'),
+
+        heading(2, 'OPERATING EXPENSES (7000s)'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['7100 Marketing & PR', '$3,600', '2.0%'],
+            ['7200 Credit Card Processing', '$5,400', '3.0%'],
+            ['7300 Repairs & Maintenance', '$2,700', '1.5%'],
+            ['7400 Professional Services', '$1,800', '1.0%'],
+            ['7500 Software & Technology', '$900', '0.5%'],
+            ['7600 Other Operating', '$2,700', '1.5%'],
+            ['TOTAL OPERATING', '$17,100', '9.5%'],
+          ]
+        ),
+
+        heading(2, 'OCCUPANCY (8000s)'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['8100 Rent & CAM', '$10,800', '6.0%'],
+            ['8200 Utilities', '$3,600', '2.0%'],
+            ['8300 Insurance', '$1,800', '1.0%'],
+            ['TOTAL OCCUPANCY', '$16,200', '9.0%'],
+          ]
+        ),
+
+        heading(2, 'NET OPERATING INCOME'),
+        paragraph('$24,720 — 13.7%'),
+        insightBox('Key Benchmarks', 'Wine cost target: 28–32% of wine sales. Food cost target: 28–32% of food sales. Prime cost 62–66% acceptable when occupancy under 8% and average check above $65. Labor 32–38% depending on service level.'),
+      ],
+    },
+  },
+
+  {
+    title: '4.7 Multi-Unit Consolidated P&L',
+    slug: '4-7-multi-unit-consolidated-pl',
+    section_slug: 'sample-financials',
+    type: 'template',
+    excerpt: 'Side-by-side P&L for a 3-location bar & grill group with consolidated reporting',
+    read_time: 14,
+    is_pinned: false,
+    order_index: 6,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '4.7 Multi-Unit Consolidated P&L'),
+        paragraph('Three-location bar & grill group under one owner. Each location maintains its own QuickBooks Online file and weekly close. This sample shows why per-location review is mandatory — consolidation can hide a struggling unit.'),
+
+        heading(2, 'Location Summary — Monthly P&L (% of Sales)'),
+        table(
+          ['Line Item', 'Location A (Strong)', 'Location B (Average)', 'Location C (Weak)', 'Consolidated'],
+          [
+            ['Revenue', '$320,000', '$275,000', '$210,000', '$805,000'],
+            ['COGS %', '26.0%', '27.5%', '29.0%', '27.3%'],
+            ['Labor %', '31.0%', '33.0%', '38.0%', '33.4%'],
+            ['Prime Cost %', '57.0%', '60.5%', '67.0%', '60.7%'],
+            ['Operating %', '18.5%', '19.0%', '20.5%', '19.2%'],
+            ['Net Income %', '12.5%', '8.5%', '2.5%', '8.8%'],
+            ['Net Income $', '$40,000', '$23,375', '$5,250', '$68,625'],
+          ]
+        ),
+        warningBox('Consolidation Hides Problems', 'The consolidated view shows 8.8% net margin — acceptable on paper. Location C at 2.5% net and 38% labor is a problem unit that consolidation masks. Always review each entity before presenting group results to ownership.'),
+
+        heading(2, 'Location A — Strong Unit ($320K Revenue)'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Sales', '$128,000', '40.0%'],
+            ['Beer Sales', '$112,000', '35.0%'],
+            ['Spirits Sales', '$64,000', '20.0%'],
+            ['TOTAL REVENUE', '$320,000', '100.0%'],
+            ['TOTAL COGS', '$83,200', '26.0%'],
+            ['TOTAL LABOR', '$99,200', '31.0%'],
+            ['PRIME COST', '$182,400', '57.0%'],
+            ['NET OPERATING INCOME', '$40,000', '12.5%'],
+          ]
+        ),
+
+        heading(2, 'Location C — Weak Unit ($210K Revenue)'),
+        table(
+          ['Account', 'Amount', '% of Sales'],
+          [
+            ['Food Sales', '$84,000', '40.0%'],
+            ['Beer Sales', '$73,500', '35.0%'],
+            ['Spirits Sales', '$42,000', '20.0%'],
+            ['TOTAL REVENUE', '$210,000', '100.0%'],
+            ['TOTAL COGS', '$60,900', '29.0%'],
+            ['TOTAL LABOR', '$79,800', '38.0%'],
+            ['PRIME COST', '$140,700', '67.0%'],
+            ['NET OPERATING INCOME', '$5,250', '2.5%'],
+          ]
+        ),
+        insightBox('Location C Red Flags', 'Labor at 38% exceeds the 32–35% bar & grill target. COGS at 29% suggests portioning or theft issues. This unit needs a dedicated labor schedule review before any group-level celebration of consolidated results.'),
+
+        heading(2, '9000s — Multi-Unit / Intercompany Accounts'),
+        paragraph('Each location is a separate legal entity with its own QBO file. Use the 9000s range for intercompany tracking:'),
+        table(
+          ['Account', 'Purpose', 'Example'],
+          [
+            ['9100 Intercompany Receivable', 'Amounts owed between entities', 'Loc C owes Loc A for shared marketing'],
+            ['9200 Intercompany Payable', 'Amounts owed to sister locations', 'Loc A central kitchen charges'],
+            ['9300 Management Fee Income', 'Corporate overhead allocation', '2% management fee to holding co'],
+            ['9400 Management Fee Expense', 'Fee paid to parent/management co', 'Loc C pays 2% to holding co'],
+            ['9500 Consolidation Eliminations', 'Reporting-layer only', 'Eliminate intercompany on consolidation'],
+          ]
+        ),
+
+        heading(2, 'Close Process — Per Entity'),
+        stepFlow([
+          { title: 'Step 1: Close Each Location', description: 'Run weekly and monthly close independently in each QBO file. No shortcuts.' },
+          { title: 'Step 2: Review Per-Location KPIs', description: 'Compare prime cost, labor %, and net margin location by location before consolidating.' },
+          { title: 'Step 3: Reconcile Intercompany', description: 'Verify 9100/9200 balances net to zero across entities.' },
+          { title: 'Step 4: Build Consolidated View', description: 'Export each P&L to Excel reporting layer. Sum revenue and expenses. Apply elimination entries for intercompany.' },
+          { title: 'Step 5: Present Both Views', description: 'Give ownership the consolidated summary AND per-location detail. Never consolidated alone.' },
+        ]),
+        proTipBox('Consolidated view is a reporting layer, not the accounting system. Accounting always happens per-entity. The consolidated P&L is built after all three closes are complete and reviewed.'),
+      ],
+    },
+  },
+
+  {
+    title: '4.8 Sample Cash Flow Statement',
+    slug: '4-8-sample-cash-flow-statement',
+    section_slug: 'sample-financials',
+    type: 'template',
+    excerpt: 'Cash flow statement for Morning Buzz cafe — positive net income but cash decreased',
+    read_time: 12,
+    is_pinned: false,
+    order_index: 7,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '4.8 Sample Cash Flow Statement'),
+        paragraph('Cash flow statement for Morning Buzz cafe (same profile as 4.1: $85,000 monthly revenue, 1,200 sq ft). This month, net income is positive but cash decreased — the classic owner question: "I made money — where did it go?"'),
+
+        heading(2, 'Starting Position'),
+        table(
+          ['Item', 'Amount'],
+          [
+            ['Cash at Beginning of Month', '$52,000'],
+            ['Net Income (from P&L)', '$26,220'],
+            ['Cash at End of Month', '$41,420'],
+            ['Net Change in Cash', '($10,580)'],
+          ]
+        ),
+        warningBox('The Owner Question', '"We made $26,000 profit but our bank account went down $10,500. What happened?" This is the most common cash-flow confusion for restaurant owners. The answer is always in the three sections below.'),
+
+        heading(2, 'OPERATING ACTIVITIES'),
+        table(
+          ['Item', 'Amount', 'Notes'],
+          [
+            ['Net Income', '$26,220', 'From P&L — starting point'],
+            ['Add: Depreciation', '$4,200', 'Non-cash expense — add back'],
+            ['Add: Amortization', '$800', 'Non-cash — add back'],
+            ['(Increase) in Accounts Receivable', '($1,500)', 'Cash not yet collected'],
+            ['(Increase) in Inventory', '($2,800)', 'Bought more inventory than sold'],
+            ['Increase in Accounts Payable', '$3,200', 'Delayed vendor payments — cash benefit'],
+            ['(Decrease) in Accrued Expenses', '($1,100)', 'Paid prior month accruals'],
+            ['NET CASH FROM OPERATIONS', '$29,020', ''],
+          ]
+        ),
+        insightBox('Depreciation Add-Back', 'Depreciation reduces net income on the P&L but does not use cash. Always add it back in the operating section. A profitable restaurant with heavy equipment depreciation can show strong operating cash flow even when net income looks modest.'),
+
+        heading(2, 'INVESTING ACTIVITIES'),
+        table(
+          ['Item', 'Amount', 'Notes'],
+          [
+            ['Purchase of Espresso Machine', '($18,000)', 'New equipment — cash out'],
+            ['Purchase of Furniture', '($3,500)', 'Patio seating upgrade'],
+            ['NET CASH FROM INVESTING', '($21,500)', ''],
+          ]
+        ),
+        paragraph('Equipment purchases hit the balance sheet and depreciate over time. They do not appear on the P&L in full — but they absolutely reduce cash this month.'),
+
+        heading(2, 'FINANCING ACTIVITIES'),
+        table(
+          ['Item', 'Amount', 'Notes'],
+          [
+            ['Loan Principal Payment', '($12,000)', 'SBA loan — principal only'],
+            ['Loan Interest Payment', '($1,800)', 'Already in P&L as expense'],
+            ['Owner Distribution', '($5,000)', 'Cash taken out by owner'],
+            ['NET CASH FROM FINANCING', '($18,100)', ''],
+          ]
+        ),
+        proTipBox('Loan principal is NOT an expense on the P&L — only interest is. Principal repayment appears in financing activities and reduces cash without affecting net income. This is the #1 reason profitable restaurants run out of cash.'),
+
+        heading(2, 'CASH RECONCILIATION'),
+        table(
+          ['Section', 'Amount'],
+          [
+            ['Beginning Cash', '$52,000'],
+            ['Operating Activities', '$29,020'],
+            ['Investing Activities', '($21,500)'],
+            ['Financing Activities', '($18,100)'],
+            ['NET CHANGE IN CASH', '($10,580)'],
+            ['ENDING CASH', '$41,420'],
+          ]
+        ),
+
+        heading(2, 'Teaching Summary'),
+        bulletList([
+          'Net income ≠ cash. The P&L measures profitability; the cash flow statement tracks actual cash movement.',
+          'Depreciation is a non-cash expense — always add it back in operating activities.',
+          'Loan principal payments reduce cash but never appear on the P&L as an expense.',
+          'Equipment purchases are investing activities — large one-time cash outflows that do not hit the P&L immediately.',
+          'Owner distributions are financing activities — owners can take cash out even in profitable months.',
+          'A profitable restaurant can run out of cash if principal payments, equipment purchases, and distributions exceed operating cash generation.',
+        ]),
+        insightBox('Connect to 4.1', 'Compare this cash flow to the Morning Buzz P&L in article 4.1. The $26,220 net income is real — but $18,000 in equipment, $12,000 in loan principal, and $5,000 in owner distributions consumed $35,000 of cash beyond normal operations.'),
+      ],
+    },
+  },
 ]
 
 // =============================================================================
@@ -1794,7 +2089,7 @@ const clientEducationArticles = [
 ]
 
 // =============================================================================
-// SECTION 6: POS & SOFTWARE GUIDES (8 articles: 5.1 – 5.8)
+// SECTION 6: POS & SOFTWARE GUIDES (13 articles: 5.1 – 5.13)
 // =============================================================================
 
 const posGuidesArticles = [
@@ -2268,6 +2563,362 @@ const posGuidesArticles = [
       ],
     },
   },
+
+  {
+    title: '5.9 Restaurant365 Overview for FinAcct Accountants',
+    slug: '5-9-restaurant365-overview',
+    section_slug: 'pos-guides',
+    type: 'guide',
+    excerpt: 'R365 ERP basics, COA and close differences vs QBO, prospect conversations, and migration overview',
+    read_time: 12,
+    is_pinned: false,
+    is_published: false,
+    order_index: 8,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '5.9 Restaurant365 Overview for FinAcct Accountants'),
+        paragraph('Restaurant365 (R365) is a restaurant-specific ERP that combines accounting, inventory, scheduling, and AP in one platform. FinAcct360\'s core delivery is built on QuickBooks Online — but you will encounter prospects and Books Review clients already on R365. This guide explains what R365 is, how it differs from QBO, and how to have an informed conversation without overpromising.'),
+
+        heading(2, 'What R365 Is'),
+        paragraph('R365 is not "QBO with a restaurant skin." It is a full ERP: general ledger, accounts payable workflow, inventory management, recipe costing, labor scheduling integration, and store-level reporting in one database. Multi-unit groups (5–50+ locations) often adopt R365 because it standardizes COA, enforces approval workflows, and ties purchases to theoretical food cost.'),
+        table(
+          ['Capability', 'R365', 'Typical QBO + FinAcct360 Stack'],
+          [
+            ['Core GL', 'Native R365 ledger', 'QBO'],
+            ['Invoice capture / AP', 'Built-in AP workflow', 'MarginEdge / Ottimate + QBO'],
+            ['Inventory & recipes', 'Native', 'Often spreadsheet or third-party'],
+            ['Scheduling', 'Integrations (7shifts, etc.)', '7shifts export + payroll'],
+            ['Weekly close rhythm', 'R365 close checklist', 'FinAcct360 SOP on QBO'],
+          ]
+        ),
+
+        heading(2, 'Who Uses It'),
+        bulletList([
+          'Multi-unit fast casual and full-service groups scaling past 3–4 locations',
+          'Franchisees with corporate COA requirements',
+          'Operators who want inventory and accounting in one system (less QBO middleware)',
+          'Less common: single-unit cafes (cost and complexity usually favor QBO)',
+        ]),
+        exampleBox(
+          'Prospect conversation — Olive & Vine group',
+          'A 6-location FSR group on R365 asks about FinAcct360. Acknowledge: "Your accounting lives in R365 today — we specialize in QBO-based weekly closes and KPI dashboards. We can review your R365 P&L structure in a Books Review, but full ongoing service assumes migration to QBO or a hybrid transition plan."'
+        ),
+
+        heading(2, 'COA and Close Workflow Differences'),
+        paragraph('R365 uses restaurant-standard account ranges similar to FinAcct360 (4000s revenue, 5000s COGS, 6000s labor), but account numbers and sub-account rules are configured per client. The close is task-driven inside R365 (AP batches, inventory counts, labor accruals) rather than our QBO export-and-reconcile rhythm.'),
+        insightBox(
+          'Key difference for accountants',
+          'In QBO, you often import POS + payroll + bank and reconcile outward. In R365, sales and purchases may already post through integrated modules — your job is validating batches, not rebuilding from CSV exports. Duplicate entries happen when a client also runs MarginEdge into QBO while on R365 (dual systems).'
+        ),
+        warningBox(
+          'Dual-system red flag',
+          'If a Books Review shows R365 as the GL but QBO still receives bank feeds or POS sync, treat it as a cleanup priority. One system of record only.'
+        ),
+
+        heading(2, 'What to Say to Prospects on R365'),
+        stepFlow([
+          { title: 'Acknowledge fit', description: 'R365 is a legitimate choice for larger multi-unit operators.' },
+          { title: 'Clarify scope', description: 'FinAcct360 ongoing service is optimized for QBO; confirm whether they want review-only or migration.' },
+          { title: 'Books Review path', description: 'Offer structured review of R365 P&L, labor %, and COA consistency before any migration talk.' },
+          { title: 'Migration realism', description: 'Migration is a project: COA mapping, open AP/AR, inventory balances, historical periods, training.' },
+        ]),
+
+        heading(2, 'Migration to QBO — High Level'),
+        bulletList([
+          'Chart of accounts mapping (R365 → FinAcct360 master COA)',
+          'Trial balance transfer at cutover date; document retained earnings bridge',
+          'Open AP, inventory, and accrued liabilities brought forward',
+          'POS, payroll, and AP automation reconnected to QBO (not R365 connectors)',
+          'Parallel-run month recommended: both systems reported, variances explained',
+          'Owner expectation: 4–8 weeks for mid-size multi-unit, not a weekend flip',
+        ]),
+        proTipBox('Do not disparage R365 in sales calls. Position FinAcct360 as the best fit when the owner wants QBO simplicity, our KPI platform, and our weekly close SOP — or when they are outgrowing R365 cost/complexity and want a deliberate migration.'),
+      ],
+    },
+  },
+
+  {
+    title: '5.10 Inventory & AP Automation Tools',
+    slug: '5-10-inventory-ap-automation-tools',
+    section_slug: 'pos-guides',
+    type: 'guide',
+    excerpt: 'MarginEdge, Ottimate, and xtraCHEF — invoice capture, food cost, and QBO sync checks',
+    read_time: 11,
+    is_pinned: false,
+    is_published: false,
+    order_index: 9,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '5.10 Inventory & AP Automation Tools'),
+        paragraph('Invoice capture tools sit between vendor PDFs and QuickBooks Online. They reduce manual bill entry and can improve food cost visibility — but they also create duplicate bills, COGS timing issues, and COA mapping conflicts if nobody owns the tie-out. This guide covers MarginEdge, Ottimate (formerly Plate IQ), and xtraCHEF (Toast).'),
+
+        heading(2, 'What Each Tool Does'),
+        table(
+          ['Tool', 'Primary Function', 'Typical Client Profile'],
+          [
+            ['MarginEdge', 'Invoice capture, item-level costing, AP export to QBO', 'FSR and multi-unit groups on QBO'],
+            ['Ottimate (Plate IQ)', 'AP automation, line-item mapping, approval workflow', 'Mid-size independents to small chains'],
+            ['xtraCHEF (Toast)', 'Invoice processing tied to Toast POS / COGS reporting', 'Toast clients wanting integrated AP'],
+          ]
+        ),
+        paragraph('All three: photograph or email invoices → OCR line items → map to GL accounts → push bills (or expenses) to QBO. Food cost tracking uses item categories and sometimes theoretical vs actual reporting.'),
+
+        heading(2, 'How Data Reaches QBO'),
+        stepFlow([
+          { title: 'Invoice ingest', description: 'Vendor invoice arrives via email, upload, or EDI.' },
+          { title: 'Mapping layer', description: 'Tool maps vendor + line item to COA (often 5100s food, 5200s beverage).' },
+          { title: 'QBO sync', description: 'Creates Bill, Bill Payment, or Expense depending on configuration.' },
+          { title: 'Your close', description: 'FinAcct360 reconciles QBO AP to vendor statements and ties COGS to P&L week.' },
+        ]),
+        insightBox(
+          'Integration is not reconciliation',
+          'A synced bill in QBO does not mean the amount, date, or account is correct. Weekly close still requires matching invoice batch totals to the P&L and bank (if paid).'
+        ),
+
+        heading(2, 'What to Check When a Client Uses One'),
+        bulletList([
+          'Duplicate bills: same invoice synced twice (email + manual upload) — watch for doubled COGS',
+          'COGS timing: bill dated in wrong week; accrual vs cash mismatch on weekly P&L',
+          'Mapping conflicts: tool uses "Food Purchases" to 5100 but client also manually posts Sysco to 5190',
+          'Unapproved invoices sitting in tool queue — not in QBO yet, but vendor statements show balance due',
+          'Sales tax and freight lines mapped to food cost instead of separate accounts',
+        ]),
+        exampleBox(
+          'Morning Buzz cafe — MarginEdge duplicate',
+          'Sysco invoice $2,340 appears twice in QBO (MarginEdge auto-sync + bookkeeper manual entry). Food cost % jumps from 29% to 34% for the week. Fix: void duplicate, enable duplicate detection in MarginEdge, document in close notes.'
+        ),
+        warningBox(
+          'COA alignment',
+          'Reconcile tool default mappings to FinAcct360 COA template before trusting dashboards. A persistent 5190 vs 5100 split breaks food cost % trending.'
+        ),
+
+        heading(2, 'Weekly Close Tie-Out'),
+        table(
+          ['Check', 'Pass', 'Fail Signal'],
+          [
+            ['Invoice batch total ↔ QBO bills', 'Within $25', 'Hundreds off — missing or duplicate sync'],
+            ['Food COGS % vs prior weeks', 'Stable ±2 pts', 'Sudden spike — mapping or duplicate'],
+            ['Open AP in QBO ↔ vendor statements', 'Matches', 'Tool queue backlog'],
+            ['Inventory count (if used)', 'Documented', 'COGS-only mode with no count — note limitation'],
+          ]
+        ),
+        proTipBox('Ask every new client: "Do you use MarginEdge, Ottimate, or xtraCHEF?" on onboarding. Request read-only access or weekly export PDF — do not rely on QBO alone.'),
+      ],
+    },
+  },
+
+  {
+    title: '5.11 Scheduling & Labor Platforms',
+    slug: '5-11-scheduling-labor-platforms',
+    section_slug: 'pos-guides',
+    type: 'guide',
+    excerpt: '7shifts and HotSchedules — labor data, scheduled vs actual, and weekly close exports',
+    read_time: 10,
+    is_pinned: false,
+    is_published: false,
+    order_index: 10,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '5.11 Scheduling & Labor Platforms'),
+        paragraph('Scheduling platforms hold the data that explains labor % variances: who was scheduled, who clocked in, overtime hours, and department splits. Payroll tells you what was paid; scheduling tells you why. FinAcct360 uses both in labor analysis and weekly close tie-out.'),
+
+        heading(2, '7shifts'),
+        paragraph('Popular with independent and small-chain restaurants. Integrates with Toast, Square, and others. Holds schedules, time punches (when used as time clock), labor targets, and SPLH-style reporting.'),
+        stepFlow([
+          { title: 'Login path', description: 'app.7shifts.com → Reports → Labor & Sales' },
+          { title: 'Key exports', description: 'Scheduled vs Actual Hours, Daily Labor Summary, Overtime Report' },
+          { title: 'Close use', description: 'Compare scheduled hours to payroll register hours for the same week' },
+        ]),
+
+        heading(2, 'HotSchedules (Fourth / HotSchedules)'),
+        paragraph('Common in larger casual dining and hotel F&B. Strong multi-location rollups, forecast vs actual, and enterprise labor compliance features.'),
+        stepFlow([
+          { title: 'Login path', description: 'HotSchedules manager portal → Reports → Labor' },
+          { title: 'Key exports', description: 'Actual vs Scheduled Labor, OT Detail, Labor by Job Code' },
+          { title: 'Close use', description: 'Job code mapping should align to FOH/BOH/management COA buckets' },
+        ]),
+
+        heading(2, 'Scheduled vs Actual — Why It Matters'),
+        table(
+          ['Scenario', 'Scheduled', 'Actual (Payroll)', 'Likely Cause'],
+          [
+            ['OT spike', '380 hrs', '442 hrs', 'Call-outs, understaffing, event volume'],
+            ['Labor % miss with flat hours', '400 hrs', '398 hrs', 'Revenue miss — not scheduling'],
+            ['FOH high, BOH low', 'FOH +12%', 'FOH wages +15%', 'Shift trades, wrong job codes'],
+          ]
+        ),
+        insightBox(
+          'Labor % analysis workflow',
+          'Step 1: P&L labor % vs target. Step 2: overtime_cost KPI. Step 3: scheduling export scheduled vs actual. Step 4: payroll register by department. Only then recommend operational changes to the owner.'
+        ),
+
+        heading(2, 'Exports Useful in Weekly Close'),
+        bulletList([
+          'Scheduled vs Actual Hours (by department) — same date range as close week',
+          'Overtime detail — tie to 6600 / overtime_cost',
+          'Labor dollars forecast vs actual (if client uses labor targets)',
+          'SPLH or sales per labor hour — sanity check against POS net sales',
+        ]),
+        exampleBox(
+          'Smokey\'s Bar & Grill — 7shifts + Gusto',
+          'Labor % hit 38% (target 30–32%). 7shifts shows 56 OT hours on FOH (playoff weekend). Payroll register OT = $2,100. Owner thought "sales were great" — SPLH was fine, but OT drove the miss. Conversation: schedule caps for event nights, not menu price cuts.'
+        ),
+        warningBox(
+          'POS labor ≠ payroll',
+          'Toast labor report excludes salaried managers. HotSchedules may include breaks differently than payroll. Always reconcile to payroll register as source of truth for dollars.'
+        ),
+        proTipBox('Request scheduling read-only access at onboarding alongside payroll. Store exports in the client folder with naming: [ClientCode]_7shifts_Labor_[YYYYMMDD-YYYYMMDD].csv'),
+      ],
+    },
+  },
+
+  {
+    title: '5.12 Payroll Provider Guide',
+    slug: '5-12-payroll-provider-guide',
+    section_slug: 'pos-guides',
+    type: 'guide',
+    excerpt: 'Gusto, ADP Run, Paychex, Toast Payroll — registers, exports, quirks, and 6000s mapping',
+    read_time: 14,
+    is_pinned: false,
+    is_published: false,
+    order_index: 11,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '5.12 Payroll Provider Guide'),
+        paragraph('Every payroll provider formats the register differently. FinAcct360 maps all exports to the same 6000s structure: wages by role, 6400 employer taxes, 6500 benefits, 6600 overtime, tips reducing Tips Payable. This guide covers where to pull registers and provider-specific quirks.'),
+
+        paragraphLinks([
+          'See also: ',
+          { text: '5.7 Payroll Register Export Guide', href: '/section/pos-guides/5-7-payroll-register-export-guide' },
+          ' and Academy Module ',
+          { text: '4.4 Reading a Payroll Register', href: '/training/payroll-reading-register' },
+          ' for export steps and journal-entry walkthrough.',
+        ]),
+
+        heading(2, 'Gusto'),
+        stepFlow([
+          { title: 'Register location', description: 'Reports → Payroll Journal (CSV)' },
+          { title: 'Export format', description: 'CSV with earnings, taxes, deductions, employer costs by employee' },
+          { title: 'Quirks', description: 'Clear employer vs employee tax columns; tips often on separate earnings row' },
+        ]),
+
+        heading(2, 'ADP Run / ADP Workforce Now'),
+        stepFlow([
+          { title: 'Register location', description: 'Reports → Payroll Summary or Payroll Register' },
+          { title: 'Export format', description: 'Excel/PDF; column names vary by ADP product tier' },
+          { title: 'Quirks', description: 'Employer taxes sometimes grouped — expand detail before mapping to 6400' },
+        ]),
+
+        heading(2, 'Paychex'),
+        stepFlow([
+          { title: 'Register location', description: 'Paychex Flex → Reports → Payroll Journal' },
+          { title: 'Export format', description: 'Excel with department codes — map codes to FOH/BOH/mgmt' },
+          { title: 'Quirks', description: 'Department codes must match client org chart; benefits on separate tab' },
+        ]),
+
+        heading(2, 'Toast Payroll'),
+        stepFlow([
+          { title: 'Register location', description: 'Toast Back Office → Reports → Payroll (if Toast Payroll enabled)' },
+          { title: 'Export format', description: 'Integrated with Toast labor; tips flow from POS' },
+          { title: 'Quirks', description: 'Tips often pre-integrated — verify Tips Payable balance still ties' },
+        ]),
+
+        heading(2, 'Mapping Exports to 6000s'),
+        table(
+          ['Register Line', 'Account', 'KPI Field'],
+          [
+            ['Gross — Servers / FOH', '6110–6130', 'foh_labor'],
+            ['Gross — Kitchen / BOH', '6210–6220', 'boh_labor'],
+            ['Gross — Management', '6310', 'mgmt_labor'],
+            ['Overtime premium', '6600', 'overtime_cost'],
+            ['Employer FICA / FUTA / SUTA', '6400', 'Total labor'],
+            ['Employer health / 401k', '6500', 'Total labor'],
+            ['Employee taxes withheld', '2410–2430 liabilities', 'Not expense'],
+            ['Tips paid on payroll', 'Cr 2200 Tips Payable', 'Not revenue'],
+          ]
+        ),
+        warningBox(
+          'Provider-specific trap',
+          'ADP and Paychex sometimes label "Total Payroll Cost" including employee withholdings. Do not post that lump sum to wages — split gross, liabilities, and employer taxes.'
+        ),
+        exampleBox(
+          'Brij Foods — Gusto biweekly',
+          'Kitchen gross $14,200 → 6210. Employer FICA $1,374 → 6400. Employee WH $3,210 → liabilities only. Tips paid $2,180 → reduce Tips Payable. Net pay $12,640 → payroll checking outflow.'
+        ),
+        proTipBox('Save every register as [ClientCode]_[Provider]_Payroll_[PayPeriodEnd].csv in the client folder before posting JEs. Non-negotiable for audit trail.'),
+      ],
+    },
+  },
+
+  {
+    title: '5.13 Choosing the Right Stack (Client Conversations)',
+    slug: '5-13-choosing-the-right-stack',
+    section_slug: 'pos-guides',
+    type: 'guide',
+    excerpt: 'How to guide owners on MarginEdge, R365, POS, and payroll — without making the decision for them',
+    read_time: 10,
+    is_pinned: false,
+    is_published: false,
+    order_index: 12,
+    content: {
+      type: 'doc',
+      content: [
+        heading(1, '5.13 Choosing the Right Stack (Client Conversations)'),
+        paragraph('Owners ask: "Should we get MarginEdge? Switch to R365? Change POS?" Your job is to clarify tradeoffs, book impact, and FinAcct360 fit — not to sell software. This one-page guide frames helpful answers that protect the relationship and the quality of the books.'),
+
+        heading(2, 'How to Answer Without Deciding for Them'),
+        stepFlow([
+          { title: 'Listen for the pain', description: '"Invoices take forever" → AP automation. "I don\'t trust food cost" → invoice + item mapping. "Nothing talks to each other" → integration audit first.' },
+          { title: 'Separate ops from accounting', description: 'Scheduling tools improve staffing; they do not replace payroll register discipline.' },
+          { title: 'State book impact', description: 'Every new tool changes sync paths, duplicate risk, and close steps — document before they buy.' },
+          { title: 'Offer a phased plan', description: 'Stabilize QBO close first, then add one integration at a time with tie-out rules.' },
+        ]),
+        insightBox(
+          'FinAcct360 position',
+          'We are accountants and operators\' finance partners, not resellers. Recommend categories of tools; let the owner choose vendor and timing. Always note: "We will need read-only access and two close cycles to validate after any change."'
+        ),
+
+        heading(2, 'What Each Choice Means for Their Books'),
+        table(
+          ['If They Add…', 'Books Impact', 'Your Action'],
+          [
+            ['MarginEdge / Ottimate / xtraCHEF', 'AP sync to QBO; COGS timing from bills', 'COA mapping review; duplicate bill checks'],
+            ['R365', 'May replace QBO as GL', 'Clarify if FinAcct360 scope continues; migration project if moving to QBO'],
+            ['New POS (Toast, Square, etc.)', 'Revenue mapping, tips, delivery fees change', 'Re-export training; POS-to-bank re-baseline'],
+            ['7shifts / HotSchedules', 'Better labor analysis; payroll still source of truth', 'Request exports; align job codes to FOH/BOH'],
+            ['New payroll provider', 'Register format changes', 'Remap 6000s; update tie-out checklist'],
+          ]
+        ),
+
+        heading(2, 'Sample Conversations'),
+        scenarioBox(
+          '"Should we get MarginEdge?" — "It can cut manual invoice entry and improve food cost line-of-sight if mapped to your COA. Tradeoff: another sync to monitor for duplicates. If you proceed, we\'ll remap vendors to our 5100s structure and add duplicate checks to your close for two cycles."'
+        ),
+        scenarioBox(
+          '"Should we switch to R365?" — "R365 fits some multi-unit groups who want inventory and GL together. FinAcct360\'s weekly close and KPI platform are built for QBO. If you switch to R365, we should discuss whether you need a Books Review only or a planned QBO migration — timeline is months, not weeks."'
+        ),
+        scenarioBox(
+          '"Should we change POS?" — "POS drives revenue accounts, tips, and delivery fee treatment. Before switching, document current mapping. After go-live, expect 2–3 weekly closes with extra reconciliation until deposits stabilize."'
+        ),
+
+        warningBox(
+          'Do not promise',
+          'Avoid "MarginEdge will fix food cost" or "R365 will solve everything." Tools expose data; discipline and mapping make it accurate.'
+        ),
+        bulletList([
+          'One system of record for the GL (QBO or R365 — not both receiving full feeds)',
+          'Written cutover checklist for any stack change',
+          'Owner signs off on COA mapping before go-live',
+          'FinAcct360 documents new tie-out steps in client notes',
+        ]),
+        proTipBox('End every stack conversation with: "What problem are you solving, and how will we know the books are still right after?" That keeps you in advisor mode, not vendor mode.'),
+      ],
+    },
+  },
 ]
 
 // =============================================================================
@@ -2352,7 +3003,7 @@ async function seed() {
       slug: article.slug,
       section_id: sectionId,
       excerpt: article.excerpt,
-      is_published: true,
+      is_published: (article as { is_published?: boolean }).is_published ?? true,
       order_index: article.order_index,
       content: article.content,
     }, {

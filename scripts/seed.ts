@@ -897,8 +897,8 @@ const TRAINING_MODULES = [
   { title: 'POS Systems — Square', slug: 'pos-square', description: 'Pull and understand Square sales reports', estimated_minutes: 20, order_index: 8 },
   { title: 'POS Systems — Toast', slug: 'pos-toast', description: 'Pull and understand Toast sales reports', estimated_minutes: 20, order_index: 9 },
   { title: 'POS Systems — Clover', slug: 'pos-clover', description: 'Pull and understand Clover sales reports', estimated_minutes: 20, order_index: 10 },
-  { title: 'Weekly Close Process', slug: 'weekly-close-process', description: 'Step-by-step weekly close procedure', estimated_minutes: 20, order_index: 11 },
-  { title: 'Common Mistakes', slug: 'common-mistakes', description: 'Avoid the top errors new accountants make', estimated_minutes: 20, order_index: 12 },
+  { title: 'Weekly Close Process', slug: 'weekly-close-process', description: 'Step-by-step weekly close procedure', estimated_minutes: 20, order_index: 12 },
+  { title: 'Common Mistakes', slug: 'common-mistakes', description: 'Avoid the top errors new accountants make', estimated_minutes: 20, order_index: 13 },
 ]
 
 async function seedTrainingModules(): Promise<Map<string, string>> {

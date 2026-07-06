@@ -2,6 +2,8 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { Resend } from 'resend'
+import { fetchUserGates, isFullyCertified } from '@/lib/certification'
+import { ACADEMY_EMAIL_FROM } from '@/lib/certification-constants'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -10,8 +12,8 @@ export async function getOrCreateCertificate() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { data: null, error: 'Not authenticated' }
 
-  const { data: profile } = await supabase.from('profiles').select('training_completed').eq('id', user.id).single()
-  if (!profile?.training_completed) return { data: null, error: 'Training not completed' }
+  const gates = await fetchUserGates(supabase, user.id)
+  if (!isFullyCertified(gates)) return { data: null, error: 'FCRA certification not complete' }
 
   const { data: existing } = await supabase.from('certificates').select('*').eq('user_id', user.id).single()
   if (existing) {
@@ -61,12 +63,12 @@ export async function getOrCreateCertificate() {
   const adminEmail = process.env.ADMIN_COMPLETION_EMAIL || 'ganesh@finacctsolutions.com'
   if (process.env.RESEND_API_KEY && adminEmail) {
     try {
-      const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <academy@finacct360.io>'
+      const from = process.env.RESEND_FROM ?? ACADEMY_EMAIL_FROM
       await resend.emails.send({
         from,
         to: [adminEmail],
-        subject: `${userName} completed FinAcct360 Academy training`,
-        html: `<p>${userName} has completed all training modules and received their certificate (${certNumber}).</p>`,
+        subject: `${userName} earned FCRA certification — FinAcct360 Academy`,
+        html: `<p>${userName} has passed all six FCRA certification gates and received their certificate (${certNumber}).</p>`,
       })
     } catch {
       // ignore
@@ -85,22 +87,22 @@ export async function sendCertificateToEmail(pdfBase64: string): Promise<{ ok: b
   const { data: { user } } = await supabase.auth.getUser()
   if (!user?.email) return { ok: false, error: 'Not authenticated' }
 
-  const { data: profile } = await supabase.from('profiles').select('training_completed').eq('id', user.id).single()
-  if (!profile?.training_completed) return { ok: false, error: 'Training not completed' }
+  const gates = await fetchUserGates(supabase, user.id)
+  if (!isFullyCertified(gates)) return { ok: false, error: 'FCRA certification not complete' }
 
   if (!process.env.RESEND_API_KEY) return { ok: false, error: 'Email is not configured. Please contact support.' }
 
-  const from = process.env.RESEND_FROM ?? 'FinAcct360 Academy <academy@finacct360.io>'
+  const from = process.env.RESEND_FROM ?? ACADEMY_EMAIL_FROM
   const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '').replace(/^data:.*?;base64,/, '')
   if (!base64Data || base64Data.length < 100) return { ok: false, error: 'Invalid certificate data' }
 
   const { error } = await resend.emails.send({
     from,
     to: [user.email],
-    subject: 'Your FinAcct360 Academy Certificate of Completion',
+    subject: 'Your FinAcct360 Academy FCRA Certificate',
     html: `
       <p>Congratulations!</p>
-      <p>You have successfully completed the FinAcct360 Academy Restaurant Accounting Training Program. Your certificate is attached to this email.</p>
+      <p>You have successfully completed all six FCRA certification gates for the FinAcct360 Academy Restaurant Accounting Training Program. Your certificate is attached to this email.</p>
       <p>Keep it for your records and share it with your team or clients as needed.</p>
       <p>— FinAcct360 Academy</p>
     `,

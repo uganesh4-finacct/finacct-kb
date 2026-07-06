@@ -14,8 +14,8 @@ interface QuizCompletePassProps {
   nextModuleTitle?: string | null
   moduleSlug: string
   timeSpentFormatted?: string
-  /** True when trainee just passed all modules and was upgraded to accountant */
-  trainingJustCompleted?: boolean
+  /** True when trainee just completed all coursework (G1 auto-passed) */
+  courseworkJustCompleted?: boolean
 }
 
 export function QuizCompletePass({
@@ -28,15 +28,23 @@ export function QuizCompletePass({
   nextModuleTitle,
   moduleSlug,
   timeSpentFormatted,
-  trainingJustCompleted,
+  courseworkJustCompleted,
 }: QuizCompletePassProps) {
   return (
     <div className="rounded-2xl border border-slate-800/50 bg-slate-800/30 p-8 relative overflow-hidden w-full max-w-xl mx-auto page-content">
       <Confetti />
-      {trainingJustCompleted && (
-        <div className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/40">
-          <p className="text-lg font-semibold text-green-300">
-            🎉 Training Complete! You now have full access to the FinAcct360 Academy as an Accountant.
+      {courseworkJustCompleted && (
+        <div
+          className="mb-6 p-4 rounded-xl border"
+          style={{ borderColor: 'rgba(230, 126, 34, 0.45)', backgroundColor: 'rgba(230, 126, 34, 0.12)' }}
+        >
+          <p className="text-lg font-semibold text-white">Coursework Complete!</p>
+          <p className="text-sm text-slate-300 mt-1">
+            Gate G1 is passed. Visit the{' '}
+            <Link href="/certification" className="font-medium underline" style={{ color: '#E67E22' }}>
+              Certification Center
+            </Link>{' '}
+            to track your remaining FCRA gates.
           </p>
         </div>
       )}

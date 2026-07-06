@@ -1,6 +1,8 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { autoPassG1IfEligible } from '@/lib/certification'
 
 export async function recordModuleProgress(moduleId: string, timeSpentSeconds: number) {
   const supabase = await createClient()
@@ -28,35 +30,40 @@ export async function recordModuleProgress(moduleId: string, timeSpentSeconds: n
   }
 }
 
-export async function recordModuleComplete(moduleId: string) {
+/**
+ * Mark a module as completed for the current user (e.g. after passing the quiz).
+ * Uses upsert so completion is always persisted; returns success for callers to log on failure.
+ */
+export async function recordModuleComplete(moduleId: string): Promise<{ ok: boolean; error?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return
-  const { data: existing } = await supabase
+  if (!user) return { ok: false, error: 'Not authenticated' }
+
+  const completedAt = new Date().toISOString()
+  const { error } = await supabase
     .from('training_progress')
-    .select('id')
-    .eq('user_id', user.id)
-    .eq('module_id', moduleId)
-    .single()
-  if (existing) {
-    await supabase
-      .from('training_progress')
-      .update({ is_completed: true, completed_at: new Date().toISOString() })
-      .eq('id', existing.id)
-  } else {
-    await supabase.from('training_progress').insert({
-      user_id: user.id,
-      module_id: moduleId,
-      is_completed: true,
-      completed_at: new Date().toISOString(),
-    })
+    .upsert(
+      {
+        user_id: user.id,
+        module_id: moduleId,
+        is_completed: true,
+        completed_at: completedAt,
+        next_retry_at: null,
+      },
+      { onConflict: 'user_id,module_id' }
+    )
+
+  if (error) {
+    console.error('[recordModuleComplete] failed:', { moduleId, userId: user.id, message: error.message, code: error.code })
+    return { ok: false, error: error.message }
   }
+  return { ok: true }
 }
 
 export async function submitQuizAttempt(moduleId: string, answers: Record<string, string>) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, error: 'Not authenticated', score: 0, passed: false, upgraded: false, attemptNumber: 0 }
+  if (!user) return { ok: false as const, error: 'Not authenticated', score: 0, passed: false, courseworkJustCompleted: false, attemptNumber: 0 }
 
   const { data: questions } = await supabase
     .from('quiz_questions')
@@ -64,7 +71,7 @@ export async function submitQuizAttempt(moduleId: string, answers: Record<string
     .eq('module_id', moduleId)
     .order('order_index')
 
-  if (!questions?.length) return { ok: false as const, error: 'No questions', score: 0, passed: false, upgraded: false }
+  if (!questions?.length) return { ok: false as const, error: 'No questions', score: 0, passed: false, courseworkJustCompleted: false }
 
   let correct = 0
   for (const q of questions) {
@@ -88,14 +95,26 @@ export async function submitQuizAttempt(moduleId: string, answers: Record<string
     answers,
     attempt_number: attemptNumber,
   })
-  if (error) return { ok: false as const, error: error.message, score: 0, passed: false, upgraded: false, attemptNumber }
+  if (error) return { ok: false as const, error: error.message, score: 0, passed: false, courseworkJustCompleted: false, attemptNumber }
 
   // Clear in-progress quiz state when attempt is submitted (pass or fail)
   await supabase.from('quiz_progress').delete().eq('user_id', user.id).eq('module_id', moduleId)
 
+  let courseworkJustCompleted = false
   if (passed) {
-    await recordModuleComplete(moduleId)
+    const completeResult = await recordModuleComplete(moduleId)
+    if (!completeResult.ok) {
+      console.error('[submitQuizAttempt] recordModuleComplete failed after quiz pass:', completeResult.error)
+    }
     await clearQuizLockInternal(supabase, user.id, moduleId)
+
+    const g1Result = await autoPassG1IfEligible(supabase, user.id)
+    courseworkJustCompleted = g1Result.newlyPassed
+    if (g1Result.newlyPassed) {
+      revalidatePath('/certification')
+      revalidatePath('/training')
+      revalidatePath('/home')
+    }
   } else if (attemptNumber >= 3) {
     const nextRetryAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
     const { data: progressRow } = await supabase
@@ -118,17 +137,7 @@ export async function submitQuizAttempt(moduleId: string, answers: Record<string
     }
   }
 
-  let upgraded = false
-  if (passed) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('training_completed, role')
-      .eq('id', user.id)
-      .maybeSingle()
-    upgraded = profile?.training_completed === true && (profile?.role as string) === 'accountant'
-  }
-
-  return { ok: true as const, score: scorePct, passed, upgraded, attemptNumber }
+  return { ok: true as const, score: scorePct, passed, courseworkJustCompleted, attemptNumber }
 }
 
 async function clearQuizLockInternal(

@@ -67,6 +67,17 @@ export default function UpdatePasswordPage() {
     })
   }, [router])
 
+  function toUserFriendlyError(msg: string): string {
+    const lower = msg?.toLowerCase() ?? ''
+    if (lower.includes('fetch') || lower.includes('network') || lower.includes('failed to fetch') || lower.includes('load')) {
+      return "We couldn't reach the server. Check your connection and try again."
+    }
+    if (lower.includes('session') || lower.includes('expired') || lower.includes('invalid')) {
+      return 'Your link may have expired. Please request a new invite or password reset.'
+    }
+    return msg || 'Something went wrong. Please try again.'
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -79,17 +90,38 @@ export default function UpdatePasswordPage() {
       return
     }
     setLoading(true)
-    const supabase = createClient()
-    const { error: updateError } = await supabase.auth.updateUser({ password })
-    setLoading(false)
-    if (updateError) {
-      setError(updateError.message)
-      return
+    try {
+      const supabase = createClient()
+      const { error: updateError } = await supabase.auth.updateUser({ password })
+      if (updateError) {
+        console.error('[update-password] updateUser error:', {
+          message: updateError.message,
+          name: updateError.name,
+          status: (updateError as unknown as { status?: number })?.status,
+        })
+        setError(toUserFriendlyError(updateError.message))
+        setLoading(false)
+        return
+      }
+      const clearResult = await clearNeedsPasswordSet()
+      if (!clearResult?.ok) {
+        console.warn('[update-password] clearNeedsPasswordSet failed (password was updated):', clearResult?.error)
+      }
+      setDone(true)
+      router.push('/login?message=Password updated. Sign in with your new password.')
+      router.refresh()
+    } catch (err) {
+      const obj = err as Error & { cause?: unknown }
+      console.error('[update-password] handleSubmit error:', {
+        message: obj?.message,
+        name: obj?.name,
+        cause: obj?.cause,
+        stack: obj?.stack?.slice(0, 300),
+      })
+      setError(toUserFriendlyError(obj?.message ?? 'Something went wrong'))
+    } finally {
+      setLoading(false)
     }
-    await clearNeedsPasswordSet()
-    setDone(true)
-    router.push('/login?message=Password updated. Sign in with your new password.')
-    router.refresh()
   }
 
   if (checkingSession || email === null) {

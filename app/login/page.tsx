@@ -14,7 +14,13 @@ function LoginForm() {
   const errorParam = searchParams.get('error')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(errorParam === 'invalid_reset_link' ? 'Reset link invalid or expired. Request a new one.' : null)
+  const errorMessage =
+    errorParam === 'invalid_reset_link'
+      ? 'Reset link invalid or expired. Request a new one.'
+      : errorParam === 'connection_failed'
+        ? "We couldn't connect. Check your connection and try again."
+        : errorParam ?? null
+  const [error, setError] = useState<string | null>(errorMessage)
   const [loading, setLoading] = useState(false)
 
   // If we landed here with an invite hash, send to accept-invite (full page nav so mobile keeps hash).

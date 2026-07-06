@@ -34,15 +34,22 @@ export function SetPasswordForm({
       return
     }
     setLoading(true)
-    const result = await setPasswordWithToken(token, password)
-    setLoading(false)
-    if (!result.ok) {
-      setError(result.error ?? 'Something went wrong')
-      return
+    try {
+      const result = await setPasswordWithToken(token, password)
+      if (!result.ok) {
+        setError(result.error ?? "Something went wrong. Please try again.")
+        return
+      }
+      setDone(true)
+      router.push('/login?message=Password set. Sign in with your email and new password.')
+      router.refresh()
+    } catch (err) {
+      const obj = err as Error
+      console.error('[SetPasswordForm] handleSubmit error:', { message: obj?.message, name: obj?.name })
+      setError("We couldn't complete your request. Check your connection and try again, or contact support.")
+    } finally {
+      setLoading(false)
     }
-    setDone(true)
-    router.push('/login?message=Password set. Sign in with your email and new password.')
-    router.refresh()
   }
 
   return (

@@ -6,11 +6,20 @@ export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: profile } = user
+    ? await supabase.from('profiles').select('role').eq('id', user.id).single()
+    : { data: null }
+  const isAdmin = profile?.role === 'admin'
 
-  const [articlesRes, sectionsRes, profilesRes, readsRes, recentRes] = await Promise.all([
+  const queries = [
     supabase.from('kb_articles').select('*', { count: 'exact', head: true }),
-    supabase.from('kb_sections').select('*', { count: 'exact', head: true }),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    ...(isAdmin
+      ? [
+          supabase.from('kb_sections').select('*', { count: 'exact', head: true }),
+          supabase.from('profiles').select('*', { count: 'exact', head: true }),
+        ]
+      : []),
     supabase
       .from('kb_reads')
       .select('*', { count: 'exact', head: true })
@@ -27,7 +36,14 @@ export default async function AdminDashboardPage() {
       `)
       .order('updated_at', { ascending: false })
       .limit(8),
-  ])
+  ] as const
+
+  const results = await Promise.all(queries)
+  const articlesRes = results[0]
+  const sectionsRes = isAdmin ? results[1] : { count: 0 }
+  const profilesRes = isAdmin ? results[2] : { count: 0 }
+  const readsRes = isAdmin ? results[3] : results[1]
+  const recentRes = isAdmin ? results[4] : results[2]
 
   const totalArticles = articlesRes.count ?? 0
   const totalSections = sectionsRes.count ?? 0
@@ -59,8 +75,12 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { label: 'Total Articles', value: totalArticles, icon: FileText, href: '/admin/articles' },
-    { label: 'Sections', value: totalSections, icon: FolderOpen, href: '/admin/sections' },
-    { label: 'Team Members', value: teamMembers, icon: Users, href: '/admin/team' },
+    ...(isAdmin
+      ? [
+          { label: 'Sections', value: totalSections, icon: FolderOpen, href: '/admin/sections' },
+          { label: 'Team Members', value: teamMembers, icon: Users, href: '/admin/team' },
+        ]
+      : []),
     { label: 'Reads This Week', value: readsThisWeek, icon: Eye, href: '/admin' },
   ]
 
@@ -132,20 +152,24 @@ export default async function AdminDashboardPage() {
               <Plus className="w-5 h-5" />
               New Article
             </Link>
-            <Link
-              href="/admin/sections?add=1"
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-slate-600 hover:bg-slate-700/50 text-white font-medium transition"
-            >
-              <FolderOpen className="w-5 h-5" />
-              New Section
-            </Link>
-            <Link
-              href="/admin/team?add=1"
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-slate-600 hover:bg-slate-700/50 text-white font-medium transition"
-            >
-              <UserPlus className="w-5 h-5" />
-              Add Team Member
-            </Link>
+            {isAdmin && (
+              <>
+                <Link
+                  href="/admin/sections?add=1"
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-slate-600 hover:bg-slate-700/50 text-white font-medium transition"
+                >
+                  <FolderOpen className="w-5 h-5" />
+                  New Section
+                </Link>
+                <Link
+                  href="/admin/team?add=1"
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-slate-600 hover:bg-slate-700/50 text-white font-medium transition"
+                >
+                  <UserPlus className="w-5 h-5" />
+                  Add Team Member
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

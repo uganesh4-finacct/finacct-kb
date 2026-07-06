@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getOrCreateCertificate } from '@/lib/certificate-actions'
+import { fetchUserGates, isFullyCertified } from '@/lib/certification'
 import { CertificateDownload } from '@/components/CertificateDownload'
 import { CertificatePrint } from '@/components/CertificatePrint'
 import { CertificateEmailButton } from '@/components/CertificateEmailButton'
@@ -16,8 +17,11 @@ export default async function CertificatePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.from('profiles').select('full_name, training_completed').eq('id', user.id).single()
-  if (!profile?.training_completed) redirect('/training')
+  const gates = await fetchUserGates(supabase, user.id)
+  if (!isFullyCertified(gates)) redirect('/certification')
+
+  const { data: profile } = await supabase.from('profiles').select('full_name, role').eq('id', user.id).single()
+  if (profile?.role === 'trainee') redirect('/certification')
 
   const { count: totalModulesCount } = await supabase
     .from('training_modules')
@@ -26,14 +30,14 @@ export default async function CertificatePage() {
   const totalModules = totalModulesCount ?? 0
 
   const { data: cert, error } = await getOrCreateCertificate()
-  if (error || !cert) redirect('/training')
+  if (error || !cert) redirect('/certification')
 
   const modulesCompleted = (cert as { modules_completed?: number | null }).modules_completed ?? 0
   if (totalModules > 0 && modulesCompleted < totalModules) redirect('/training')
 
   const issuedDate = new Date(cert.issued_at)
   const issuedFormatted = issuedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  const fullName = profile.full_name || user.email?.split('@')[0] || 'User'
+  const fullName = profile?.full_name || user.email?.split('@')[0] || 'User'
   const averageScore = cert.average_score != null ? Number(cert.average_score).toFixed(1) : '—'
   const modulesLabel = totalModules > 0 ? totalModules : modulesCompleted
 
@@ -42,9 +46,9 @@ export default async function CertificatePage() {
       <nav className="no-print flex items-center gap-2 text-sm text-slate-400 mb-6 max-w-5xl mx-auto">
         <Link href="/home" className="hover:text-white">Home</Link>
         <span>/</span>
-        <Link href="/training" className="hover:text-white">Training</Link>
+        <Link href="/certification" className="hover:text-white">Certification</Link>
         <span>/</span>
-        <span className="text-white">Certificate</span>
+        <span className="text-white">FCRA Certificate</span>
       </nav>
 
       <div className="no-print flex flex-col items-center gap-4 mb-8 max-w-5xl mx-auto">
@@ -53,8 +57,8 @@ export default async function CertificatePage() {
           <CertificateEmailButton />
           <CertificatePrint />
         </div>
-        <Link href="/training" className="text-slate-400 hover:text-white text-sm font-medium">
-          ← Back to Training
+        <Link href="/certification" className="text-slate-400 hover:text-white text-sm font-medium">
+          ← Back to Certification Center
         </Link>
       </div>
 
@@ -64,11 +68,9 @@ export default async function CertificatePage() {
           className="bg-white rounded-xl shadow-2xl max-w-4xl mx-auto certificate-pdf-source"
           style={{ width: '800px', minHeight: '560px', paddingTop: '6px' }}
         >
-          {/* Gradient top border — visible margin so PDF capture doesn't clip */}
           <div className="h-2 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-t-xl" />
 
           <div className="p-12 pt-10 pb-10 flex flex-col">
-            {/* Logo — extra top padding so PDF capture doesn't clip */}
             <div className="flex justify-center mb-8 pt-2">
               <img
                 src="/logo-light.png"
@@ -79,22 +81,19 @@ export default async function CertificatePage() {
               />
             </div>
 
-            {/* Decorative line */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="h-px w-24 bg-gradient-to-r from-transparent to-orange-300" />
               <div className="w-2 h-2 rounded-full bg-orange-400" />
               <div className="h-px w-24 bg-gradient-to-l from-transparent to-orange-300" />
             </div>
 
-            {/* Title */}
             <h1 className="text-4xl font-serif text-center text-slate-800 mb-2">
               Certificate of Completion
             </h1>
             <p className="text-center text-slate-500 mb-8">
-              This certifies that
+              FCRA Certified — FinAcct360 Academy
             </p>
 
-            {/* Name */}
             <div className="text-center mb-8">
               <div className="inline-block">
                 <p className="text-3xl font-serif font-bold text-slate-900 mb-1">
@@ -104,12 +103,11 @@ export default async function CertificatePage() {
               </div>
             </div>
 
-            {/* Description */}
             <p className="text-center text-slate-600 max-w-lg mx-auto mb-10">
-              has successfully completed the <span className="font-semibold text-slate-800">FinAcct360 Academy</span> Restaurant Accounting Training Program
+              has successfully completed all six FCRA certification gates for the{' '}
+              <span className="font-semibold text-slate-800">FinAcct360 Academy</span> Restaurant Accounting Training Program
             </p>
 
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto mb-10">
               <div className="text-center p-4 bg-slate-50 rounded-xl">
                 <p className="text-3xl font-bold text-orange-500">{modulesLabel}</p>
@@ -125,10 +123,8 @@ export default async function CertificatePage() {
               </div>
             </div>
 
-            {/* Divider */}
             <div className="border-t border-slate-200 my-8" />
 
-            {/* Signature */}
             <div className="flex justify-between items-end">
               <div>
                 <p className="font-serif text-lg text-slate-800">{SIGNER_NAME}</p>
@@ -143,7 +139,6 @@ export default async function CertificatePage() {
             </div>
           </div>
 
-          {/* Gradient bottom border */}
           <div className="h-2 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600" />
         </div>
       </div>
